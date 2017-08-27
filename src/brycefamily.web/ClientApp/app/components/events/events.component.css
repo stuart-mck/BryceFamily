@@ -1,0 +1,15 @@
+.event {
+    border: 1px solid black;
+    padding: 2px;
+    border-radius: 15px;
+
+}
+
+.event > .detail {
+    margin-left: 10px;
+}
+
+.hardRight{
+    right: 0;
+    top: 0;
+}
