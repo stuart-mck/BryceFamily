@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace brycefamily.repo
+namespace brycefamily.repo.Model
 {
-    public class Class1
+    public class Entity
     {
+        public int ID { get; set; }
     }
 }
