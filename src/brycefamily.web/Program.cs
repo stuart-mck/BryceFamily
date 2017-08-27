@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using BryceFamily.Repo.Core;
+using BryceFamily.Repo.Core.Initialisation;
 
 namespace brycefamily
 {
@@ -24,6 +26,8 @@ namespace brycefamily
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();
+
+           
 
             host.Run();
         }

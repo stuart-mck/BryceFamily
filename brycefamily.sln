@@ -1,18 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DFC070B0-970C-4F5C-97C1-E99AC990387E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "brycefamily.web", "src\brycefamily.web\brycefamily.web.csproj", "{A30D4FA8-0ED7-4DA1-87B9-D9CE5914D429}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "brycefamily.repo", "src\brycefamily.repo\brycefamily.repo.csproj", "{F0CF8AC7-6CB2-4560-949B-F4EDB313B213}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F8A358DB-EE81-4818-949B-1D6DE6DA859D}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BryceFamily.Repo.Core", "src\BryceFamily.Repo.Core\BryceFamily.Repo.Core.csproj", "{8286DA71-F1FA-42E8-836E-D62FB455F177}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,16 +24,19 @@ Global
 		{A30D4FA8-0ED7-4DA1-87B9-D9CE5914D429}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A30D4FA8-0ED7-4DA1-87B9-D9CE5914D429}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A30D4FA8-0ED7-4DA1-87B9-D9CE5914D429}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F0CF8AC7-6CB2-4560-949B-F4EDB313B213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F0CF8AC7-6CB2-4560-949B-F4EDB313B213}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F0CF8AC7-6CB2-4560-949B-F4EDB313B213}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F0CF8AC7-6CB2-4560-949B-F4EDB313B213}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8286DA71-F1FA-42E8-836E-D62FB455F177}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8286DA71-F1FA-42E8-836E-D62FB455F177}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8286DA71-F1FA-42E8-836E-D62FB455F177}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8286DA71-F1FA-42E8-836E-D62FB455F177}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A30D4FA8-0ED7-4DA1-87B9-D9CE5914D429} = {DFC070B0-970C-4F5C-97C1-E99AC990387E}
-		{F0CF8AC7-6CB2-4560-949B-F4EDB313B213} = {DFC070B0-970C-4F5C-97C1-E99AC990387E}
+		{8286DA71-F1FA-42E8-836E-D62FB455F177} = {DFC070B0-970C-4F5C-97C1-E99AC990387E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {96D9C2D7-2F38-402B-AC8F-2898D8A0126E}
 	EndGlobalSection
 EndGlobal

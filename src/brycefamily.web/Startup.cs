@@ -1,6 +1,9 @@
+using BryceFamily.Repo.Core;
+using BryceFamily.Repo.Core.Initialisation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -24,6 +27,11 @@ namespace brycefamily
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<DatabaseContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            var context = services.BuildServiceProvider().GetRequiredService<DatabaseContext>();
+            DataInitialiser.Initialize(context);
             // Add framework services.
             services.AddMvc();
         }
@@ -33,6 +41,8 @@ namespace brycefamily
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+    
 
             if (env.IsDevelopment())
             {
