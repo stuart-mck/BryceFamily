@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace BryceFamily.Repo.Core.Model
 {
@@ -10,6 +6,6 @@ namespace BryceFamily.Repo.Core.Model
     {
         public byte[] ImageData { get; set; }
 
-        public string[] Tags { get; set; }
+        public ICollection<ImageTag> Tags { get; set; }
     }
 }

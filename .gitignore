@@ -28,8 +28,8 @@ Obj/
 
 # Visual Studio 2015 cache/options directory
 .vs/
-/wwwroot/dist/**
-/ClientApp/dist/**
+*/wwwroot/dist/**
+*/ClientApp/dist/**
 
 # Workaround for https://github.com/aspnet/JavaScriptServices/issues/235
 !/wwwroot/dist/_placeholder.txt
@@ -196,6 +196,8 @@ orleans.codegen.cs
 /node_modules/**
 !/node_modules/_placeholder.txt
 /src/brycefamily.web/node_modules
+/src/BryceFamily.Web.Core/node_modules
+
 
 /yarn.lock
 
