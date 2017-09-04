@@ -1,12 +1,12 @@
 export class Event {
-    public EntityId: number;
-    public Title: string;
-    public Dates: EventDateTime;
-    public Location: Location;
-    public Details: string; 
-    public EventType: eventType;
-    public EventStatus: eventStatus;
-    public Organiser: string;
+    public entityId: number;
+    public title: string;
+    public dates: EventDateTime;
+    public location: Location;
+    public details: string; 
+    public eventType: eventType;
+    public eventStatus: eventStatus;
+    public organiser: string;
     
     constructor(){
     }
