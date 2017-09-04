@@ -20,4 +20,8 @@ export class NewEventComponent implements OnInit {
     ngOnInit() {
         //this.eventService.getAllActiveEvents().then(events  => this.Events = events);
     }
+
+    submitNewEvent(){
+        console.log(this.Event);
+    }
 }
