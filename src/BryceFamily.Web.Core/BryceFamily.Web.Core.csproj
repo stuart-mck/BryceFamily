@@ -13,6 +13,7 @@
   </ItemGroup>
   <ItemGroup>
     <!-- Files not to show in IDE -->
+    <None Remove="ClientApp\app\components\events\newEvent\newEvent.component.ts" />
     <None Remove="yarn.lock" />
 
     <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
@@ -21,6 +22,10 @@
   
   <ItemGroup>
     <ProjectReference Include="..\BryceFamily.Repo.Core\BryceFamily.Repo.Core.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\components\events\newEvent\newEvent.component.ts" />
   </ItemGroup>
   <Target Name="RunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
