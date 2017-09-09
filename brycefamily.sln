@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.3
+VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DFC070B0-970C-4F5C-97C1-E99AC990387E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "brycefamily.web", "src\brycefamily.web\brycefamily.web.csproj", "{A30D4FA8-0ED7-4DA1-87B9-D9CE5914D429}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F8A358DB-EE81-4818-949B-1D6DE6DA859D}"
 	ProjectSection(SolutionItems) = preProject
@@ -14,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BryceFamily.Repo.Core", "src\BryceFamily.Repo.Core\BryceFamily.Repo.Core.csproj", "{8286DA71-F1FA-42E8-836E-D62FB455F177}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BryceFamily.Web.Core", "src\BryceFamily.Web.Core\BryceFamily.Web.Core.csproj", "{A0217601-9928-404D-A3E0-602119215820}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BryceFamily.Web.Core", "src\BryceFamily.Web.Core\BryceFamily.Web.Core.csproj", "{34CA5BC1-7A01-4F77-82A4-B4D1CAE7C9EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,26 +20,21 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A30D4FA8-0ED7-4DA1-87B9-D9CE5914D429}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A30D4FA8-0ED7-4DA1-87B9-D9CE5914D429}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A30D4FA8-0ED7-4DA1-87B9-D9CE5914D429}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A30D4FA8-0ED7-4DA1-87B9-D9CE5914D429}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8286DA71-F1FA-42E8-836E-D62FB455F177}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8286DA71-F1FA-42E8-836E-D62FB455F177}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8286DA71-F1FA-42E8-836E-D62FB455F177}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8286DA71-F1FA-42E8-836E-D62FB455F177}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A0217601-9928-404D-A3E0-602119215820}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A0217601-9928-404D-A3E0-602119215820}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A0217601-9928-404D-A3E0-602119215820}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A0217601-9928-404D-A3E0-602119215820}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34CA5BC1-7A01-4F77-82A4-B4D1CAE7C9EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34CA5BC1-7A01-4F77-82A4-B4D1CAE7C9EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34CA5BC1-7A01-4F77-82A4-B4D1CAE7C9EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34CA5BC1-7A01-4F77-82A4-B4D1CAE7C9EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{A30D4FA8-0ED7-4DA1-87B9-D9CE5914D429} = {DFC070B0-970C-4F5C-97C1-E99AC990387E}
 		{8286DA71-F1FA-42E8-836E-D62FB455F177} = {DFC070B0-970C-4F5C-97C1-E99AC990387E}
-		{A0217601-9928-404D-A3E0-602119215820} = {DFC070B0-970C-4F5C-97C1-E99AC990387E}
+		{34CA5BC1-7A01-4F77-82A4-B4D1CAE7C9EE} = {DFC070B0-970C-4F5C-97C1-E99AC990387E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {96D9C2D7-2F38-402B-AC8F-2898D8A0126E}

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using BryceFamily.Web.Core.Models;
 
-namespace brycefamily.Controllers
+namespace BryceFamily.Web.Core.Controllers
 {
     [Route("api/[Controller]")]
     public class EventsController : Controller
