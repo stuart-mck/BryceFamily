@@ -55,7 +55,7 @@ html {
 
 /* ====== Header ====== */
 .header {
-    background-image: linear-gradient(rgba(20, 44, 82, 0.85), rgba(20, 44, 82, 0.85)); /*, url('../images/bg.jpg'); */
+    background-image: linear-gradient(rgba(20, 44, 82, 0.85), rgba(20, 44, 82, 0.85)), url('../images/fields.jpg'); 
     color: rgba(255, 255, 255, 0.85);
     padding: 0;
     margin: 0;

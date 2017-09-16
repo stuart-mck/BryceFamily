@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "2d609d6aa3bf862abce3"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "e0ad67cb1d8841629c5b"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -1826,7 +1826,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "body,\r\nhtml {\r\n    height: 100%;\r\n}\r\n\r\n.page-wrapper {\r\n    min-height: 100%;\r\n    /* equal to footer height */\r\n    margin-bottom: -50px;\r\n}\r\n\r\n    .page-wrapper:after {\r\n        content: \"\";\r\n        display: block;\r\n        height: 50px;\r\n    }\r\n\r\n.footer {\r\n    height: 50px;\r\n}\r\n\r\n.body-blue > .header {\r\n    background-position: center bottom;\r\n    background-size: initial;\r\n}\r\n\r\n\r\n.header .navbar-brand {\r\n    display: block;\r\n    float: none;\r\n    height: auto;\r\n}\r\n\r\n.navbar {\r\n    background: inherit;\r\n    margin-bottom: 0;\r\n}\r\n\r\n    .navbar .container-fluid {\r\n        display: flex;\r\n        flex-direction: row;\r\n        align-items: center;\r\n    }\r\n\r\n.navbar-nav {\r\n    margin-left: 30px;\r\n}\r\n\r\n    .navbar-nav > li {\r\n        margin-right: 30px;\r\n        font-size: 1.1em;\r\n    }\r\n\r\n\r\n\r\n/* ====== Header ====== */\r\n.header {\r\n    background-image: linear-gradient(rgba(20, 44, 82, 0.85), rgba(20, 44, 82, 0.85)); /*, url('../images/bg.jpg'); */\r\n    color: rgba(255, 255, 255, 0.85);\r\n    padding: 0;\r\n    margin: 0;\r\n    background-position: 60% 40%;\r\n    background-repeat: no-repeat;\r\n    background-size: cover;\r\n    position: relative;\r\n}\r\n\r\n\r\n/* Sidebar */\r\n.doc-sidebar {\r\n    float: left;\r\n    width: 200px;\r\n}\r\n\r\n.doc-content {\r\n    margin-left: 250px;\r\n}\r\n\r\n.sidenav .nav a {\r\n    display: inline-block;\r\n    padding-right: 10px;\r\n    margin-right: 20px;\r\n}\r\n\r\n.sidenav .nav .parent {\r\n    outline: none;\r\n    cursor: pointer;\r\n    transition: all 0.2s;\r\n}\r\n\r\n    .sidenav .nav .parent > .nav {\r\n        display: block;\r\n        max-height: 0;\r\n        margin-left: 18px;\r\n        overflow: hidden;\r\n        transition: all 0.2s;\r\n        font-size: 14px;\r\n    }\r\n\r\n    .sidenav .nav .parent:after {\r\n        display: block;\r\n        transition: all 0.2s;\r\n    }\r\n\r\n    .sidenav .nav a:hover, .sidenav .nav .parent.active > a:hover, .sidenav .nav .parent:hover:after {\r\n        color: #00b3ee;\r\n    }\r\n\r\n    .sidenav .nav .parent.active:after {\r\n        transform: rotate(180deg);\r\n        content: \"\\F107\" !important;\r\n    }\r\n\r\n    .sidenav .nav .parent.active > .nav {\r\n        max-height: 700px;\r\n    }\r\n\r\n/* ====== Footer ====== */\r\n.footer {\r\n    background: #142c52;\r\n    color: rgba(255, 255, 255, 0.6);\r\n    padding: 15px 0;\r\n    position: fixed;\r\n    bottom: 0;\r\n    width: 100%;\r\n}\r\n\r\n    .footer a {\r\n        color: #257ba0;\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n@media (max-width: 767px) {\r\n    /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */\r\n    .body-content {\r\n        padding-top: 50px;\r\n    }\r\n}\r\n", ""]);
+exports.push([module.i, "", ""]);
 
 // exports
 
