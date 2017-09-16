@@ -3,16 +3,81 @@
             <nav-menu></nav-menu>
         </div>
     <div class="col-md-10">
-        <h1>Events</h1>
-        <div class="row event" *ngFor="let event of Events">
-            <h3>{{ event.title }}</h3>
-            <div class="row">
-                <div class="col-md-2">Event Type: {{event.eventType}}</div>
-                <div class="col-md-2">Start Date: {{event.dates.startDate}}</div>
-                <button class="col-md-2 btn btn-sm" (click)="switchDetail()">...</button>
+        <div class="row">
+            <h1>Events</h1> <span *ngIf="canEdit" class="editorButton"><button (click)="addNewEvent()" class="btn btn-default btn-green">Add New Event</button></span>
+        </div>
+        <div *ngIf="!editMode">
+            <div class="row event" *ngFor="let event of Events">
+                <h3>{{ event.title }}</h3>
+                <div class="row">
+                    <div class="col-md-2">Event Type: {{event.eventType}}</div>
+                    <div class="col-md-2">Start Date: {{event.dates.startDate}}</div>
+                    <button class="col-md-2 btn btn-sm" (click)="switchDetail(event.id)">...</button>
+                </div>
+                <div class="row detail" *ngIf="showDetail" [innerHTML]='event.details'>
+                </div>
             </div>
-            <div class="row detail" *ngIf="showDetail" [innerHTML]='event.details'>
-            </div>
+        </div>
+        <div *ngIf="editMode">
+            <h2>New Event</h2>
+            <form #f="ngForm" (ngSubmit)="submitNewEvent()">
+                <div class="form-group row">
+                    <div class="col-md-2">
+                        <label>Title:</label>
+                    </div>
+                    <div class="col-md-10 form-control">
+                        <input type="text" [(ngModel)]="Event.title" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-2">
+                        <label>Start Date:</label>
+                    </div>
+                    <div class="col-md-3 form-control">
+                        <input [mdDatepicker]="myDatepicker" [(ngModel)]="Event.dates.startDate">
+                        <md-datepicker #myDatepicker></md-datepicker>
+                    </div>
+                    <div class="col-md-2">
+                        <label>End Date:</label>
+                    </div>
+                    <div class="col-md-3 form-control">
+                        <input type="datetime" [(ngModel)]="Event.dates.endDate" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-2">
+                        <label>Status:</label>
+                    </div>
+                    <div class="col-md-3 form-control">
+                        <select [(ngModel)]="Event.eventStatus" required>
+                            <option [ngValue]="0">Pending</option>
+                            <option [ngValue]="1">Cancelled</option>
+                            <option [ngValue]="2">Expired</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label>Type:</label>
+                    </div>
+                    <div class="col-md-3 form-control">
+                        <select  [(ngModel)]="Event.eventType" required>
+                            <option [ngValue]="0">Gathering</option>
+                            <option [ngValue]="1">Birthday</option>
+                            <option [ngValue]="2">Funeral</option>
+                            <option [ngValue]="3">Wedding</option>
+                            <option [ngValue]="4">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-2">
+                        <label>Description:</label>
+                    </div>
+                    <div class="col-md-10 form-control">
+                        <textarea [(ngModel)]="Event.details" required></textarea>
+                    </div>
+                </div>
+                <button type="submit" [disabled]="!f.valid">Submit</button>
+            </form>
         </div>
     </div>
 </div>

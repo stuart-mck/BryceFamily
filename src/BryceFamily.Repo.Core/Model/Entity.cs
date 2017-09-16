@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Amazon.DynamoDBv2.DataModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace BryceFamily.Repo.Core.Model
 {
     public class Entity
     {
-        public int ID { get; set; }
+        [DynamoDBHashKey]   
+        public Guid ID { get; set; }
     }
 }
