@@ -197,10 +197,8 @@ orleans.codegen.cs
 # Workaround for https://github.com/aspnet/JavaScriptServices/issues/235
 /node_modules/**
 !/node_modules/_placeholder.txt
-*/src/brycefamily.web/node_modules
 /src/BryceFamily.Web.Core/node_modules
-/src/BryceFamily.Web.Core.off/node_modules
-/src/BryceFamily.web.off/node_modules
+
 
 /yarn.lock
 
