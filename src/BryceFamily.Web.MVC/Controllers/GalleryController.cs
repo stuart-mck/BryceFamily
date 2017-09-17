@@ -22,7 +22,7 @@ namespace BryceFamily.Web.MVC.Controllers
         {
             var gallery = await _readModel.Load(id, new System.Threading.CancellationToken());
 
-            return View(gallery);
+            return View(Gallery.Map(gallery));
         }
 
         public async Task<IActionResult> Index()

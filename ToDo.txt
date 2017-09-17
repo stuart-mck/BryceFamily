@@ -1,0 +1,19 @@
+image viewing
+gallery management
+	- associate with family event
+	- upload image (image ref editing)
+contacts
+	- upload bulk list
+	- emails editor
+	- subcription / unsubscription
+	- send email
+	- sms alerts
+auth / authentication
+style tidy
+google maps integration
+  - events
+  - people ?
+contact
+- captcha
+view family tree
+ xml - json?

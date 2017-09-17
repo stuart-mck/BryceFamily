@@ -10,7 +10,7 @@ namespace BryceFamily.Web.MVC.Controllers
     {
         public IActionResult Thumbnail (Guid resourceid)
         {
-            return null;
+            return NotFound();
         }
 
         public IActionResult Image(Guid resourceid)

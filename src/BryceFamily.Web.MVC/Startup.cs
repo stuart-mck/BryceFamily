@@ -57,7 +57,74 @@ namespace BryceFamily.Web.MVC
                         FirstName = "Brian",
                         LastName = "Something"
                     },
-                    DateCreated = DateTime.Now.AddDays(-36)
+                    DateCreated = DateTime.Now.AddDays(-36),
+                    ImageReferences = new List<ImageReference>()
+                    {
+                        new ImageReference()
+                        {
+                            Description = "an image",
+                            ImageLocation = Guid.NewGuid(),
+                            MimeType = "gif",
+                            Title = "Image 1"
+                        },
+                        new ImageReference()
+                        {
+                            Description = "an image",
+                            ImageLocation = Guid.NewGuid(),
+                            MimeType = "gif",
+                            Title = "Image 2"
+                        },
+                        new ImageReference()
+                        {
+                            Description = "an image",
+                            ImageLocation = Guid.NewGuid(),
+                            MimeType = "gif",
+                            Title = "Image 3"
+                        },
+                        new ImageReference()
+                        {
+                            Description = "an image",
+                            ImageLocation = Guid.NewGuid(),
+                            MimeType = "gif",
+                            Title = "Image 4"
+                        },
+                        new ImageReference()
+                        {
+                            Description = "an image",
+                            ImageLocation = Guid.NewGuid(),
+                            MimeType = "gif",
+                            Title = "Image 5"
+                        },
+                        new ImageReference()
+                        {
+                            Description = "an image",
+                            ImageLocation = Guid.NewGuid(),
+                            MimeType = "gif",
+                            Title = "Image 6"
+                        },
+                        new ImageReference()
+                        {
+                            Description = "an image",
+                            ImageLocation = Guid.NewGuid(),
+                            MimeType = "gif",
+                            Title = "Image 7"
+                        },
+                        new ImageReference()
+                        {
+                            Description = "an image",
+                            ImageLocation = Guid.NewGuid(),
+                            MimeType = "gif",
+                            Title = "Image 8"
+                        },
+                        new ImageReference()
+                        {
+                            Description = "an image",
+                            ImageLocation = Guid.NewGuid(),
+                            MimeType = "gif",
+                            Title = "Image 9"
+                        },
+
+                    }
                 }
             };
 

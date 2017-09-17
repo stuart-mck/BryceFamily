@@ -1,10 +1,12 @@
-﻿namespace BryceFamily.Web.MVC.Models
+﻿using System;
+
+namespace BryceFamily.Web.MVC.Models
 {
     public class ImageReferenceModel
     {
         public string Title { get; set; }
 
-        public string Reference { get; set; }
+        public Guid Reference { get; set; }
 
         public string MimeType { get; set; }
 
@@ -16,7 +18,7 @@
             return new ImageReferenceModel()
             {
                 MimeType = arg.MimeType,
-                Reference = $"{arg.ID}",
+                Reference = arg.ID,
                 Title = arg.Title
             };
         }

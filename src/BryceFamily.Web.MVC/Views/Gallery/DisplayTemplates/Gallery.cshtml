@@ -1,22 +1,32 @@
 ﻿@model Gallery
-@{
-    ViewData["Title"] = "Gallery";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+
 
 
 <h2>@Html.DisplayFor(t => t.Title)</h2>
 <div class="row">
-    @{ 
+    @{
         var total = Model.ImageReferences.Count();
         const int maxInRow = 4;
         var totalRows = Math.Ceiling((double)total / (double)maxInRow);
-    }
-    @for(var row = 0; row < totalRows; row++)
-    {
-        <div class="row">
 
-        </div>
     }
+        
+        @for (var counter = 0; counter < total; counter++)
+        {
+            if (counter == 0 || counter % 6 == 0)
+            {
+                @Html.Raw("<div class=\"row\" >") 
+            }
+
+            <div class="col-md-2">
+                <img src="@Url.Action("Thumbnail", "Resource", new { id= Model.ImageReferences[counter].Reference})" alt="@Model.ImageReferences[counter].Title" />
+                <label>@Model.ImageReferences[counter].Title</label>
+            </div>
+
+            @if (counter > 0 && counter % 6 == 0)
+            {
+                @Html.Raw("</div>")
+            }
+        }
+       
 </div>
-
