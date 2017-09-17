@@ -15,6 +15,12 @@ namespace BryceFamily.Web.Core.Controllers
 
         }
 
+        [HttpPost]
+        public IActionResult Post(Event @event)
+        {
+            return Ok();
+        }
+
         [HttpGet("[action]")]
         public IEnumerable<Event> Events(bool activeOnly)
         {

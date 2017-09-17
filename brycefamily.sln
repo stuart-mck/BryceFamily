@@ -12,7 +12,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BryceFamily.Repo.Core", "src\BryceFamily.Repo.Core\BryceFamily.Repo.Core.csproj", "{8286DA71-F1FA-42E8-836E-D62FB455F177}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BryceFamily.Web.Core", "src\BryceFamily.Web.Core\BryceFamily.Web.Core.csproj", "{34CA5BC1-7A01-4F77-82A4-B4D1CAE7C9EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BryceFamily.Web.Core", "src\BryceFamily.Web.Core\BryceFamily.Web.Core.csproj", "{34CA5BC1-7A01-4F77-82A4-B4D1CAE7C9EE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BryceFamily.Web.MVC", "src\BryceFamily.Web.MVC\BryceFamily.Web.MVC.csproj", "{6FC2FCEE-A9E0-40F5-9C47-97071458D2EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,6 +30,10 @@ Global
 		{34CA5BC1-7A01-4F77-82A4-B4D1CAE7C9EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34CA5BC1-7A01-4F77-82A4-B4D1CAE7C9EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34CA5BC1-7A01-4F77-82A4-B4D1CAE7C9EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FC2FCEE-A9E0-40F5-9C47-97071458D2EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FC2FCEE-A9E0-40F5-9C47-97071458D2EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FC2FCEE-A9E0-40F5-9C47-97071458D2EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FC2FCEE-A9E0-40F5-9C47-97071458D2EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -35,6 +41,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{8286DA71-F1FA-42E8-836E-D62FB455F177} = {DFC070B0-970C-4F5C-97C1-E99AC990387E}
 		{34CA5BC1-7A01-4F77-82A4-B4D1CAE7C9EE} = {DFC070B0-970C-4F5C-97C1-E99AC990387E}
+		{6FC2FCEE-A9E0-40F5-9C47-97071458D2EE} = {DFC070B0-970C-4F5C-97C1-E99AC990387E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {96D9C2D7-2F38-402B-AC8F-2898D8A0126E}

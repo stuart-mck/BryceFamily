@@ -2,14 +2,12 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppModuleShared } from './app.module.shared';
 import { AppComponent } from './components/app/app.component';
-import { MdDatepicker } from '@angular/material';
 
 @NgModule({
     bootstrap: [ AppComponent ],
     imports: [
         BrowserModule,
-        AppModuleShared,
-        MdDatepicker
+        AppModuleShared
     ],
     providers: [
         { provide: 'BASE_URL', useFactory: getBaseUrl }

@@ -1,0 +1,74 @@
+﻿@model FamilyEvent
+
+
+<div class="row">
+    <div class="col-md-2">
+        <label>Title:</label>
+    </div>
+    <div class="col-md-10">
+        <input type="text" asp-for="Title" class="form-control" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <label>Start Date:</label>
+    </div>
+    <div class="col-md-3">
+        <input type="date" asp-for="StartDate" class="form-control" />
+    </div>
+    <div class="col-md-2">
+        <label>End Date:</label>
+    </div>
+    <div class="col-md-3 ">
+        <input type="date" asp-for="EndDate" class="form-control" />
+    </div>
+</div>
+<div class="row">
+    @Html.HiddenFor(t => t.EventStatus)
+    <div class="col-md-2">
+        <label>Type:</label>
+    </div>
+    <div class="col-md-3 ">
+        <select asp-for="EventType" asp-items="Html.GetEnumSelectList<eventType>()" class="form-control">
+            <option selected="selected" value="">Please select</option>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <label>Description:</label>
+    </div>
+    <div class="col-md-10">
+        <textarea asp-for="Details" cols="10" rows="10" class="form-control">
+
+        </textarea>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <label>Location</label>
+    </div>
+    <div class="col-md-10 address">
+        <span >Address</span><input type="text" asp-for="Address1" /><br/>
+        <span>&nbsp;</span><input type="text" asp-for="Address2" /><br />
+        <span>Suburb</span><input type="text" asp-for="City" /><br />
+        <span>State</span><input type="text" asp-for="State" /><br />
+        <span>Post Code</span><input type="text" asp-for="PostCode" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <label>Organiser</label>
+    </div>
+    <div class="col-md-10">
+        <div class="col-md-10 address">
+            <span>Name</span><input type="text" asp-for="OrganiserName" /><br />
+            <span>Contact</span><input type="text" asp-for="OrganiserContact" /><br />
+            <span>Email</span><input type="email" asp-for="OrganiserEmail" /><br />
+        </div>
+    </div>
+</div>
+@Html.HiddenFor(t => t.EntityId)
+
+
+   

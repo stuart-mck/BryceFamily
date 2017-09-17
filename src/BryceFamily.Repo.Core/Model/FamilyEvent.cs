@@ -12,6 +12,8 @@ namespace BryceFamily.Repo.Core.Model
 
         public DateTime StartDate { get; set; }
 
+        public DateTime EndDate { get; set; }
+
         public EventLocation Location { get; set; }
 
         public string Details { get; set; }

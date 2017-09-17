@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject  } from '@angular/core';
 import { Event } from './../../model/eventEntities/event';
 import { EventService } from './../../services/event.service';
 import { Http } from '@angular/http';
@@ -16,9 +16,9 @@ export class EventsComponent implements OnInit {
       public canEdit: boolean;
       public newEvent: Event;
   
-      constructor(http: Http) { 
+      constructor(private eventService : EventService, http: Http, @Inject('BASE_URL') originUrl: string) { 
     
-        http.get('/api/Events/Events?activeOnly=true').subscribe(result => {
+        http.get(originUrl + '/api/Events/Events?activeOnly=true').subscribe(result => {
           this.Events = result.json() as Event[];
         });
         this.showDetail = false;
@@ -34,7 +34,13 @@ export class EventsComponent implements OnInit {
      }
 
      submitNewEvent() {
-         
+         this.eventService.saveEvent(this.newEvent)
+             .then(result => {
+                 this.newEvent = result;
+             });
+         this.showDetail = false;
+         this.canEdit = true;
+
      }
 
      public addNewEvent() {

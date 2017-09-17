@@ -1,0 +1,9 @@
+﻿@model FamilyEvent
+
+<h2>New Event</h2>
+ <form asp-controller="Event" sp-action="NewEvent" method="post">
+    
+     @Html.EditorForModel()
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+ </form>
