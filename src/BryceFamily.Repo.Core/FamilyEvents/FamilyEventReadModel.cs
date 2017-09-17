@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace BryceFamily.Repo.Core.FamilyEvents
 {
@@ -45,6 +46,11 @@ namespace BryceFamily.Repo.Core.FamilyEvents
 
             return await context.QueryAsync<FamilyEvent>(queryRequest).GetRemainingAsync();
             
+        }
+
+        public Task<IQueryable<FamilyEvent>> AsQueryable()
+        {
+            throw new NotImplementedException();
         }
     }
 }

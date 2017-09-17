@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using BryceFamily.Web.MVC.Models;
 using BryceFamily.Repo.Core.Repository;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
@@ -18,9 +20,18 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         // GET: /<controller>/
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(GetMocks());
+            var events = (await _readmodel.AsQueryable()).ToList();
+            
+            return View(events.Select(FamilyEvent.Map));
+        }
+
+        public async Task<IActionResult> Detail(Guid eventId)
+        {
+            var familyEvent = await _readmodel.Load(eventId, new System.Threading.CancellationToken());
+            return View(FamilyEvent.Map(familyEvent));
+
         }
 
         [HttpGet]
@@ -40,46 +51,46 @@ namespace BryceFamily.Web.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                
-                return Ok(RedirectToAction("Index"));
+                _writeModel.Save(familyEventPost.MapToEntity());
+                return RedirectToAction("Index");
             }
             return BadRequest();
             
         }
 
-        private IEnumerable<FamilyEvent> GetMocks()
-        {
-            var dummyData = new List<FamilyEvent>(){
-                new FamilyEvent(){
-                        StartDate = new DateTime(2017, 12, 4, 14, 0, 0),
-                        EndDate = new DateTime(2017, 12, 4, 14, 0, 0),
-                    Details = "A gathering of the clan at Lake something or other",
-                    OrganiserName = "Phillip Moore",
-                    Title = "Bryce Family Reuninion",
-                    EntityId = Guid.NewGuid(),
-                        Address1 = "Lake SOmething",
-                        City = "Halls Gap",
-                        LocationTitle = "Lake Something Camping Ground",
-                    EventType = eventType.Gathering,
-                    EventStatus = eventStatus.Pending
-                },
-                new FamilyEvent(){
-                    StartDate = new DateTime(2018, 3, 2, 14, 0, 0),
-                        EndDate = new DateTime(2017, 3, 6, 14, 0, 0),
-                    Details = "A gathering of the clan at Halls Gap",
-                    OrganiserName = "Michael Moore",
-                    Title = "Another Bryce Family Reuninion !",
-                    EntityId = Guid.NewGuid(),
-                        Address1 = "The Camping Ground",
-                        City = "Halls Gap",
-                        LocationTitle = "Lake Something Camping Ground",
-                    EventType = eventType.Gathering,
-                    EventStatus = eventStatus.Pending
-                }
-            };
+        //private IEnumerable<FamilyEvent> GetMocks()
+        //{
+        //    var dummyData = new List<FamilyEvent>(){
+        //        new FamilyEvent(){
+        //                StartDate = new DateTime(2017, 12, 4, 14, 0, 0),
+        //                EndDate = new DateTime(2017, 12, 4, 14, 0, 0),
+        //            Details = "A gathering of the clan at Lake something or other",
+        //            OrganiserName = "Phillip Moore",
+        //            Title = "Bryce Family Reuninion",
+        //            EntityId = Guid.NewGuid(),
+        //                Address1 = "Lake SOmething",
+        //                City = "Halls Gap",
+        //                LocationTitle = "Lake Something Camping Ground",
+        //            EventType = eventType.Gathering,
+        //            EventStatus = eventStatus.Pending
+        //        },
+        //        new FamilyEvent(){
+        //            StartDate = new DateTime(2018, 3, 2, 14, 0, 0),
+        //                EndDate = new DateTime(2017, 3, 6, 14, 0, 0),
+        //            Details = "A gathering of the clan at Halls Gap",
+        //            OrganiserName = "Michael Moore",
+        //            Title = "Another Bryce Family Reuninion !",
+        //            EntityId = Guid.NewGuid(),
+        //                Address1 = "The Camping Ground",
+        //                City = "Halls Gap",
+        //                LocationTitle = "Lake Something Camping Ground",
+        //            EventType = eventType.Gathering,
+        //            EventStatus = eventStatus.Pending
+        //        }
+        //    };
 
-            return dummyData;
-        }
+        //    return dummyData;
+        //}
     }
 }
         

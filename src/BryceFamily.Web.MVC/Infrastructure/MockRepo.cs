@@ -41,5 +41,10 @@ namespace BryceFamily.Web.MVC.Infrastructure
                 _familyEvents.Remove(itemToRemove);
 
         }
+
+        public async Task<IQueryable<FamilyEvent>> AsQueryable()
+        {
+            return await Task.FromResult(_familyEvents.AsQueryable());
+        }
     }
 }

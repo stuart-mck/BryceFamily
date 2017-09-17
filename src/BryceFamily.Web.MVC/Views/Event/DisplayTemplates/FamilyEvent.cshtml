@@ -1,0 +1,73 @@
+﻿@model FamilyEvent
+
+<div class="row">
+    <div class="col-md-2">
+        <label>Title:</label>
+    </div>
+    <div class="col-md-10">
+        @Html.DisplayFor(t => t.Title)
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <label>Start Date:</label>
+    </div>
+    <div class="col-md-3">
+        @Html.DisplayFor(t => t.StartDate)
+    </div>
+    <div class="col-md-2">
+        <label>End Date:</label>
+    </div>
+    <div class="col-md-3 ">
+        @Html.DisplayFor(t => t.EndDate)
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <label>Status:</label>
+    </div>
+    <div class="col-md-3 ">
+        @Html.DisplayFor(t => t.EventStatus)
+    </div>
+    <div class="col-md-2">
+        <label>Type:</label>
+    </div>
+    <div class="col-md-3 ">
+        @Html.DisplayFor(t => t.EventType)
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <label>Description:</label>
+    </div>
+    <div class="col-md-10">
+        @Html.DisplayTextFor(t => t.Details)
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <label>Location</label>
+    </div>
+    <div class="col-md-10 address">
+        <span>Address</span>@Html.DisplayFor(t => t.Address1)<br />
+        <span>&nbsp;</span>@Html.DisplayFor(t => t.Address2)<br />
+        <span>Suburb</span>@Html.DisplayFor(t => t.City)<br />
+        <span>State</span>@Html.DisplayFor(t => t.State)<br />
+        <span>Post Code</span>@Html.DisplayFor(t => t.PostCode)
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <label>Organiser</label>
+    </div>
+    <div class="col-md-10">
+        <div class="col-md-10 address">
+            <span>Name</span>@Html.DisplayFor(t => t.OrganiserContact)<br />
+            <span>Contact</span>@Html.DisplayFor(t => t.OrganiserContact)<br />
+            <span>Email</span>@Html.DisplayFor(t => t.OrganiserEmail)<br />
+        </div>
+    </div>
+</div>
+<div>
+@Html.ActionLink("Back", "Index", "Event")
+</div>

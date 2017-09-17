@@ -45,6 +45,7 @@ namespace BryceFamily.Web.MVC
                 EndDate = new DateTime(2018, 3, 12, 12, 00, 00),
                 StartDate = new DateTime(2018, 3, 10, 12, 00, 00),
                 EventStatus = EventStatus.Pending,
+                EventType = EventType.Gathering,
                 Title = "A new event",
                 Location = new EventLocation()
                 {

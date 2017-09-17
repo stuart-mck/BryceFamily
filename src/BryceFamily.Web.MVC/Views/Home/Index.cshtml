@@ -7,17 +7,23 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="nav-panel">
-                        <a [routerLink]="['/familyHistory']">
-                            <h2>Family History</h2>
-                            <div class="item-text">
-                                Info on the history of the Bryce family
-                            </div>
-                        </a>
+                        <h2>@Html.ActionLink("History", "Index", "History")</h2>
+                        <div class="item-text">
+                            Info on the history of the Bryce family
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="nav-panel">
                         <h2>@Html.ActionLink("Events", "Index", "Event")</h2>
+                        <div class="item-text">
+                            See a schedule of and information about upcoming family events
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="nav-panel">
+                        <h2>@Html.ActionLink("Galleries", "Index", "Gallery")</h2>
                         <div class="item-text">
                             View pics and stories from previous family events and see a schedule of upcoming events
                         </div>

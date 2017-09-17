@@ -27,4 +27,5 @@ namespace BryceFamily.Repo.Core.Model
         public ICollection<Image> EventImages { get; set; }
 
     }
+
 }

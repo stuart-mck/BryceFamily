@@ -15,4 +15,8 @@
     <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.4.17" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Galleries\" />
+  </ItemGroup>
+
 </Project>
