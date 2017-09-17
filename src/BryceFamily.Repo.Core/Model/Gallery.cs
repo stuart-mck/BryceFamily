@@ -8,9 +8,16 @@ namespace BryceFamily.Repo.Core.Model
     {
         public string Name { get; set; }
 
+        public Person Owner { get; set; }
+
+        public string Summary { get; set; }
+
         public FamilyEvent FamilyEvent { get; set; }
 
         public List<ImageReference> ImageReferences { get; set; }
+
+        public DateTime DateCreated { get; set; }
+
 
     }
 }

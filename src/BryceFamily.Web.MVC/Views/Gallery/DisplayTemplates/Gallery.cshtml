@@ -1,0 +1,22 @@
+﻿@model Gallery
+@{
+    ViewData["Title"] = "Gallery";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>@Html.DisplayFor(t => t.Title)</h2>
+<div class="row">
+    @{ 
+        var total = Model.ImageReferences.Count();
+        const int maxInRow = 4;
+        var totalRows = Math.Ceiling((double)total / (double)maxInRow);
+    }
+    @for(var row = 0; row < totalRows; row++)
+    {
+        <div class="row">
+
+        </div>
+    }
+</div>
+

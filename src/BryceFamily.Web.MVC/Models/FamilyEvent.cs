@@ -52,6 +52,8 @@ namespace BryceFamily.Web.MVC.Models
 
         public static FamilyEvent Map(Repo.Core.Model.FamilyEvent sourceFamilyEvent)
         {
+            if (sourceFamilyEvent == null)
+                return null;
             return new FamilyEvent()
             {
                 Address1 = sourceFamilyEvent.Location?.Address1,

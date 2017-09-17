@@ -33,6 +33,35 @@ namespace BryceFamily.Web.MVC
             services.AddSingleton(context => (IReadModel<FamilyEvent, Guid>)context.GetService<MockRepo<FamilyEvent, Guid>>());
             services.AddSingleton(context => (IWriteModel<FamilyEvent, Guid>)context.GetService<MockRepo<FamilyEvent, Guid>>());
 
+            services.AddSingleton(context =>
+            {
+                return new GalleryMockRepo<Gallery, Guid>(GetMockGalleries());
+            });
+            services.AddSingleton(context => (IReadModel<Gallery, Guid>)context.GetService<GalleryMockRepo<Gallery, Guid>>());
+            //services.AddSingleton(context => (IWriteModel<Gallery, Guid>)context.GetService<MockRepo<Gallery, Guid>>());
+
+        }
+
+        private List<Gallery> GetMockGalleries()
+        {
+            var dummyData = new List<Gallery>()
+            {
+                new Gallery()
+                {
+                    ID = Guid.NewGuid(),
+                    Name = "A Gallery",
+                    Summary = "An image gallery of stuff with pictures of stuff in it",
+                    Owner = new Person()
+                    {
+                        ID = Guid.NewGuid(),
+                        FirstName = "Brian",
+                        LastName = "Something"
+                    },
+                    DateCreated = DateTime.Now.AddDays(-36)
+                }
+            };
+
+            return dummyData;
         }
 
         private List<FamilyEvent> GetMockData()

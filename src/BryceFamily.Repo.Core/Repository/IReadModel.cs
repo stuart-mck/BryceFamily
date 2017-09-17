@@ -11,9 +11,9 @@ namespace BryceFamily.Repo.Core.Repository
     {
         Task<TEntity> Load(TId id, CancellationToken cancellationToken);
 
-        Task<List<FamilyEvent>> GetByQuery(DateTime startDate, DateTime endDate);
+        Task<List<TEntity>> GetByQuery(DateTime startDate, DateTime endDate);
 
-        Task<IQueryable<FamilyEvent>> AsQueryable();
+        Task<IQueryable<TEntity>> AsQueryable();
 
     }
 }

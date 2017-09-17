@@ -11,5 +11,7 @@ namespace BryceFamily.Repo.Core.Model
         public string Description { get; set; }
 
         public Uri ImageLocation { get; set; }
+
+        public string MimeType { get; set; }
     }
 }
