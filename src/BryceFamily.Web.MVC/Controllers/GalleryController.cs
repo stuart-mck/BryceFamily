@@ -33,9 +33,7 @@ namespace BryceFamily.Web.MVC.Controllers
         {
             var galleries = (await _readModel.AsQueryable()).ToList();
 
-            return View(galleries.Select(t => {
-                return Gallery.Map(t);
-                }));
+            return View(galleries.Select(Gallery.Map));
             
         }
 
