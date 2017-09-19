@@ -91,10 +91,7 @@ namespace BryceFamily.Web.MVC.Controllers
 
                     if (file.Length > 0)
                     {
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await formFile.CopyToAsync(stream);
-                        }
+
                         await _fileService.SaveFile(img.Id, galleryId, file, file.Name);
                     }
                 });
