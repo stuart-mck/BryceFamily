@@ -1,0 +1,36 @@
+﻿@model BryceFamily.Web.MVC.Models.Gallery
+
+<input type="hidden" asp-for="Id" />
+<div class="row">
+    <div class="col-md-2">
+        <label>Title:</label>
+    </div>
+    <div class="col-md-10">
+        <input type="text" asp-for="Title" class="form-control" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-2">
+        <label>Owner:</label>
+    </div>
+    <div class="col-md-10">
+        <input type="text" asp-for="Owner" class="form-control" />
+    </div>
+    <input type="hidden" asp-for="OwnerId"/>
+</div>
+
+
+<div class="row">
+    <div class="col-md-2">
+        <label>Summary:</label>
+    </div>
+    <div class="col-md-10">
+        <textarea asp-for="Summary" class="form-control" rows="10" cols="10"></textarea>
+    </div>
+    <input type="hidden" asp-for="OwnerId" />
+</div>
+
+
+
+

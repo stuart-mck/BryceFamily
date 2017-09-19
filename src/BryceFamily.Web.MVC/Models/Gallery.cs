@@ -8,11 +8,11 @@ namespace BryceFamily.Web.MVC.Models
     {
         public string Title { get; set; }
         public FamilyEvent FamilyEvent { get; set; }
-        public string Owner { get; private set; }
-        public Guid OwnerId { get; private set; }
-        public string Summary { get; private set; }
-        public Guid Id { get; private set; }
-        public DateTime DateCreated { get; private set; }
+        public string Owner { get; set; }
+        public Guid OwnerId { get; set; }
+        public string Summary { get; set; }
+        public Guid Id { get; set; }
+        public DateTime DateCreated { get; set; }
 
         public List<ImageReferenceModel> ImageReferences { get; private set; }
 
@@ -39,6 +39,17 @@ namespace BryceFamily.Web.MVC.Models
                 results.AddRange(imageReferences.Select(ImageReferenceModel.Map));
 
             return results;
+        }
+
+        public Repo.Core.Model.Gallery MapToEntity()
+        {
+            return new Repo.Core.Model.Gallery()
+            {
+                ID = this.Id,
+                DateCreated = this.DateCreated,
+                Name = this.Title,
+                Summary = this.Summary
+            };
         }
     }
 }

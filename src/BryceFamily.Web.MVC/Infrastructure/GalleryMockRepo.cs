@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace BryceFamily.Web.MVC.Infrastructure
 {
-    public class GalleryMockRepo<TEntity, TId> : IReadModel<Gallery, Guid>
+    public class GalleryMockRepo<TEntity, TId> : IReadModel<Gallery, Guid>, IWriteModel<Gallery, Guid>
     {
         public GalleryMockRepo(List<Gallery> gallery)
         {
@@ -30,6 +30,17 @@ namespace BryceFamily.Web.MVC.Infrastructure
         public async Task<Gallery> Load(Guid id, CancellationToken cancellationToken)
         {
             return await Task.FromResult(_gallery.First(t => t.ID == id));
+        }
+
+        public Guid Save(Gallery entity)
+        {
+            _gallery.Add(entity);
+            return entity.ID;
+        }
+
+        public void Delete(Guid entityId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

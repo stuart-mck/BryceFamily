@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -26,23 +24,17 @@ namespace BryceFamily.Web.MVC
         {
             services.AddMvc();
 
-            services.AddSingleton(context =>
-            {
-                return new MockRepo<FamilyEvent, Guid>(GetMockData());
-            });
+            services.AddSingleton(context => new MockRepo<FamilyEvent, Guid>(GetMockData()));
             services.AddSingleton(context => (IReadModel<FamilyEvent, Guid>)context.GetService<MockRepo<FamilyEvent, Guid>>());
             services.AddSingleton(context => (IWriteModel<FamilyEvent, Guid>)context.GetService<MockRepo<FamilyEvent, Guid>>());
 
-            services.AddSingleton(context =>
-            {
-                return new GalleryMockRepo<Gallery, Guid>(GetMockGalleries());
-            });
+            services.AddSingleton(context => new GalleryMockRepo<Gallery, Guid>(GetMockGalleries()));
             services.AddSingleton(context => (IReadModel<Gallery, Guid>)context.GetService<GalleryMockRepo<Gallery, Guid>>());
-            //services.AddSingleton(context => (IWriteModel<Gallery, Guid>)context.GetService<MockRepo<Gallery, Guid>>());
+            services.AddSingleton(context => (IWriteModel<Gallery, Guid>)context.GetService<GalleryMockRepo<Gallery, Guid>>());
 
         }
 
-        private List<Gallery> GetMockGalleries()
+        private static List<Gallery> GetMockGalleries()
         {
             var dummyData = new List<Gallery>()
             {
@@ -131,7 +123,7 @@ namespace BryceFamily.Web.MVC
             return dummyData;
         }
 
-        private List<FamilyEvent> GetMockData()
+        private static List<FamilyEvent> GetMockData()
         {
             var dummyData = new List<FamilyEvent>();
             dummyData.Add(new FamilyEvent()
