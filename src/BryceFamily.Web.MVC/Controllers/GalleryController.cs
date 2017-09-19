@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using BryceFamily.Repo.Core.Repository;
 using BryceFamily.Web.MVC.Models;
 using Microsoft.AspNetCore.Http;
+using BryceFamily.Repo.Core.Files;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
@@ -14,11 +15,13 @@ namespace BryceFamily.Web.MVC.Controllers
     {
         private readonly IReadModel<Repo.Core.Model.Gallery, Guid> _readModel;
         private readonly IWriteModel<Repo.Core.Model.Gallery, Guid> _writeModel;
+        private readonly IFileService _fileService;
 
-        public GalleryController(IReadModel<Repo.Core.Model.Gallery, Guid> readModel, IWriteModel<Repo.Core.Model.Gallery, Guid> writeModel)
+        public GalleryController(IReadModel<Repo.Core.Model.Gallery, Guid> readModel, IWriteModel<Repo.Core.Model.Gallery, Guid> writeModel, IFileService fileService)
         {
             _readModel = readModel;
             _writeModel = writeModel;
+            _fileService = fileService;
         }
 
 
@@ -38,7 +41,7 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> EditGallery()
+        public IActionResult EditGallery()
         {
             return View(new Gallery()
             {
@@ -71,7 +74,38 @@ namespace BryceFamily.Web.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadFiles(Guid galleryId, List<IFormFile> files)
         {
-            return await Task.FromResult(Ok());
+            try
+            {
+                var gallery = Gallery.Map(await _readModel.Load(galleryId, CancellationToken.None));
+
+                files.ForEach(async file =>
+                {
+                    var img = new ImageReferenceModel()
+                    {
+                        MimeType = file.ContentType,
+                        Reference = Guid.NewGuid(),
+                        Title = file.Name,
+                        Id = Guid.NewGuid()
+                    };
+                    gallery.ImageReferences.Add(img);
+
+                    if (file.Length > 0)
+                    {
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await formFile.CopyToAsync(stream);
+                        }
+                        await _fileService.SaveFile(img.Id, galleryId, file, file.Name);
+                    }
+                });
+
+                return await Task.FromResult(Ok());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Gallery does not exist");
+            }
+            
         }
     }
 }

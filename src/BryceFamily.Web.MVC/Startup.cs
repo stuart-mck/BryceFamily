@@ -7,17 +7,21 @@ using Microsoft.Extensions.DependencyInjection;
 using BryceFamily.Web.MVC.Infrastructure;
 using BryceFamily.Repo.Core.Model;
 using BryceFamily.Repo.Core.Repository;
+using BryceFamily.Repo.Core.Files;
 
 namespace BryceFamily.Web.MVC
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             Configuration = configuration;
+            HostingEnvironment = hostingEnvironment;
         }
 
         public IConfiguration Configuration { get; }
+
+        public IHostingEnvironment HostingEnvironment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -31,6 +35,9 @@ namespace BryceFamily.Web.MVC
             services.AddSingleton(context => new GalleryMockRepo<Gallery, Guid>(GetMockGalleries()));
             services.AddSingleton(context => (IReadModel<Gallery, Guid>)context.GetService<GalleryMockRepo<Gallery, Guid>>());
             services.AddSingleton(context => (IWriteModel<Gallery, Guid>)context.GetService<GalleryMockRepo<Gallery, Guid>>());
+
+            services.AddSingleton<IFileService>(new MockFileService(HostingEnvironment.ContentRootPath));
+            
 
         }
 

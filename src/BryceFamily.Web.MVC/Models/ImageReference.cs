@@ -4,6 +4,8 @@ namespace BryceFamily.Web.MVC.Models
 {
     public class ImageReferenceModel
     {
+        public Guid Id { get; set; }
+
         public string Title { get; set; }
 
         public Guid Reference { get; set; }
