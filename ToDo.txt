@@ -5,6 +5,8 @@ gallery management
 contacts
 	- upload bulk list
 	- emails editor
+	- sms editor
+	- message filters?
 	- subcription / unsubscription
 	- send email
 	- sms alerts
