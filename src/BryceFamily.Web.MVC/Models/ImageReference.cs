@@ -1,4 +1,5 @@
 ﻿using System;
+using BryceFamily.Repo.Core.Model;
 
 namespace BryceFamily.Web.MVC.Models
 {
@@ -8,9 +9,23 @@ namespace BryceFamily.Web.MVC.Models
 
         public string Title { get; set; }
 
-        public Guid Reference { get; set; }
+        public string Reference { get; set; }
+
+        public string Description { get; set; }
 
         public string MimeType { get; set; }
+
+        public ImageReference MapToEntity()
+        {
+            return new ImageReference()
+            {
+                Title = Title,
+                ImageLocation = Reference,
+                ID =  Id,
+                Description = Description,
+                MimeType = MimeType
+            };
+        }
 
         internal static ImageReferenceModel Map(Repo.Core.Model.ImageReference arg)
         {
@@ -20,7 +35,7 @@ namespace BryceFamily.Web.MVC.Models
             return new ImageReferenceModel()
             {
                 MimeType = arg.MimeType,
-                Reference = arg.ID,
+                Reference = arg.ImageLocation,
                 Title = arg.Title
             };
         }

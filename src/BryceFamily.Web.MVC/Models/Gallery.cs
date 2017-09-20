@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BryceFamily.Repo.Core.Model;
 
 namespace BryceFamily.Web.MVC.Models
 {
@@ -48,8 +49,18 @@ namespace BryceFamily.Web.MVC.Models
                 ID = this.Id,
                 DateCreated = this.DateCreated,
                 Name = this.Title,
-                Summary = this.Summary
+                Summary = this.Summary,
+                ImageReferences = BuildImageReferences()
+               
             };
+        }
+
+        private List<ImageReference> BuildImageReferences()
+        {
+            if (ImageReferences == null || !ImageReferences.Any())
+                return new List<ImageReference>();
+
+           return ImageReferences.Select(ir => ir.MapToEntity()).ToList();
         }
     }
 }

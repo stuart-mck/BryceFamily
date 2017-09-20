@@ -1,10 +1,7 @@
 ﻿using BryceFamily.Repo.Core.Files;
-using ImageSharp;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BryceFamily.Web.MVC.Infrastructure
@@ -44,9 +41,9 @@ namespace BryceFamily.Web.MVC.Infrastructure
             return fileData;
         }
 
-        public async Task SaveFile(Guid fileId, Guid galleryId, IFormFile fileContent, string fileName)
+        public async Task<string> SaveFile(Guid fileId, Guid galleryId, IFormFile fileContent, string fileName)
         {
-            var path = Path.Combine(_pathRoot, galleryId.ToString());
+            var path = Path.Combine(_pathRoot, "images", "galleries",  galleryId.ToString());
                  if (!Directory.Exists(path))
                      Directory.CreateDirectory(path);
 
@@ -55,6 +52,8 @@ namespace BryceFamily.Web.MVC.Infrastructure
                 await fileContent.CopyToAsync(outputStream);
                 outputStream.Close();
             }
+
+            return $"images/{galleryId}/{fileId}";
         }
     }
 }

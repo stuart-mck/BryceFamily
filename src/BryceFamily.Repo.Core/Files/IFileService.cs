@@ -11,6 +11,6 @@ namespace BryceFamily.Repo.Core.Files
     {
         Task<byte[]> GetFile(Guid fileId, Guid galleryId);
 
-        Task SaveFile(Guid fileId, Guid galleryId, IFormFile fileStream, string fileName);
+        Task<string> SaveFile(Guid fileId, Guid galleryId, IFormFile fileStream, string fileName);
     }
 }

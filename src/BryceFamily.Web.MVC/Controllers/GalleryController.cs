@@ -63,12 +63,12 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditGallery(Gallery gallery)
+        public IActionResult EditGallery(Gallery gallery)
         {
             if (!ModelState.IsValid) return BadRequest();
 
             _writeModel.Save(gallery.MapToEntity());
-            return RedirectToAction("Index");
+            return  RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -83,7 +83,6 @@ namespace BryceFamily.Web.MVC.Controllers
                     var img = new ImageReferenceModel()
                     {
                         MimeType = file.ContentType,
-                        Reference = Guid.NewGuid(),
                         Title = file.Name,
                         Id = Guid.NewGuid()
                     };
@@ -91,10 +90,11 @@ namespace BryceFamily.Web.MVC.Controllers
 
                     if (file.Length > 0)
                     {
-
-                        await _fileService.SaveFile(img.Id, galleryId, file, file.Name);
+                        img.Reference = await _fileService.SaveFile(img.Id, galleryId, file, file.Name);
                     }
                 });
+
+                _writeModel.Save(gallery.MapToEntity());
 
                 return await Task.FromResult(Ok());
             }

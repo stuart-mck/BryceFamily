@@ -36,7 +36,7 @@ namespace BryceFamily.Web.MVC
             services.AddSingleton(context => (IReadModel<Gallery, Guid>)context.GetService<GalleryMockRepo<Gallery, Guid>>());
             services.AddSingleton(context => (IWriteModel<Gallery, Guid>)context.GetService<GalleryMockRepo<Gallery, Guid>>());
 
-            services.AddSingleton<IFileService>(new MockFileService(HostingEnvironment.ContentRootPath));
+            services.AddSingleton<IFileService>(new MockFileService(HostingEnvironment.WebRootPath));
             
 
         }
@@ -47,7 +47,7 @@ namespace BryceFamily.Web.MVC
             {
                 new Gallery()
                 {
-                    ID = Guid.NewGuid(),
+                    ID = new Guid("af4356dd-34fd-a3e2-2222-1efa3eaa149f"),
                     Name = "A Gallery",
                     Summary = "An image gallery of stuff with pictures of stuff in it",
                     Owner = new Person()
@@ -62,63 +62,63 @@ namespace BryceFamily.Web.MVC
                         new ImageReference()
                         {
                             Description = "an image",
-                            ImageLocation = Guid.NewGuid(),
+                            ImageLocation = string.Empty,
                             MimeType = "gif",
                             Title = "Image 1"
                         },
                         new ImageReference()
                         {
                             Description = "an image",
-                            ImageLocation = Guid.NewGuid(),
+                            ImageLocation = string.Empty,
                             MimeType = "gif",
                             Title = "Image 2"
                         },
                         new ImageReference()
                         {
                             Description = "an image",
-                            ImageLocation = Guid.NewGuid(),
+                            ImageLocation = string.Empty,
                             MimeType = "gif",
                             Title = "Image 3"
                         },
                         new ImageReference()
                         {
                             Description = "an image",
-                            ImageLocation = Guid.NewGuid(),
+                            ImageLocation = string.Empty,
                             MimeType = "gif",
                             Title = "Image 4"
                         },
                         new ImageReference()
                         {
                             Description = "an image",
-                            ImageLocation = Guid.NewGuid(),
+                            ImageLocation = string.Empty,
                             MimeType = "gif",
                             Title = "Image 5"
                         },
                         new ImageReference()
                         {
                             Description = "an image",
-                            ImageLocation = Guid.NewGuid(),
+                            ImageLocation = string.Empty,
                             MimeType = "gif",
                             Title = "Image 6"
                         },
                         new ImageReference()
                         {
                             Description = "an image",
-                            ImageLocation = Guid.NewGuid(),
+                            ImageLocation = string.Empty,
                             MimeType = "gif",
                             Title = "Image 7"
                         },
                         new ImageReference()
                         {
                             Description = "an image",
-                            ImageLocation = Guid.NewGuid(),
+                            ImageLocation = string.Empty,
                             MimeType = "gif",
                             Title = "Image 8"
                         },
                         new ImageReference()
                         {
                             Description = "an image",
-                            ImageLocation = Guid.NewGuid(),
+                            ImageLocation = string.Empty,
                             MimeType = "gif",
                             Title = "Image 9"
                         },
