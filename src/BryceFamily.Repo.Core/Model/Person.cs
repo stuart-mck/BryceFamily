@@ -26,6 +26,9 @@ namespace BryceFamily.Repo.Core.Model
 
         public string Email { get; set; }
 
+        public bool SubscribeToSMS { get; set; }
+
+        public bool SubscribeToEmail { get; set; }
 
         public ICollection<Image> Images { get; set; }
 

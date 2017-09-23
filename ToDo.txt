@@ -1,7 +1,6 @@
-image viewing
 gallery management
 	- associate with family event
-	- upload image (image ref editing)
+	- (image ref editing)
 contacts
 	- upload bulk list
 	- emails editor
