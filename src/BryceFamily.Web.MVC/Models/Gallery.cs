@@ -10,7 +10,7 @@ namespace BryceFamily.Web.MVC.Models
         public string Title { get; set; }
         public FamilyEvent FamilyEvent { get; set; }
         public string Owner { get; set; }
-        public Guid OwnerId { get; set; }
+        public Guid? OwnerId { get; set; }
         public string Summary { get; set; }
         public Guid Id { get; set; }
         public DateTime DateCreated { get; set; }
@@ -22,9 +22,9 @@ namespace BryceFamily.Web.MVC.Models
             return new Gallery()
             {
                 Title = sourceGallery.Name,
-                FamilyEvent = FamilyEvent.Map(sourceGallery.FamilyEvent),
+                FamilyEvent = FamilyEvent.Map(sourceGallery?.FamilyEvent),
                 Owner = $"{sourceGallery.Owner?.FirstName} {sourceGallery.Owner?.LastName}",
-                OwnerId = sourceGallery.Owner.ID,
+                OwnerId = sourceGallery?.Owner?.ID,
                 Summary = sourceGallery.Summary,
                 Id = sourceGallery.ID,
                 DateCreated = sourceGallery.DateCreated,

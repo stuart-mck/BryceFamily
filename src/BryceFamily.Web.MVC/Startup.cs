@@ -61,68 +61,11 @@ namespace BryceFamily.Web.MVC
                     {
                         new ImageReference()
                         {
-                            Description = "an image",
-                            ImageLocation = string.Empty,
-                            MimeType = "gif",
-                            Title = "Image 1"
-                        },
-                        new ImageReference()
-                        {
-                            Description = "an image",
-                            ImageLocation = string.Empty,
-                            MimeType = "gif",
-                            Title = "Image 2"
-                        },
-                        new ImageReference()
-                        {
-                            Description = "an image",
-                            ImageLocation = string.Empty,
-                            MimeType = "gif",
-                            Title = "Image 3"
-                        },
-                        new ImageReference()
-                        {
-                            Description = "an image",
-                            ImageLocation = string.Empty,
-                            MimeType = "gif",
-                            Title = "Image 4"
-                        },
-                        new ImageReference()
-                        {
-                            Description = "an image",
-                            ImageLocation = string.Empty,
-                            MimeType = "gif",
-                            Title = "Image 5"
-                        },
-                        new ImageReference()
-                        {
-                            Description = "an image",
-                            ImageLocation = string.Empty,
-                            MimeType = "gif",
-                            Title = "Image 6"
-                        },
-                        new ImageReference()
-                        {
-                            Description = "an image",
-                            ImageLocation = string.Empty,
-                            MimeType = "gif",
-                            Title = "Image 7"
-                        },
-                        new ImageReference()
-                        {
-                            Description = "an image",
-                            ImageLocation = string.Empty,
-                            MimeType = "gif",
-                            Title = "Image 8"
-                        },
-                        new ImageReference()
-                        {
-                            Description = "an image",
-                            ImageLocation = string.Empty,
-                            MimeType = "gif",
-                            Title = "Image 9"
-                        },
-
+                            ID = new Guid("33919032-e1bc-480b-8c8e-40c88299706e"),
+                            ImageLocation = "images/galleries/af4356dd-34fd-a3e2-2222-1efa3eaa149f",
+                            MimeType = "image/jpg",
+                            Title = "WIN_20151130_20_12_41_Pro.jpg"
+                        }
                     }
                 }
             };

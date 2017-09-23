@@ -36,7 +36,8 @@ namespace BryceFamily.Web.MVC.Models
             {
                 MimeType = arg.MimeType,
                 Reference = arg.ImageLocation,
-                Title = arg.Title
+                Title = arg.Title,
+                Id = arg.ID
             };
         }
     }

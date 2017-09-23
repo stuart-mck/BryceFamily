@@ -19,8 +19,9 @@
             }
 
             <div class="col-md-2">
-                <img src="@Url.Action("Thumbnail", "Resource", new { id= Model.ImageReferences[counter].Reference})" alt="@Model.ImageReferences[counter].Title" />
-                <label>@Model.ImageReferences[counter].Title</label>
+                <img src="@Url.Action("T", "ImageServer", new { galleryId = Model.Id, imageId = Model.ImageReferences[counter].Id })" />
+                <label>@Model.ImageReferences[counter].Title</label><br />
+                @Html.ActionLink("View Image", "ViewImage", "Gallery", new { galleryId = Model.Id, imageId = Model.ImageReferences[counter].Id } )
             </div>
 
             @if (counter > 0 && counter % 6 == 0)

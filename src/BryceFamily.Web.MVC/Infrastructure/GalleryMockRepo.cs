@@ -34,6 +34,10 @@ namespace BryceFamily.Web.MVC.Infrastructure
 
         public Guid Save(Gallery entity)
         {
+            var existingGallery = _gallery.FirstOrDefault(g => g.ID == entity.ID);
+            if (existingGallery != null)
+                _gallery.Remove(existingGallery);
+
             _gallery.Add(entity);
             return entity.ID;
         }

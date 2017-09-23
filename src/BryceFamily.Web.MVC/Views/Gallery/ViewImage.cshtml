@@ -1,0 +1,26 @@
+﻿@model ImageViewModel
+@{
+    ViewData["Title"] = "ViewImage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var title = string.IsNullOrEmpty(Model.Title) ? "Untitled" : Model.Title;
+}
+
+<h2>@title</h2>
+
+<div class="row">
+    <img src="@Url.Action("I", "ImageServer", new { galleryId = Model.GalleryId, imageId = Model.ImageId })" />
+</div>
+<div class="row">
+    @{ if (Model.PreviousLink != Guid.Empty)
+        {
+            @Html.ActionLink("Previous", "ViewImage", "Gallery", new { galleryId = Model.GalleryId, imageId = Model.PreviousLink})
+        }
+    }
+    @{ if (Model.NextLink != Guid.Empty)
+        {
+            @Html.ActionLink("Next", "ViewImage", "Gallery", new { galleryId = Model.GalleryId, imageId = Model.NextLink })
+        }
+    }
+</div>
+
