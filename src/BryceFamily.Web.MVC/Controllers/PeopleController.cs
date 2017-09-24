@@ -25,6 +25,32 @@ namespace BryceFamily.Web.MVC.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult EmailUnsubscribe([FromQuery] Guid personId)
+        {
+            return Ok();
+        }
+
+        [HttpGet]
+        public IActionResult EmailSubscribe([FromQuery] Guid personId)
+        {
+            return Ok();
+        }
+
+
+
+        [HttpGet]
+        public IActionResult SMSSubscribe([FromQuery] Guid personId)
+        {
+            return Ok();
+        }
+
+        [HttpGet]
+        public IActionResult SMSUnsubscribe([FromQuery] Guid personId)
+        {
+            return Ok();
+        }
+
         [HttpPost]
         public IActionResult Person(PersonWriteModel person)
         {
