@@ -37,7 +37,11 @@ namespace BryceFamily.Web.MVC
             services.AddSingleton(context => (IWriteModel<Gallery, Guid>)context.GetService<GalleryMockRepo<Gallery, Guid>>());
 
             services.AddSingleton<IFileService>(new MockFileService(HostingEnvironment.WebRootPath));
-            
+
+            services.AddSingleton(context => new MockPeopleService<Repo.Core.Model.Person, Guid>());
+            services.AddSingleton(context => (IReadModel<Repo.Core.Model.Person, Guid>)context.GetService<MockPeopleService<Repo.Core.Model.Person, Guid>>());
+            services.AddSingleton(context => (IWriteModel<Repo.Core.Model.Person, Guid>)context.GetService<MockPeopleService<Repo.Core.Model.Person, Guid>>());
+
 
         }
 

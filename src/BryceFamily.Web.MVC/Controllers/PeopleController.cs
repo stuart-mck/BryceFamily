@@ -11,10 +11,10 @@ namespace BryceFamily.Web.MVC.Controllers
 {
     public class PeopleController : Controller
     {
-        private readonly IWriteModel<Person, Guid> _writeModel;
+        private readonly IWriteModel<Repo.Core.Model.Person, Guid> _writeModel;
         private readonly IReadModel<Repo.Core.Model.Person, Guid> _readModel;
 
-        public PeopleController(IReadModel<Repo.Core.Model.Person, Guid> readModel, IWriteModel<Person, Guid> writeModel)
+        public PeopleController(IReadModel<Repo.Core.Model.Person, Guid> readModel, IWriteModel<Repo.Core.Model.Person, Guid> writeModel)
         {
             _readModel = readModel;
             _writeModel = writeModel;
@@ -29,6 +29,18 @@ namespace BryceFamily.Web.MVC.Controllers
         public IActionResult Person(PersonWriteModel person)
         {
             return Ok();
+        }
+
+        [HttpGet]
+        public IActionResult Email()
+        {
+            return View(new EmailCreateModel());
+        }
+
+        [HttpPost]
+        public IActionResult Email(EmailCreateModel email)
+        {
+            return View();
         }
 
         [HttpPut, Route("{personId}")]

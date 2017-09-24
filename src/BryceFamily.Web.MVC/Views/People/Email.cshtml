@@ -1,0 +1,36 @@
+﻿@model EmailCreateModel
+@{
+    ViewData["Title"] = "SendEmail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Send an Email</h2>
+<p>This will be sent to all members who have subsribed to  receive emails</p>
+<form asp-controller="People" asp-action="Email">
+    <div class="row">
+        <div class="col-md-2">
+            <label>Subject:</label>
+        </div>
+        <div class="col-md-10">
+            <input type="text" asp-for="Subject" class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <label>From:</label>
+        </div>
+        <div class="col-md-10">
+            <input type="text" asp-for="From" class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <label>Message:</label>
+        </div>
+        <div class="col-md-10">
+            <textarea asp-for="MessageContent" class="form-control" rows="10" cols="10"></textarea>
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary">Send</button>
+</form>
+

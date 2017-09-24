@@ -7,8 +7,10 @@
 <h2>People</h2>
 
 <div class="row">
-    <div class="col-md-3">Send SMS</div>
-    <div class="col-md-3">Send Email</div>
-    <div class="col-md-3">@Html.ActionLink("Edit People", "List", "People")</div>
+    <div class="btn-group">
+        <button class="btn btn-sm">Send SMS</button>
+        @Html.ActionLink("Send Email", "Email", "People", null, new  { @class="btn btn-sm" })
+        @Html.ActionLink("Edit People", "List", "People", null, new { @class = "btn btn-sm" })
+    </div>
 </div>
 
