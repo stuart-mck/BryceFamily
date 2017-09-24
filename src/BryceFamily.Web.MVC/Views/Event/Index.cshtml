@@ -5,18 +5,18 @@
 
     <div class="col-md-10">
         <div class="row">
-            <h1>Events</h1><span class="editorButton">@Html.ActionLink("Add New", "NewEvent", "Event", null, new { @class="edit-link"})</span>
+            <h1>Upcoming Events</h1><span class="editorButton">@Html.ActionLink("Add New", "NewEvent", "Event", null, new { @class="btn btn-primary"})</span>
         </div>
         <ul class="event-summary">
             @foreach (var evt in Model)
             {
             <li class="event">
-                <h3>@evt.Title</h3>
+                <h3>@Html.ActionLink(evt.Title, "Detail", "Event", new { eventId = evt.EntityId }, new { @class = "detail-link" })</h3>
                 <div class="row">
                     <div class="col-md-2">Event Type: @Html.DisplayFor(t => evt.EventType)</div>
                     <div class="col-md-2">Start Date: @Html.DisplayFor(t => evt.StartDate)</div>
                     <div class="col-md-2">Location: @Html.DisplayFor(t => evt.City)</div>
-                    @Html.ActionLink("...", "Detail", "Event", new { eventId = evt.EntityId }, new { @class = "detail-link" })
+                    
                 </div>
             </li>
             }

@@ -42,7 +42,7 @@ namespace BryceFamily.Web.MVC.Controllers
         {
             if (files.Count > 0)
             {
-                foreach(var file in files)
+                foreach (var file in files)
                 {
                     using (var excel = new ExcelPackage(file.OpenReadStream()))
                     {
@@ -60,7 +60,9 @@ namespace BryceFamily.Web.MVC.Controllers
                             }
                         }
                     }
+                }
             }
+            return Ok();
         }
 
 

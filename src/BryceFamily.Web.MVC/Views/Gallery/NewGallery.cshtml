@@ -1,0 +1,38 @@
+﻿@model GalleryCreateModel
+@{
+    ViewData["Title"] = "NewGallery";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Add New Gallery</h2>
+<form asp-controller="Gallery" sp-action="NewGallery" method="post">
+    <div class="row">
+        <div class="col-md-2">
+            <label>Title:</label>
+        </div>
+        <div class="col-md-10">
+            <input type="text" asp-for="Name" class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <label>Description:</label>
+        </div>
+        <div class="col-md-10">
+            <textarea asp-for="Description" class="form-control" rows="10" cols="10" ></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <label>Family Event:</label>
+        </div>
+        <div class="col-md-10">
+            <select asp-for="FamilyEventId">
+                <option value="be23b299-8299-4ddf-bcc1-874dfed9e299">A family event</option>
+                <option value="be23b299-8299-4ddf-bcc1-874dfed9e299">Another family event</option>
+                <option value="be23b299-8299-4ddf-bcc1-874dfed9e299">The one in march</option>
+            </select>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>

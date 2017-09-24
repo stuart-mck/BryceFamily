@@ -7,13 +7,13 @@
 
 <div class="col-md-10">
     <div class="row">
-        <h2>Galleries</h2><span class="editorButton">@Html.ActionLink("Add New", "NewGallery", "Gallery", null, new { @class = "edit-link" })</span>
+        <h2>Galleries</h2><span class="editorButton">@Html.ActionLink("Add New", "NewGallery", "Gallery", null, new { @class = "btn btn-primary" })</span>
     </div>
     <ul class="event-summary">
         @foreach (var evt in Model)
             {
             <li class="event">
-                <h3>@evt.Title</h3>
+                <h3>@Html.ActionLink(evt.Title, "Detail", "Gallery", new { id = evt.Id }, new { @class = "detail-link" })</h3>
                 <div class="row">
                     <div class="col-md-2">Owned By: @Html.DisplayFor(t => evt.Owner)</div>
                     <div class="col-md-2">Summary: @Html.DisplayFor(t => evt.Summary)</div>
@@ -23,8 +23,7 @@
                         <div class="col-md-2">Event Date: @Html.DisplayFor(t => evt.FamilyEvent.StartDate)</div>
 
                     }
-                    @Html.ActionLink("...", "Detail", "Gallery", new { id = evt.Id }, new { @class = "detail-link" })
-                    @Html.ActionLink("...", "EditGalleryImages", "Gallery", new { id = evt.Id }, new { @class = "detail-link" })
+                    @Html.ActionLink("Edit Images", "EditGalleryImages", "Gallery", new { id = evt.Id }, new { @class = "btn btn-sml" })
                 </div>
             </li>
         }

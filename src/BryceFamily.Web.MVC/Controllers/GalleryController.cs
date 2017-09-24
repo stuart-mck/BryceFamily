@@ -89,6 +89,27 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [HttpGet]
+        public IActionResult NewGallery()
+        {
+            return View(new GalleryCreateModel());
+        }
+
+        [HttpPost]
+        public IActionResult NewGallery(GalleryCreateModel newGallery)
+        {
+            var gallery = new Repo.Core.Model.Gallery()
+            {
+                ID = Guid.NewGuid(),
+                DateCreated = DateTime.Now,
+                ImageReferences = new List<ImageReference>(),
+                Name = newGallery.Name,
+                Summary = newGallery.Description
+            };
+            _writeModel.Save(gallery);
+            return View(new GalleryCreateModel());
+        }
+
+        [HttpGet]
         public async Task<IActionResult> EditGalleryImages(Guid id)
         {
             var gallery = Models.Gallery.Map(await _readModel.Load(id, CancellationToken.None));

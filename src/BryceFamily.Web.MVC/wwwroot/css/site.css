@@ -1,8 +1,11 @@
-﻿@import url('site.min.css');
-@import url('site.css');
-body,
+﻿
 html {
     height: 100%;
+}
+
+body {
+    padding-top: 0;
+    background-color: rgba(191, 207, 255, .75);
 }
 
 .page-wrapper {
@@ -17,6 +20,12 @@ html {
         height: 50px;
     }
 
+    .container {
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
 .footer {
     height: 50px;
 }
@@ -24,6 +33,34 @@ html {
 .body-blue > .header {
     background-position: center bottom;
     background-size: initial;
+}
+
+
+.header > .container > h1 {
+    padding-top: 80px;
+    padding-bottom: 15px;
+    color: #337ab7;
+    font-weight: bold;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+
+.header > .container > p {
+    padding-bottom: 40px;
+    color: #337ab7;
+    font-size: 1.2em;
+}
+
+.site-page h1, .site-page p {
+    display: none;
+}
+
+.site-page .header {
+    height: 40px;
+}
+
+.site-page .container{
+    width: 100px;
+    padding: 0px;
 }
 
 
@@ -57,7 +94,7 @@ html {
 
 /* ====== Header ====== */
 .header {
-    background-image: linear-gradient(rgba(20, 44, 82, 0.85), rgba(20, 44, 82, 0.85)), url('../images/fields.jpg');
+    background-image: linear-gradient(rgba(255, 210, 76, 0.85), rgba(255, 210, 76, 0.85)), url('../images/fields.jpg');
     color: rgba(255, 255, 255, 0.85);
     padding: 0;
     margin: 0;
@@ -66,6 +103,27 @@ html {
     background-size: cover;
     position: relative;
 }
+
+
+
+.home-page{
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 15px;
+}
+
+.body-nav .row {
+    margin-bottom: 15px;
+}
+
+.nav-panel {
+    border-top: 2px solid black;
+    background-color: white;
+    padding: 10px;
+    min-height: 150px;
+    margin-bottom: 15px;
+}
+
 
 
 /* Sidebar */
@@ -78,10 +136,19 @@ html {
     margin-left: 250px;
 }
 
+.sidenav {
+    margin-top: 15px;
+    
+}
+
+   
 .sidenav .nav a {
     display: inline-block;
     padding-right: 10px;
     margin-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 0;
+    font-weight: bold;
 }
 
 .sidenav .nav .parent {
@@ -113,9 +180,9 @@ html {
         content: "\f107" !important;
     }
 
-    .sidenav .nav .parent.active > .nav {
+    /*.sidenav .nav .parent.active > .nav {
         max-height: 700px;
-    }
+    }*/
 
 /* ====== Footer ====== */
 .footer {
@@ -131,18 +198,32 @@ html {
         color: #257ba0;
     }
 
+.address {
+    margin-top: 15px;
+}
 
-
-.address span {
-    min-width: 200px;
+.address  label {
+    width: 120px;
     padding-right: 50px;
     font-weight: bold;
 }
 
-.event-list li {
-    display: inline;
-    text-decoration: none;
+.centered {
+    margin: auto;
 }
+ul.event-summary {
+    display: inline;
+    list-style-type: none;
+}
+
+.event  {
+    background: white;
+    padding: 15px;
+    border-top: 1px solid black;
+    border-radius: 3px 4px;
+    
+}
+
 
 @media (max-width: 767px) {
     /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */

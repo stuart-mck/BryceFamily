@@ -10,7 +10,8 @@ namespace BryceFamily.Web.MVC.Infrastructure
 {
     public class MockPeopleService<TEntity, TId> : IReadModel<Person, Guid>, IWriteModel<Person, Guid>
     {
-        private List<Person> _people;
+        private readonly List<Person> _people = new List<Person>();
+
 
         public async Task<IQueryable<Person>> AsQueryable()
         {

@@ -23,11 +23,29 @@ namespace BryceFamily.Web.MVC.Models
         public string OrganiserContact { get; set; }
         public string OrganiserEmail { get; set; }
 
+        public string FormattedStartDate
+        {
+            get
+            {
+                return StartDate.ToLongDateString();
+            }
+        }
+
+
+        public string FormattedEndDate
+        {
+            get
+            {
+                return EndDate.ToLongDateString();
+            }
+        }
+
         public Repo.Core.Model.FamilyEvent MapToEntity()
         {
             return new Repo.Core.Model.FamilyEvent()
             {
                 Details = this.Details,
+                StartDate = this.StartDate,
                 EndDate = this.EndDate,
                 EventStatus = (Repo.Core.Model.EventStatus)this.EventStatus,
                 EventType = (Repo.Core.Model.EventType)this.EventType,

@@ -33,10 +33,11 @@ namespace BryceFamily.Web.MVC.Controllers
                 if (resource == null)
                     return NotFound();
 
-                return File(await _fileService.GetFileThumbnail(imageId, gallery.ID), resource.MimeType);
+                return File(await _fileService.GetFileResized(imageId, gallery.ID, 150d), resource.MimeType);
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return NotFound();
             }
         }
@@ -52,7 +53,7 @@ namespace BryceFamily.Web.MVC.Controllers
                 if (resource == null)
                     return NotFound();
 
-                return File(await _fileService.GetFile(imageId, galleryId), resource.MimeType);
+                return File(await _fileService.GetFileResized(imageId, galleryId, 800d), resource.MimeType);
             }
             catch(Exception ex)
             {

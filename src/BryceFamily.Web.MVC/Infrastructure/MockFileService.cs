@@ -44,17 +44,15 @@ namespace BryceFamily.Web.MVC.Infrastructure
 
             return fileData;
         }
-
-        private const double _thumbnailSize = 150d;
         
 
-        public async Task<byte[]> GetFileThumbnail(Guid resourceId, Guid galleryId)
+        public async Task<byte[]> GetFileResized(Guid resourceId, Guid galleryId, double limit)
         {
             var fileData = await GetFile(resourceId, galleryId);
 
             var image = new Image(fileData);
-            var ratioX = (double)_thumbnailSize / image.Width;
-            var ratioY = (double)_thumbnailSize / image.Height;
+            var ratioX = (double)limit / image.Width;
+            var ratioY = (double)limit / image.Height;
             var ratio = Math.Min(ratioX, ratioY);
 
             var newWidth = (int)(image.Width * ratio);

@@ -1,34 +1,25 @@
 ﻿@model FamilyEvent
 
 <div class="row">
-    <div class="col-md-2">
-        <label>Title:</label>
-    </div>
-    <div class="col-md-10">
+    <h2>
         @Html.DisplayFor(t => t.Title)
-    </div>
+    </h2>
 </div>
 <div class="row">
     <div class="col-md-2">
-        <label>Start Date:</label>
+        <label>Starts:</label>
     </div>
     <div class="col-md-3">
-        @Html.DisplayFor(t => t.StartDate)
+        @Html.DisplayFor(t => t.FormattedStartDate)
     </div>
     <div class="col-md-2">
-        <label>End Date:</label>
+        <label>Finishes:</label>
     </div>
     <div class="col-md-3 ">
-        @Html.DisplayFor(t => t.EndDate)
+        @Html.DisplayFor(t => t.FormattedEndDate)
     </div>
 </div>
 <div class="row">
-    <div class="col-md-2">
-        <label>Status:</label>
-    </div>
-    <div class="col-md-3 ">
-        @Html.DisplayFor(t => t.EventStatus)
-    </div>
     <div class="col-md-2">
         <label>Type:</label>
     </div>
@@ -37,23 +28,20 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-2">
-        <label>Description:</label>
-    </div>
-    <div class="col-md-10">
-        @Html.DisplayTextFor(t => t.Details)
-    </div>
+    @Html.DisplayTextFor(t => t.Details)
 </div>
 <div class="row">
     <div class="col-md-2">
         <label>Location</label>
     </div>
-    <div class="col-md-10 address">
-        <span>Address</span>@Html.DisplayFor(t => t.Address1)<br />
-        <span>&nbsp;</span>@Html.DisplayFor(t => t.Address2)<br />
-        <span>Suburb</span>@Html.DisplayFor(t => t.City)<br />
-        <span>State</span>@Html.DisplayFor(t => t.State)<br />
-        <span>Post Code</span>@Html.DisplayFor(t => t.PostCode)
+    <div class="col-md-10">
+        <address>
+            @Html.DisplayFor(t => t.Address1)<br />
+            @Html.DisplayFor(t => t.Address2)<br />
+            @Html.DisplayFor(t => t.City)<br />
+            @Html.DisplayFor(t => t.State)<br />
+            @Html.DisplayFor(t => t.PostCode)
+        </address>
     </div>
 </div>
 <div class="row">
@@ -61,10 +49,10 @@
         <label>Organiser</label>
     </div>
     <div class="col-md-10">
-        <div class="col-md-10 address">
-            <span>Name</span>@Html.DisplayFor(t => t.OrganiserContact)<br />
-            <span>Contact</span>@Html.DisplayFor(t => t.OrganiserContact)<br />
-            <span>Email</span>@Html.DisplayFor(t => t.OrganiserEmail)<br />
+        <div class="col-md-10">
+            @Html.DisplayFor(t => t.OrganiserContact)<br />
+            @Html.DisplayFor(t => t.OrganiserContact)<br />
+            @Html.DisplayFor(t => t.OrganiserEmail)<br />
         </div>
     </div>
 </div>
