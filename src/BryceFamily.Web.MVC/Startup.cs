@@ -12,6 +12,7 @@ using BryceFamily.Repo.Core.Write;
 using BryceFamily.Repo.Core.Write.People;
 using BryceFamily.Repo.Core.AWS;
 using Amazon.DynamoDBv2.DataModel;
+using BryceFamily.Repo.Core.Read.People;
 
 namespace BryceFamily.Web.MVC
 {
@@ -43,7 +44,7 @@ namespace BryceFamily.Web.MVC
             services.AddSingleton<IFileService>(new MockFileService(HostingEnvironment.WebRootPath));
 
             services.AddSingleton(context => new MockPeopleService<Person, Guid>());
-            services.AddSingleton(context => (IReadModel<Person, Guid>)context.GetService<MockPeopleService<Person, Guid>>());
+            services.AddScoped<IPersonReadRepository, PeopleReadRepository>();
             services.AddScoped<IWriteRepository<Person, Guid>, PeopleWriteRepository<Person, Guid>>();
 
             services.AddSingleton<IAWSClientFactory, AWSClientFactory>();
@@ -52,6 +53,8 @@ namespace BryceFamily.Web.MVC
             {
                 TableNamePrefix = "familybryce."
             });
+
+            services.AddMemoryCache();
 
         }
 

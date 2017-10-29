@@ -11,15 +11,16 @@ using BryceFamily.Repo.Core.Write;
 using BryceFamily.Repo.Core.Write.Query;
 using System.Threading.Tasks;
 using System.Threading;
+using BryceFamily.Repo.Core.Read.People;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
     public class PeopleController : Controller
     {
         private readonly IWriteRepository<Repo.Core.Model.Person, Guid> _writeModel;
-        private readonly IReadModel<Repo.Core.Model.Person, Guid> _readModel;
+        private readonly IPersonReadRepository _readModel;
 
-        public PeopleController(IReadModel<Repo.Core.Model.Person, Guid> readModel, IWriteRepository<Repo.Core.Model.Person, Guid> writeModel)
+        public PeopleController(IPersonReadRepository readModel, IWriteRepository<Repo.Core.Model.Person, Guid> writeModel)
         {
             _readModel = readModel;
             _writeModel = writeModel;
@@ -43,8 +44,27 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult Search()
+        {
+            return View(new SearchPersonModel());
+        }
 
-        
+        [HttpPost]
+        public async Task<IActionResult> Search(SearchPersonModel searchPersonModel)
+        {
+            var results = await _readModel.SearchByName(searchPersonModel.FirstName, searchPersonModel.LastName, searchPersonModel.EmailAddress, searchPersonModel.Occupation, new CancellationToken());
+
+            return View("List", results.Select(Models.Person.Map));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> List(IEnumerable<Person> people)
+        {
+            return await Task.FromResult(View(people));
+        }
+
+
 
         [HttpPost]
         public async Task<IActionResult> Person(Person  person)

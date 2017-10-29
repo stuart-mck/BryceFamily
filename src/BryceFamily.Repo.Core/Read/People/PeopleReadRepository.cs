@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BryceFamily.Repo.Core.Read.People
 {
-    public class PeopleReadRepository
+    public class PeopleReadRepository : IPersonReadRepository
     {
         private readonly IAWSClientFactory _awsClientFactory;
         private readonly DynamoDBOperationConfig _operationConfig;
@@ -26,12 +26,12 @@ namespace BryceFamily.Repo.Core.Read.People
             return dbContext.LoadAsync<Person>(id);
         }
 
-        public async Task<List<Person>> SearchByName(string firstName, string lastName, string emailAddress, CancellationToken cancellationToken)
+        public async Task<List<Person>> SearchByName(string firstName, string lastName, string emailAddress, string occupation, CancellationToken cancellationToken)
         {
             var dbContext = _awsClientFactory.GetDynamoDBContext();
             var dynamoOperationContext = new DynamoDBOperationConfig()
             {
-                IndexName = "person_by_name",
+
                 ConditionalOperator = ConditionalOperatorValues.Or,
                 TableNamePrefix = "familybryce."
             };
@@ -39,6 +39,7 @@ namespace BryceFamily.Repo.Core.Read.People
             dynamoOperationContext.QueryFilter.Add(new ScanCondition("FirstName", ScanOperator.Equal, firstName));
             dynamoOperationContext.QueryFilter.Add(new ScanCondition("LastName", ScanOperator.Equal, lastName));
             dynamoOperationContext.QueryFilter.Add(new ScanCondition("EmailAddress", ScanOperator.Equal, emailAddress));
+            dynamoOperationContext.QueryFilter.Add(new ScanCondition("Occupation", ScanOperator.Equal, occupation));
 
             return await dbContext.QueryAsync<Person>(dynamoOperationContext).GetRemainingAsync(cancellationToken);
 
