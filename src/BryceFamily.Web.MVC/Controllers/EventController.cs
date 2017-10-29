@@ -5,15 +5,16 @@ using BryceFamily.Web.MVC.Models;
 using BryceFamily.Repo.Core.Repository;
 using System.Linq;
 using System.Threading.Tasks;
+using BryceFamily.Repo.Core.Write;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
     public class EventController : Controller
     {
         private readonly IReadModel<Repo.Core.Model.FamilyEvent, Guid> _readmodel;
-        private readonly IWriteModel<Repo.Core.Model.FamilyEvent, Guid> _writeModel;
+        private readonly IWriteRepository<Repo.Core.Model.FamilyEvent, Guid> _writeModel;
 
-        public EventController(IReadModel<Repo.Core.Model.FamilyEvent, Guid> readmodel, IWriteModel<Repo.Core.Model.FamilyEvent, Guid> writeModel)
+        public EventController(IReadModel<Repo.Core.Model.FamilyEvent, Guid> readmodel, IWriteRepository<Repo.Core.Model.FamilyEvent, Guid> writeModel)
         {
             _readmodel = readmodel;
             _writeModel = writeModel;
@@ -51,7 +52,7 @@ namespace BryceFamily.Web.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _writeModel.Save(familyEventPost.MapToEntity());
+                _writeModel.Save(familyEventPost.MapToEntity(), new System.Threading.CancellationToken());
                 return RedirectToAction("Index");
             }
             return BadRequest();

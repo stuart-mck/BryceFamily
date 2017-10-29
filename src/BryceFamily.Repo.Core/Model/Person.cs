@@ -1,9 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using Amazon.DynamoDBv2.DataModel;
 
 namespace BryceFamily.Repo.Core.Model
 {
+    [DynamoDBTable("person")]
     public class Person : Entity
     {
+
+        public Person():base()
+        {
+
+        }
 
         public string FirstName { get; set; }
 
@@ -26,11 +32,7 @@ namespace BryceFamily.Repo.Core.Model
 
         public string Email { get; set; }
 
-        public bool SubscribeToSMS { get; set; }
-
         public bool SubscribeToEmail { get; set; }
-
-        public ICollection<Image> Images { get; set; }
-
+        public string Occupation { get; set; }
     }
 }

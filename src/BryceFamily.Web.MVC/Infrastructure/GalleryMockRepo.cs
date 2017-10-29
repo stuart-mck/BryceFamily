@@ -5,10 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
+using BryceFamily.Repo.Core.Write;
+using BryceFamily.Repo.Core.Write.Query;
 
 namespace BryceFamily.Web.MVC.Infrastructure
 {
-    public class GalleryMockRepo<TEntity, TId> : IReadModel<Gallery, Guid>, IWriteModel<Gallery, Guid>
+    public class GalleryMockRepo<TEntity, TId> : IReadModel<Gallery, Guid>, IWriteRepository<Gallery, Guid>
     {
         public GalleryMockRepo(List<Gallery> gallery)
         {
@@ -32,17 +34,25 @@ namespace BryceFamily.Web.MVC.Infrastructure
             return await Task.FromResult(_gallery.First(t => t.ID == id));
         }
 
-        public Guid Save(Gallery entity)
+        public async Task Save(Gallery entity, CancellationToken cancellationToken)
         {
-            var existingGallery = _gallery.FirstOrDefault(g => g.ID == entity.ID);
-            if (existingGallery != null)
-                _gallery.Remove(existingGallery);
+            await Task.Run(() =>
+            {
+                var existingGallery = _gallery.FirstOrDefault(g => g.ID == entity.ID);
+                if (existingGallery != null)
+                    _gallery.Remove(existingGallery);
 
-            _gallery.Add(entity);
-            return entity.ID;
+                _gallery.Add(entity);
+            });
+            
         }
 
         public void Delete(Guid entityId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Gallery> FindByQuery(IQueryParameter repository)
         {
             throw new NotImplementedException();
         }

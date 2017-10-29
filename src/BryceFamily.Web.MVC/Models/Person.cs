@@ -28,7 +28,7 @@ namespace BryceFamily.Web.MVC.Models
 
         public string Email { get; set; }
 
-        public bool SubscribeToSMS { get; set; }
+        public string Occupation { get; set; }
 
         public bool SubscribeToEmail { get; set; }
 
@@ -47,8 +47,8 @@ namespace BryceFamily.Web.MVC.Models
                 PostCode = PostCode,
                 State = State,
                 SubscribeToEmail = SubscribeToEmail,
-                SubscribeToSMS = SubscribeToSMS,
-                Suburb = Suburb
+                Suburb = Suburb,
+                Occupation = Occupation
             };
         }
 
@@ -67,7 +67,6 @@ namespace BryceFamily.Web.MVC.Models
                 PostCode = person.PostCode,
                 State = person.State,
                 SubscribeToEmail = person.SubscribeToEmail,
-                SubscribeToSMS = person.SubscribeToSMS,
                 Suburb = person.Suburb
             };
         }

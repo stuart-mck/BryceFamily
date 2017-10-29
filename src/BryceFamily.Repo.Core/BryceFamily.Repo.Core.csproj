@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <Folder Include="Galleries\" />
+    <Folder Include="Person\" />
   </ItemGroup>
 
   <ItemGroup>

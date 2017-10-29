@@ -8,6 +8,10 @@ using BryceFamily.Web.MVC.Infrastructure;
 using BryceFamily.Repo.Core.Model;
 using BryceFamily.Repo.Core.Repository;
 using BryceFamily.Repo.Core.Files;
+using BryceFamily.Repo.Core.Write;
+using BryceFamily.Repo.Core.Write.People;
+using BryceFamily.Repo.Core.AWS;
+using Amazon.DynamoDBv2.DataModel;
 
 namespace BryceFamily.Web.MVC
 {
@@ -30,18 +34,24 @@ namespace BryceFamily.Web.MVC
 
             services.AddSingleton(context => new MockRepo<FamilyEvent, Guid>(GetMockData()));
             services.AddSingleton(context => (IReadModel<FamilyEvent, Guid>)context.GetService<MockRepo<FamilyEvent, Guid>>());
-            services.AddSingleton(context => (IWriteModel<FamilyEvent, Guid>)context.GetService<MockRepo<FamilyEvent, Guid>>());
+            services.AddSingleton(context => (IWriteRepository<FamilyEvent, Guid>)context.GetService<MockRepo<FamilyEvent, Guid>>());
 
             services.AddSingleton(context => new GalleryMockRepo<Gallery, Guid>(GetMockGalleries()));
             services.AddSingleton(context => (IReadModel<Gallery, Guid>)context.GetService<GalleryMockRepo<Gallery, Guid>>());
-            services.AddSingleton(context => (IWriteModel<Gallery, Guid>)context.GetService<GalleryMockRepo<Gallery, Guid>>());
+            services.AddSingleton(context => (IWriteRepository<Gallery, Guid>)context.GetService<GalleryMockRepo<Gallery, Guid>>());
 
             services.AddSingleton<IFileService>(new MockFileService(HostingEnvironment.WebRootPath));
 
-            services.AddSingleton(context => new MockPeopleService<Repo.Core.Model.Person, Guid>());
-            services.AddSingleton(context => (IReadModel<Repo.Core.Model.Person, Guid>)context.GetService<MockPeopleService<Repo.Core.Model.Person, Guid>>());
-            services.AddSingleton(context => (IWriteModel<Repo.Core.Model.Person, Guid>)context.GetService<MockPeopleService<Repo.Core.Model.Person, Guid>>());
+            services.AddSingleton(context => new MockPeopleService<Person, Guid>());
+            services.AddSingleton(context => (IReadModel<Person, Guid>)context.GetService<MockPeopleService<Person, Guid>>());
+            services.AddScoped<IWriteRepository<Person, Guid>, PeopleWriteRepository<Person, Guid>>();
 
+            services.AddSingleton<IAWSClientFactory, AWSClientFactory>();
+
+            services.AddSingleton(context => new DynamoDBOperationConfig()
+            {
+                TableNamePrefix = "familybryce."
+            });
 
         }
 
@@ -65,7 +75,35 @@ namespace BryceFamily.Web.MVC
                     {
                         new ImageReference()
                         {
-                            ID = new Guid("33919032-e1bc-480b-8c8e-40c88299706e"),
+                            ID = new Guid("69cb852b-481b-415e-b2f6-8dc9cdc17fee"),
+                            ImageLocation = "images/galleries/af4356dd-34fd-a3e2-2222-1efa3eaa149f",
+                            MimeType = "image/jpg",
+                            Title = "WIN_20151130_20_12_41_Pro.jpg"
+                        },
+                        new ImageReference()
+                        {
+                            ID = new Guid("2976fc68-5579-462b-b947-f403c937c7f7"),
+                            ImageLocation = "images/galleries/af4356dd-34fd-a3e2-2222-1efa3eaa149f",
+                            MimeType = "image/jpg",
+                            Title = "WIN_20151130_20_12_41_Pro.jpg"
+                        },
+                        new ImageReference()
+                        {
+                            ID = new Guid("11697dbe-abf0-4eaf-8de9-281555e972e0"),
+                            ImageLocation = "images/galleries/af4356dd-34fd-a3e2-2222-1efa3eaa149f",
+                            MimeType = "image/jpg",
+                            Title = "WIN_20151130_20_12_41_Pro.jpg"
+                        },
+                        new ImageReference()
+                        {
+                            ID = new Guid("d4f09575-5f0a-4617-97b8-35d6ee80bd1f"),
+                            ImageLocation = "images/galleries/af4356dd-34fd-a3e2-2222-1efa3eaa149f",
+                            MimeType = "image/jpg",
+                            Title = "WIN_20151130_20_12_41_Pro.jpg"
+                        },
+                        new ImageReference()
+                        {
+                            ID = new Guid("69cb852b-481b-415e-b2f6-8dc9cdc17fee"),
                             ImageLocation = "images/galleries/af4356dd-34fd-a3e2-2222-1efa3eaa149f",
                             MimeType = "image/jpg",
                             Title = "WIN_20151130_20_12_41_Pro.jpg"

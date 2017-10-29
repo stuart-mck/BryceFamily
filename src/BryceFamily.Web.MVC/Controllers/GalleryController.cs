@@ -9,16 +9,17 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BryceFamily.Repo.Core.Model;
+using BryceFamily.Repo.Core.Write;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
     public class GalleryController : Controller
     {
         private readonly IReadModel<Repo.Core.Model.Gallery, Guid> _readModel;
-        private readonly IWriteModel<Repo.Core.Model.Gallery, Guid> _writeModel;
+        private readonly IWriteRepository<Repo.Core.Model.Gallery, Guid> _writeModel;
         private readonly IFileService _fileService;
 
-        public GalleryController(IReadModel<Repo.Core.Model.Gallery, Guid> readModel, IWriteModel<Repo.Core.Model.Gallery, Guid> writeModel, IFileService fileService)
+        public GalleryController(IReadModel<Repo.Core.Model.Gallery, Guid> readModel, IWriteRepository<Repo.Core.Model.Gallery, Guid> writeModel, IFileService fileService)
         {
             _readModel = readModel;
             _writeModel = writeModel;
@@ -63,7 +64,7 @@ namespace BryceFamily.Web.MVC.Controllers
             }
             catch (Exception ex)
             {
-                return NotFound();
+                return NotFound(ex.Message);
             }
         }
 
@@ -105,7 +106,7 @@ namespace BryceFamily.Web.MVC.Controllers
                 Name = newGallery.Name,
                 Summary = newGallery.Description
             };
-            _writeModel.Save(gallery);
+            _writeModel.Save(gallery, new CancellationToken());
             return View(new GalleryCreateModel());
         }
 
@@ -126,7 +127,7 @@ namespace BryceFamily.Web.MVC.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            _writeModel.Save(gallery.MapToEntity());
+            _writeModel.Save(gallery.MapToEntity(), new CancellationToken());
             return  RedirectToAction("Index");
         }
 
@@ -153,11 +154,11 @@ namespace BryceFamily.Web.MVC.Controllers
                     }
                 });
 
-                _writeModel.Save(gallery.MapToEntity());
+                await _writeModel.Save(gallery.MapToEntity(), new CancellationToken());
 
                 return await Task.FromResult(RedirectToAction("EditGalleryImages", new { id = gallery.Id}));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Gallery does not exist");
             }

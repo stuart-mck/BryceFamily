@@ -5,10 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
+using BryceFamily.Repo.Core.Write;
+using BryceFamily.Repo.Core.Write.Query;
 
 namespace BryceFamily.Web.MVC.Infrastructure
 {
-    public class MockRepo<TEntity, TId> : IReadModel<FamilyEvent, Guid>, IWriteModel<FamilyEvent, Guid>
+    public class MockRepo<TEntity, TId> : IReadModel<FamilyEvent, Guid>, IWriteRepository<FamilyEvent, Guid>
     {
         private readonly List<FamilyEvent> _familyEvents;
 
@@ -27,10 +29,12 @@ namespace BryceFamily.Web.MVC.Infrastructure
             return await Task.FromResult(_familyEvents.Where(t => t.StartDate >= startDate && t.EndDate < endDate).ToList());
         }
 
-        public Guid Save(FamilyEvent entity)
+        public async Task Save(FamilyEvent entity, CancellationToken cancellationToken)
         {
-            _familyEvents.Add(entity);
-            return entity.ID;
+            await Task.Run(() =>
+            {
+                _familyEvents.Add(entity);
+            });
         }
 
         public void Delete(Guid entityId)
@@ -45,6 +49,11 @@ namespace BryceFamily.Web.MVC.Infrastructure
         public async Task<IQueryable<FamilyEvent>> AsQueryable()
         {
             return await Task.FromResult(_familyEvents.AsQueryable());
+        }
+
+        public Task<FamilyEvent> FindByQuery(IQueryParameter repository)
+        {
+            throw new NotImplementedException();
         }
     }
 }

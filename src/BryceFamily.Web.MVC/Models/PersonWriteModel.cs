@@ -7,6 +7,10 @@ namespace BryceFamily.Web.MVC.Models
 {
     public class PersonWriteModel
     {
+        public PersonWriteModel()
+        {
+            Person = new Person();
+        }
         public Person Person { get; set; }
     }
 }

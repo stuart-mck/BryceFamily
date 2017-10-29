@@ -6,15 +6,20 @@ using Microsoft.AspNetCore.Http;
 using BryceFamily.Repo.Core.Repository;
 using OfficeOpenXml;
 using System.Linq;
+using BryceFamily.Web.MVC.Extensions;
+using BryceFamily.Repo.Core.Write;
+using BryceFamily.Repo.Core.Write.Query;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
     public class PeopleController : Controller
     {
-        private readonly IWriteModel<Repo.Core.Model.Person, Guid> _writeModel;
+        private readonly IWriteRepository<Repo.Core.Model.Person, Guid> _writeModel;
         private readonly IReadModel<Repo.Core.Model.Person, Guid> _readModel;
 
-        public PeopleController(IReadModel<Repo.Core.Model.Person, Guid> readModel, IWriteModel<Repo.Core.Model.Person, Guid> writeModel)
+        public PeopleController(IReadModel<Repo.Core.Model.Person, Guid> readModel, IWriteRepository<Repo.Core.Model.Person, Guid> writeModel)
         {
             _readModel = readModel;
             _writeModel = writeModel;
@@ -39,22 +44,14 @@ namespace BryceFamily.Web.MVC.Controllers
 
 
 
-        [HttpGet]
-        public IActionResult SMSSubscribe([FromQuery] Guid personId)
-        {
-            return Ok();
-        }
-
-        [HttpGet]
-        public IActionResult SMSUnsubscribe([FromQuery] Guid personId)
-        {
-            return Ok();
-        }
+        
 
         [HttpPost]
-        public IActionResult Person(PersonWriteModel person)
+        public async Task<IActionResult> Person(Person  person)
         {
-            return Ok();
+
+            await _writeModel.Save(person.MapToEntity(), new CancellationToken());
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -75,8 +72,18 @@ namespace BryceFamily.Web.MVC.Controllers
             return Ok();
         }
 
+
+        [HttpGet]
+        public IActionResult Person()
+        {
+            return View(new Person());
+        }
+
+
+
+
         [HttpPost]
-        public IActionResult People(List<IFormFile> files)
+        public async Task<IActionResult> People(List<IFormFile> files)
         {
             if (files.Count > 0)
             {
@@ -88,13 +95,38 @@ namespace BryceFamily.Web.MVC.Controllers
                         if (sheet != null)
                         {
                             var rowId = 1;
-                            var colId = 1;
-                            while (sheet.Cells[rowId, 1].Value != string.Empty)
+                            while (sheet.Cells[rowId, 1].Text != string.Empty)
                             {
-                                var person = new Person()
+                                var identifier = new PersonIdentifier()
                                 {
-
+                                    FirstName = sheet.Cells[PersonImport.FirstName.ToInt(), 1].Text,
+                                    LastName = sheet.Cells[PersonImport.LastName.ToInt(), 1].Text,
+                                    EmailAddress = sheet.Cells[PersonImport.EmailAddress.ToInt(), 1].Text,
+                                    MiddleName = sheet.Cells[PersonImport.EmailAddress.ToInt(), 1].Text
                                 };
+
+                                var person = await  _writeModel.FindByQuery(identifier);
+
+                                if (person == null) {
+                                    person = new Repo.Core.Model.Person()
+                                    {
+                                        FirstName = sheet.Cells[PersonImport.FirstName.ToInt(), 1].Text,
+                                        LastName = sheet.Cells[PersonImport.LastName.ToInt(), 1].Text,
+                                        Email = sheet.Cells[PersonImport.EmailAddress.ToInt(), 1].Text,
+                                        ID = Guid.NewGuid()
+                                    };
+                                }
+
+                                person.Address = sheet.Cells[PersonImport.Address1.ToInt(), 1].Text;
+                                person.Address1 = sheet.Cells[PersonImport.Address2.ToInt(), 1].Text;
+                                person.Suburb = sheet.Cells[PersonImport.Suburb.ToInt(), 1].Text;
+                                person.State = sheet.Cells[PersonImport.State.ToInt(), 1].Text;
+                                person.PostCode = sheet.Cells[PersonImport.PostCode.ToInt(), 1].Text;
+                                person.Country = sheet.Cells[PersonImport.Country.ToInt(), 1].Text;
+                                person.Occupation = sheet.Cells[PersonImport.Occupation.ToInt(), 1].Text;
+                                
+                                await _writeModel.Save(person, new CancellationToken());
+
                             }
                         }
                     }

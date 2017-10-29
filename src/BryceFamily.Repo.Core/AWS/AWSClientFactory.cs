@@ -1,12 +1,13 @@
 ﻿using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.S3;
 
 namespace BryceFamily.Repo.Core.AWS
 {
     public class AWSClientFactory : IAWSClientFactory
     {
-        private AmazonDynamoDBClient _client = new AmazonDynamoDBClient();
+        private AmazonDynamoDBClient _client = new AmazonDynamoDBClient(RegionEndpoint.APSoutheast2);
 
         private IAmazonDynamoDB GetDynamoDbClient()
         {
@@ -19,5 +20,12 @@ namespace BryceFamily.Repo.Core.AWS
         {
             return new DynamoDBContext(GetDynamoDbClient());
         }
+
+        public IAmazonS3 GetS3Context()
+        {
+            return new AmazonS3Client(RegionEndpoint.APSoutheast2);
+        }
+
     }
 }
+
