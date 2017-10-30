@@ -4,8 +4,10 @@ namespace BryceFamily.Web.MVC.Models
 {
     public class SearchPersonModel
     {
+        
+
         [DisplayName("First Name")]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } 
 
         [DisplayName("Last Name")]
         public string LastName { get; set; }

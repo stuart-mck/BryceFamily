@@ -7,7 +7,7 @@ namespace BryceFamily.Repo.Core.Model
     public class Entity
     {
 
-        [DynamoDBHashKey, DynamoDBProperty("id")]   
+        [DynamoDBHashKey]   
         public Guid ID { get; set; }
 
     }

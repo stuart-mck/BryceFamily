@@ -48,6 +48,7 @@ namespace BryceFamily.Repo.Core.Write.People
         {
             var dynamoContext = _clientFactory.GetDynamoDBContext();
             entity.ID = Guid.NewGuid();
+            entity.SortKey = $"{entity.FirstName}_{entity.LastName}_{entity.EmailAddress}";
             await dynamoContext.SaveAsync(entity, _dynamoDBOperationConfig, cancellationToken);
         }
     }

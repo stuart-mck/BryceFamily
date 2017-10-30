@@ -29,19 +29,23 @@ namespace BryceFamily.Repo.Core.Read.People
         public async Task<List<Person>> SearchByName(string firstName, string lastName, string emailAddress, string occupation, CancellationToken cancellationToken)
         {
             var dbContext = _awsClientFactory.GetDynamoDBContext();
-            var dynamoOperationContext = new DynamoDBOperationConfig()
-            {
 
-                ConditionalOperator = ConditionalOperatorValues.Or,
-                TableNamePrefix = "familybryce."
-            };
+            var scanConditions = new List<ScanCondition>();
 
-            dynamoOperationContext.QueryFilter.Add(new ScanCondition("FirstName", ScanOperator.Equal, firstName));
-            dynamoOperationContext.QueryFilter.Add(new ScanCondition("LastName", ScanOperator.Equal, lastName));
-            dynamoOperationContext.QueryFilter.Add(new ScanCondition("EmailAddress", ScanOperator.Equal, emailAddress));
-            dynamoOperationContext.QueryFilter.Add(new ScanCondition("Occupation", ScanOperator.Equal, occupation));
+            if (!string.IsNullOrEmpty(firstName))
+                scanConditions.Add(new ScanCondition("FirstName", ScanOperator.Equal, firstName));
 
-            return await dbContext.QueryAsync<Person>(dynamoOperationContext).GetRemainingAsync(cancellationToken);
+            if (!string.IsNullOrEmpty(lastName))
+                scanConditions.Add(new ScanCondition("LastName", ScanOperator.Equal, lastName));
+
+            if (!string.IsNullOrEmpty(emailAddress))
+                scanConditions.Add(new ScanCondition("EmailAddress", ScanOperator.Equal, emailAddress));
+
+            if (!string.IsNullOrEmpty(occupation))
+                scanConditions.Add(new ScanCondition("Occupation", ScanOperator.Equal, occupation));
+
+
+            return await dbContext.ScanAsync<Person>(scanConditions, _operationConfig).GetRemainingAsync(cancellationToken);
 
         }
 

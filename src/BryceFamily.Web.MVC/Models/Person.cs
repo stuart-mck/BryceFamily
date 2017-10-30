@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BryceFamily.Web.MVC.Models
 {
     public class Person
     {
+        public Guid Id { get; set; }
+        public string Clan { get; set; }
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
@@ -26,7 +25,7 @@ namespace BryceFamily.Web.MVC.Models
 
         public string PostCode { get; set; }
 
-        public string Email { get; set; }
+        public string EmailAddress { get; set; }
 
         public string Occupation { get; set; }
 
@@ -39,7 +38,7 @@ namespace BryceFamily.Web.MVC.Models
                 Address = Address,
                 Address1 = Address1,
                 Country = Country,
-                Email = Email,
+                EmailAddress = EmailAddress,
                 FirstName = FirstName,
                 HomePhone = HomePhone,
                 LastName = LastName,
@@ -48,7 +47,9 @@ namespace BryceFamily.Web.MVC.Models
                 State = State,
                 SubscribeToEmail = SubscribeToEmail,
                 Suburb = Suburb,
-                Occupation = Occupation
+                Occupation = Occupation,
+                Clan = Clan,
+                ID = Id
             };
         }
 
@@ -59,7 +60,7 @@ namespace BryceFamily.Web.MVC.Models
                 Address = person.Address,
                 Address1 = person.Address1,
                 Country = person.Country,
-                Email = person.Email,
+                EmailAddress = person.EmailAddress,
                 FirstName = person.FirstName,
                 HomePhone = person.HomePhone,
                 LastName = person.LastName,
@@ -67,7 +68,10 @@ namespace BryceFamily.Web.MVC.Models
                 PostCode = person.PostCode,
                 State = person.State,
                 SubscribeToEmail = person.SubscribeToEmail,
-                Suburb = person.Suburb
+                Suburb = person.Suburb,
+                Occupation = person.Occupation,
+                Clan = person.Clan,
+                Id = person.ID
             };
         }
     }

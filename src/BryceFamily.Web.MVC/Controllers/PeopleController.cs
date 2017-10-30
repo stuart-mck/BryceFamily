@@ -132,7 +132,7 @@ namespace BryceFamily.Web.MVC.Controllers
                                     {
                                         FirstName = sheet.Cells[PersonImport.FirstName.ToInt(), 1].Text,
                                         LastName = sheet.Cells[PersonImport.LastName.ToInt(), 1].Text,
-                                        Email = sheet.Cells[PersonImport.EmailAddress.ToInt(), 1].Text,
+                                        EmailAddress = sheet.Cells[PersonImport.EmailAddress.ToInt(), 1].Text,
                                         ID = Guid.NewGuid()
                                     };
                                 }
