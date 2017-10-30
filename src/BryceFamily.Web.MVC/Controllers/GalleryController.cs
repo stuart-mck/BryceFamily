@@ -10,18 +10,22 @@ using System.Threading;
 using System.Threading.Tasks;
 using BryceFamily.Repo.Core.Model;
 using BryceFamily.Repo.Core.Write;
+using BryceFamily.Repo.Core.Read.Gallery;
+using BryceFamily.Repo.Core.Read.FamilyEvents;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
     public class GalleryController : Controller
     {
-        private readonly IReadModel<Repo.Core.Model.Gallery, Guid> _readModel;
+        private readonly IGalleryReadRepository _readModel;
+        private readonly IFamilyEventReadRepository _familyEventReadRepository;
         private readonly IWriteRepository<Repo.Core.Model.Gallery, Guid> _writeModel;
         private readonly IFileService _fileService;
 
-        public GalleryController(IReadModel<Repo.Core.Model.Gallery, Guid> readModel, IWriteRepository<Repo.Core.Model.Gallery, Guid> writeModel, IFileService fileService)
+        public GalleryController(IGalleryReadRepository readModel, IFamilyEventReadRepository familyEventReadRepository, IWriteRepository<Repo.Core.Model.Gallery, Guid> writeModel, IFileService fileService)
         {
             _readModel = readModel;
+            _familyEventReadRepository = familyEventReadRepository;
             _writeModel = writeModel;
             _fileService = fileService;
         }
@@ -31,14 +35,17 @@ namespace BryceFamily.Web.MVC.Controllers
         {
             var gallery = await _readModel.Load(id, CancellationToken.None);
 
-            return View(Models.Gallery.Map(gallery));
+            return View(Models.Gallery.Map(gallery,_familyEventReadRepository, CancellationToken.None));
         }
 
         public async Task<IActionResult> Index()
         {
-            var galleries = (await _readModel.AsQueryable()).ToList();
+            var galleries = await _readModel.LoadAll(CancellationToken.None);
 
-            return View(galleries.Select(Models.Gallery.Map));
+            var readModel = galleries.Select(
+                g => Models.Gallery.Map(g, _familyEventReadRepository, CancellationToken.None).Result);
+
+            return View(readModel);
             
         }
 
@@ -113,7 +120,10 @@ namespace BryceFamily.Web.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> EditGalleryImages(Guid id)
         {
-            var gallery = Models.Gallery.Map(await _readModel.Load(id, CancellationToken.None));
+
+            var cancellationToken = new CancellationToken();
+
+            var gallery =await  Models.Gallery.Map(await _readModel.Load(id, cancellationToken), _familyEventReadRepository, cancellationToken);
 
             return View(new FileUploadModel()
             {
@@ -136,7 +146,9 @@ namespace BryceFamily.Web.MVC.Controllers
         {
             try
             {
-                var gallery = Models.Gallery.Map(await _readModel.Load(galleryId, CancellationToken.None));
+                var cancellationToken = new CancellationToken();
+
+                var gallery = await Models.Gallery.Map(await _readModel.Load(galleryId, cancellationToken), _familyEventReadRepository, cancellationToken);
 
                 files.ForEach(async file =>
                 {
@@ -150,11 +162,11 @@ namespace BryceFamily.Web.MVC.Controllers
 
                     if (file.Length > 0)
                     {
-                        img.Reference = await _fileService.SaveFile(img.Id, galleryId, file, file.Name);
+                        img.Reference = await _fileService.SaveFile(img.Id, galleryId, file, file.Name, cancellationToken);
                     }
                 });
 
-                await _writeModel.Save(gallery.MapToEntity(), new CancellationToken());
+                await _writeModel.Save(gallery.MapToEntity(), cancellationToken);
 
                 return await Task.FromResult(RedirectToAction("EditGalleryImages", new { id = gallery.Id}));
             }

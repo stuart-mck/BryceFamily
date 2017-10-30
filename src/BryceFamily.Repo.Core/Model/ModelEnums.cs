@@ -16,4 +16,10 @@
         Cancelled,
         Expired
     }
+
+    public enum ImageReferenceType
+    {
+        Gallery,
+        Person
+    }
 }

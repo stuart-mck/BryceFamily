@@ -22,8 +22,7 @@ namespace BryceFamily.Web.MVC.Models
 
         public static async Task<Gallery> Map(Repo.Core.Model.Gallery sourceGallery, IFamilyEventReadRepository familyEventReadModel, CancellationToken cancellationToken)
         {
-            return new Gallery()
-            {
+            return await Task.FromResult(new Gallery(){
                 Title = sourceGallery.Name,
                 FamilyEvent = FamilyEvent.Map(await familyEventReadModel.Load(sourceGallery.FamilyEvent, cancellationToken)),
                 Owner = sourceGallery.Owner.ToString(),
@@ -32,7 +31,8 @@ namespace BryceFamily.Web.MVC.Models
                 Id = sourceGallery.ID,
                 DateCreated = sourceGallery.DateCreated,
                 ImageReferences = MapImageReferences(sourceGallery.ImageReferences)
-            };
+            }
+            );
         }
 
         private static List<ImageReferenceModel> MapImageReferences(List<ImageReference> imageReferences)

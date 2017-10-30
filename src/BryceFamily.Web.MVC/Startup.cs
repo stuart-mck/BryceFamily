@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using BryceFamily.Web.MVC.Infrastructure;
 using BryceFamily.Repo.Core.Model;
-using BryceFamily.Repo.Core.Repository;
 using BryceFamily.Repo.Core.Files;
 using BryceFamily.Repo.Core.Write;
 using BryceFamily.Repo.Core.Write.People;
@@ -15,6 +13,8 @@ using Amazon.DynamoDBv2.DataModel;
 using BryceFamily.Repo.Core.Read.People;
 using BryceFamily.Repo.Core.FamilyEvents;
 using BryceFamily.Repo.Core.Read.FamilyEvents;
+using BryceFamily.Repo.Core.Write.Gallery;
+using BryceFamily.Repo.Core.Read.Gallery;
 
 namespace BryceFamily.Web.MVC
 {
@@ -39,11 +39,10 @@ namespace BryceFamily.Web.MVC
             services.AddScoped<IFamilyEventReadRepository, FamilyEventReadRepository>();
             services.AddScoped<IWriteRepository<FamilyEvent, Guid>, FamilyEventWriteRepository<FamilyEvent, Guid>>();
 
-            services.AddSingleton(context => new GalleryMockRepo<Gallery, Guid>(GetMockGalleries()));
-            services.AddSingleton(context => (IReadModel<Gallery, Guid>)context.GetService<GalleryMockRepo<Gallery, Guid>>());
-            services.AddScoped(context => (IWriteRepository<Gallery, Guid>)context.GetService<GalleryMockRepo<Gallery, Guid>>());
+            services.AddScoped<IGalleryReadRepository, GalleryReadRepository>();
+            services.AddScoped<IWriteRepository<Gallery, Guid>, GalleryWriteRepository<Gallery, Guid>>();
 
-            services.AddSingleton<IFileService>(new MockFileService(HostingEnvironment.WebRootPath));
+            services.AddScoped<IFileService>(context => new S3Service(context.GetRequiredService<IAWSClientFactory>(), "arn:aws:s3:::familybryce.gallery"));
 
             services.AddScoped<IPersonReadRepository, PeopleReadRepository>();
             services.AddScoped<IWriteRepository<Person, Guid>, PeopleWriteRepository<Person, Guid>>();
@@ -55,66 +54,16 @@ namespace BryceFamily.Web.MVC
                 TableNamePrefix = "familybryce."
             });
 
+            services.AddSingleton(context => new CDNServiceRoot("http://familybryce.gallery.s3-website-ap-southeast-2.amazonaws.com"));
+
+
             services.AddSingleton(new ClanService());
 
             services.AddMemoryCache();
 
         }
 
-        private static List<Gallery> GetMockGalleries()
-        {
-            var dummyData = new List<Gallery>()
-            {
-                new Gallery()
-                {
-                    ID = new Guid("af4356dd-34fd-a3e2-2222-1efa3eaa149f"),
-                    Name = "A Gallery",
-                    Summary = "An image gallery of stuff with pictures of stuff in it",
-                    Owner = Guid.NewGuid(),
-                    DateCreated = DateTime.Now.AddDays(-36),
-                    ImageReferences = new List<ImageReference>()
-                    {
-                        new ImageReference()
-                        {
-                            ID = new Guid("69cb852b-481b-415e-b2f6-8dc9cdc17fee"),
-                            ImageLocation = "images/galleries/af4356dd-34fd-a3e2-2222-1efa3eaa149f",
-                            MimeType = "image/jpg",
-                            Title = "WIN_20151130_20_12_41_Pro.jpg"
-                        },
-                        new ImageReference()
-                        {
-                            ID = new Guid("2976fc68-5579-462b-b947-f403c937c7f7"),
-                            ImageLocation = "images/galleries/af4356dd-34fd-a3e2-2222-1efa3eaa149f",
-                            MimeType = "image/jpg",
-                            Title = "WIN_20151130_20_12_41_Pro.jpg"
-                        },
-                        new ImageReference()
-                        {
-                            ID = new Guid("11697dbe-abf0-4eaf-8de9-281555e972e0"),
-                            ImageLocation = "images/galleries/af4356dd-34fd-a3e2-2222-1efa3eaa149f",
-                            MimeType = "image/jpg",
-                            Title = "WIN_20151130_20_12_41_Pro.jpg"
-                        },
-                        new ImageReference()
-                        {
-                            ID = new Guid("d4f09575-5f0a-4617-97b8-35d6ee80bd1f"),
-                            ImageLocation = "images/galleries/af4356dd-34fd-a3e2-2222-1efa3eaa149f",
-                            MimeType = "image/jpg",
-                            Title = "WIN_20151130_20_12_41_Pro.jpg"
-                        },
-                        new ImageReference()
-                        {
-                            ID = new Guid("69cb852b-481b-415e-b2f6-8dc9cdc17fee"),
-                            ImageLocation = "images/galleries/af4356dd-34fd-a3e2-2222-1efa3eaa149f",
-                            MimeType = "image/jpg",
-                            Title = "WIN_20151130_20_12_41_Pro.jpg"
-                        }
-                    }
-                }
-            };
-
-            return dummyData;
-        }
+      
 
         
 

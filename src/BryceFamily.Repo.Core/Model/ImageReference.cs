@@ -9,6 +9,8 @@
 
         public string ImageLocation { get; set; }
 
+        public ImageReferenceType ImageReferenceType { get; set; }
+
         public string MimeType { get; set; }
     }
 }

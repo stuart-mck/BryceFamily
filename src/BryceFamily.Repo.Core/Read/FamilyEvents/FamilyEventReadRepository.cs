@@ -45,7 +45,7 @@ namespace BryceFamily.Repo.Core.Read.FamilyEvents
         public async Task<FamilyEvent> Load(Guid id, CancellationToken cancellationToken)
         {
             var dbContext = _awsClientFactory.GetDynamoDBContext();
-            return await dbContext.LoadAsync<FamilyEvent>(id, cancellationToken);
+            return await dbContext.LoadAsync<FamilyEvent>(id, _operationConfig, cancellationToken);
         }
     }
 }
