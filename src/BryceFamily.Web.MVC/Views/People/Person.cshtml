@@ -1,8 +1,17 @@
 ﻿@model BryceFamily.Web.MVC.Models.Person
+@inject BryceFamily.Web.MVC.Infrastructure.ClanService ClanService
 
 @{
     ViewData["Title"] = "Person";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var clansSelect = ClanService.Clans.Select(c => new SelectListItem()
+    {
+        Selected = Model.Clan == c,
+        Text = c,
+        Value = c
+    });
+
 }
 
 <h2>Person</h2>
@@ -10,12 +19,14 @@
 <h4>PersonWriteModel</h4>
 <hr />
 <div class="row">
+    <a href="~/Views/People/Person.cshtml">~/Views/People/Person.cshtml</a>
     <div class="col-md-4">
         <form asp-action="Person">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.HiddenFor(m => m.Id)
             <div class="form-group">
                 <label asp-for="Clan" class="control-label"></label>
-                <input asp-for="Clan" class="form-control" />
+                <select asp-for="Clan" asp-items="clansSelect" class="form-control" ></select>
                 <span asp-validation-for="Clan" class="text-danger"></span>
             </div>
             <div class="form-group">

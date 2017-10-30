@@ -94,9 +94,15 @@ namespace BryceFamily.Web.MVC.Controllers
 
 
         [HttpGet]
-        public IActionResult Person()
+        public async Task<IActionResult> Person(Guid? id = null)
         {
-            return View(new Person());
+            Person p = null;
+            if (id != null)
+                p = Models.Person.Map(await _readModel.Load(id.Value, new CancellationToken()));
+            else
+                p = new Person();
+
+            return View(p);
         }
 
 

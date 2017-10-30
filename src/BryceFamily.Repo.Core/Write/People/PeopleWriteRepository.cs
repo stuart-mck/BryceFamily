@@ -47,7 +47,8 @@ namespace BryceFamily.Repo.Core.Write.People
         public async Task Save(Person entity, CancellationToken cancellationToken)
         {
             var dynamoContext = _clientFactory.GetDynamoDBContext();
-            entity.ID = Guid.NewGuid();
+            if (entity.ID == Guid.Empty)
+                entity.ID = Guid.NewGuid();
             entity.SortKey = $"{entity.FirstName}_{entity.LastName}_{entity.EmailAddress}";
             await dynamoContext.SaveAsync(entity, _dynamoDBOperationConfig, cancellationToken);
         }

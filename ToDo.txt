@@ -18,3 +18,7 @@ contact
 - captcha
 view family tree
  xml - json?
+
+ lookups
+ - clans
+ - occupations

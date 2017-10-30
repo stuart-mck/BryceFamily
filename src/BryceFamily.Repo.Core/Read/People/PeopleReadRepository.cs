@@ -23,14 +23,17 @@ namespace BryceFamily.Repo.Core.Read.People
         public Task<Person> Load(Guid id, CancellationToken cancellationToken)
         {
             var dbContext = _awsClientFactory.GetDynamoDBContext();
-            return dbContext.LoadAsync<Person>(id);
+            return dbContext.LoadAsync<Person>(id, _operationConfig);
         }
 
-        public async Task<List<Person>> SearchByName(string firstName, string lastName, string emailAddress, string occupation, CancellationToken cancellationToken)
+        public async Task<List<Person>> SearchByName(string clan, string firstName, string lastName, string emailAddress, string occupation, CancellationToken cancellationToken)
         {
             var dbContext = _awsClientFactory.GetDynamoDBContext();
 
             var scanConditions = new List<ScanCondition>();
+
+            if (!string.IsNullOrEmpty(clan))
+                scanConditions.Add(new ScanCondition("Clan", ScanOperator.Equal, clan));
 
             if (!string.IsNullOrEmpty(firstName))
                 scanConditions.Add(new ScanCondition("FirstName", ScanOperator.Equal, firstName));

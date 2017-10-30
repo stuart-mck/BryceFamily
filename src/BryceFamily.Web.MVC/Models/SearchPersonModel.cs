@@ -4,7 +4,10 @@ namespace BryceFamily.Web.MVC.Models
 {
     public class SearchPersonModel
     {
-        
+
+
+        [DisplayName("Clan")]
+        public string Clan { get; set; }
 
         [DisplayName("First Name")]
         public string FirstName { get; set; } 

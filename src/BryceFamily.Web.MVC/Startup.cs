@@ -54,6 +54,8 @@ namespace BryceFamily.Web.MVC
                 TableNamePrefix = "familybryce."
             });
 
+            services.AddSingleton(new ClanService());
+
             services.AddMemoryCache();
 
         }

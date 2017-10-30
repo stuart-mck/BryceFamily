@@ -13,6 +13,9 @@
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Clan)
+            </th>
                 <th>
                     @Html.DisplayNameFor(model => model.FirstName)
                 </th>
@@ -22,35 +25,12 @@
                 <th>
                     @Html.DisplayNameFor(model => model.MobilePhone)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.HomePhone)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Address)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Address1)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Suburb)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.State)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Country)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PostCode)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.EmailAddress)
-                </th>
+                
                 <th>
                     @Html.DisplayNameFor(model => model.Occupation)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.SubscribeToEmail)
+                    &nbsp;
                 </th>
             <th></th>
         </tr>
@@ -58,6 +38,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Clan)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
             </td>
@@ -67,40 +50,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.MobilePhone)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HomePhone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Suburb)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.State)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Country)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PostCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmailAddress)
-            </td>
+            
             <td>
                 @Html.DisplayFor(modelItem => item.Occupation)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SubscribeToEmail)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Details", "Person", new { id=item.Id }) 
             </td>
         </tr>
 }
