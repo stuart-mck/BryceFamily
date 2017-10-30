@@ -42,7 +42,7 @@ namespace BryceFamily.Web.MVC
             services.AddScoped<IGalleryReadRepository, GalleryReadRepository>();
             services.AddScoped<IWriteRepository<Gallery, Guid>, GalleryWriteRepository<Gallery, Guid>>();
 
-            services.AddScoped<IFileService>(context => new S3Service(context.GetRequiredService<IAWSClientFactory>(), "arn:aws:s3:::familybryce.gallery"));
+            services.AddScoped<IFileService>(context => new S3Service(context.GetRequiredService<IAWSClientFactory>(), "familybryce.gallery"));
 
             services.AddScoped<IPersonReadRepository, PeopleReadRepository>();
             services.AddScoped<IWriteRepository<Person, Guid>, PeopleWriteRepository<Person, Guid>>();

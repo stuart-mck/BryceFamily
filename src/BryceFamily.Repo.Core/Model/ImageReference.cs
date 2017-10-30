@@ -1,5 +1,8 @@
-﻿namespace BryceFamily.Repo.Core.Model
+﻿using Amazon.DynamoDBv2.DataModel;
+
+namespace BryceFamily.Repo.Core.Model
 {
+    [DynamoDBTable("imageReference")]
     public class ImageReference : Entity
     {
 

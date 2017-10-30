@@ -12,7 +12,7 @@ namespace BryceFamily.Repo.Core.Files
     {
         Task<byte[]> GetFile(Guid fileId, Guid galleryId);
 
-        Task<string> SaveFile(Guid fileId, Guid galleryId, IFormFile fileStream, string fileName, CancellationToken cancellationToken);
+        string  SaveFile(Guid fileId, Guid galleryId, IFormFile fileStream, string fileName, CancellationToken cancellationToken);
         Task<byte[]> GetFileResized(Guid resourceId, Guid galleryId, double resizeLimit);
     }
 }

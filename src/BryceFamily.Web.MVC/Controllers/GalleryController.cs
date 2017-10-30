@@ -162,7 +162,7 @@ namespace BryceFamily.Web.MVC.Controllers
 
                     if (file.Length > 0)
                     {
-                        img.Reference = await _fileService.SaveFile(img.Id, galleryId, file, file.Name, cancellationToken);
+                        img.Reference = _fileService.SaveFile(img.Id, galleryId, file, file.Name, cancellationToken);
                     }
                 });
 
