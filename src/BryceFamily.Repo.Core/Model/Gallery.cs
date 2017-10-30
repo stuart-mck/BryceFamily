@@ -1,18 +1,19 @@
-﻿using System;
+﻿using Amazon.DynamoDBv2.DataModel;
+using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace BryceFamily.Repo.Core.Model
 {
+    [DynamoDBTable("gallery")]
     public class Gallery : Entity
     {
         public string Name { get; set; }
 
-        public Person Owner { get; set; }
+        public Guid Owner { get; set; }
 
         public string Summary { get; set; }
 
-        public FamilyEvent FamilyEvent { get; set; }
+        public Guid FamilyEvent { get; set; }
 
         public List<ImageReference> ImageReferences { get; set; }
 

@@ -53,7 +53,7 @@ namespace BryceFamily.Web.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Search(SearchPersonModel searchPersonModel)
         {
-            var results = await _readModel.SearchByName(searchPersonModel.FirstName, searchPersonModel.LastName, searchPersonModel.EmailAddress, searchPersonModel.Occupation, new CancellationToken());
+            var results = await _readModel.SearchByName(searchPersonModel.Clan, searchPersonModel.FirstName, searchPersonModel.LastName, searchPersonModel.EmailAddress, searchPersonModel.Occupation, new CancellationToken());
 
             return View("List", results.Select(Models.Person.Map));
         }

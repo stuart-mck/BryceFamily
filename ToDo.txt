@@ -20,5 +20,11 @@ view family tree
  xml - json?
 
  lookups
- - clans
  - occupations
+ - users / current user
+
+ search
+ - event by date / clan
+
+
+

@@ -44,14 +44,17 @@ namespace BryceFamily.Web.MVC.Models
         {
             return new Repo.Core.Model.FamilyEvent()
             {
-                Details = this.Details,
-                StartDate = this.StartDate,
-                EndDate = this.EndDate,
-                EventStatus = (Repo.Core.Model.EventStatus)this.EventStatus,
-                EventType = (Repo.Core.Model.EventType)this.EventType,
-                ID = this.EntityId,
+                Details = Details,
+                StartDate = StartDate,
+                EndDate = EndDate,
+                EventStatus = (EventStatus)this.EventStatus,
+                EventType = (EventType)this.EventType,
+                ID = EntityId,
                 Location = MapLocation(),
-                Title = this.Title
+                Title = Title,
+                OrganiserContact = OrganiserContact,
+                OrganiserEmail = OrganiserEmail,
+                OrganiserName = OrganiserName
             };
         }
 
@@ -59,12 +62,12 @@ namespace BryceFamily.Web.MVC.Models
         {
             return new EventLocation()
             {
-                Address1 = this.Address1,
-                Address2 = this.Address2,
-                City = this.City,
-                PostCode = this.PostCode,
-                State = this.State,
-                Title = this.LocationTitle
+                Address1 = Address1,
+                Address2 = Address2,
+                City = City,
+                PostCode = PostCode,
+                State = State,
+                Title = LocationTitle
             };
         }
 
@@ -85,7 +88,11 @@ namespace BryceFamily.Web.MVC.Models
                 Details = sourceFamilyEvent.Details,
                 Title = sourceFamilyEvent.Title,
                 StartDate = sourceFamilyEvent.StartDate,
-                EndDate = sourceFamilyEvent.EndDate
+                EndDate = sourceFamilyEvent.EndDate,
+                OrganiserName = sourceFamilyEvent.OrganiserName,
+                OrganiserEmail = sourceFamilyEvent.OrganiserEmail,
+                OrganiserContact = sourceFamilyEvent.OrganiserEmail
+
             };
         }
     }

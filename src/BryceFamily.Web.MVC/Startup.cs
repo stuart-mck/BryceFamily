@@ -13,6 +13,8 @@ using BryceFamily.Repo.Core.Write.People;
 using BryceFamily.Repo.Core.AWS;
 using Amazon.DynamoDBv2.DataModel;
 using BryceFamily.Repo.Core.Read.People;
+using BryceFamily.Repo.Core.FamilyEvents;
+using BryceFamily.Repo.Core.Read.FamilyEvents;
 
 namespace BryceFamily.Web.MVC
 {
@@ -33,17 +35,16 @@ namespace BryceFamily.Web.MVC
         {
             services.AddMvc();
 
-            services.AddSingleton(context => new MockRepo<FamilyEvent, Guid>(GetMockData()));
-            services.AddSingleton(context => (IReadModel<FamilyEvent, Guid>)context.GetService<MockRepo<FamilyEvent, Guid>>());
-            services.AddSingleton(context => (IWriteRepository<FamilyEvent, Guid>)context.GetService<MockRepo<FamilyEvent, Guid>>());
+            
+            services.AddScoped<IFamilyEventReadRepository, FamilyEventReadRepository>();
+            services.AddScoped<IWriteRepository<FamilyEvent, Guid>, FamilyEventWriteRepository<FamilyEvent, Guid>>();
 
             services.AddSingleton(context => new GalleryMockRepo<Gallery, Guid>(GetMockGalleries()));
             services.AddSingleton(context => (IReadModel<Gallery, Guid>)context.GetService<GalleryMockRepo<Gallery, Guid>>());
-            services.AddSingleton(context => (IWriteRepository<Gallery, Guid>)context.GetService<GalleryMockRepo<Gallery, Guid>>());
+            services.AddScoped(context => (IWriteRepository<Gallery, Guid>)context.GetService<GalleryMockRepo<Gallery, Guid>>());
 
             services.AddSingleton<IFileService>(new MockFileService(HostingEnvironment.WebRootPath));
 
-            services.AddSingleton(context => new MockPeopleService<Person, Guid>());
             services.AddScoped<IPersonReadRepository, PeopleReadRepository>();
             services.AddScoped<IWriteRepository<Person, Guid>, PeopleWriteRepository<Person, Guid>>();
 
@@ -69,12 +70,7 @@ namespace BryceFamily.Web.MVC
                     ID = new Guid("af4356dd-34fd-a3e2-2222-1efa3eaa149f"),
                     Name = "A Gallery",
                     Summary = "An image gallery of stuff with pictures of stuff in it",
-                    Owner = new Person()
-                    {
-                        ID = Guid.NewGuid(),
-                        FirstName = "Brian",
-                        LastName = "Something"
-                    },
+                    Owner = Guid.NewGuid(),
                     DateCreated = DateTime.Now.AddDays(-36),
                     ImageReferences = new List<ImageReference>()
                     {
@@ -120,27 +116,7 @@ namespace BryceFamily.Web.MVC
             return dummyData;
         }
 
-        private static List<FamilyEvent> GetMockData()
-        {
-            var dummyData = new List<FamilyEvent>();
-            dummyData.Add(new FamilyEvent()
-            {
-                ID = Guid.NewGuid(),
-                Details = "This is a test event",
-                EndDate = new DateTime(2018, 3, 12, 12, 00, 00),
-                StartDate = new DateTime(2018, 3, 10, 12, 00, 00),
-                EventStatus = EventStatus.Pending,
-                EventType = EventType.Gathering,
-                Title = "A new event",
-                Location = new EventLocation()
-                {
-                    Title = "the car park"
-                }
-            });
-
-
-            return dummyData;
-        }
+        
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

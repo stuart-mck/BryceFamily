@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using BryceFamily.Repo.Core.Model;
+using BryceFamily.Repo.Core.Read.FamilyEvents;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace BryceFamily.Web.MVC.Models
 {
@@ -17,14 +20,14 @@ namespace BryceFamily.Web.MVC.Models
 
         public List<ImageReferenceModel> ImageReferences { get; private set; }
 
-        public static Gallery Map(Repo.Core.Model.Gallery sourceGallery)
+        public static async Task<Gallery> Map(Repo.Core.Model.Gallery sourceGallery, IFamilyEventReadRepository familyEventReadModel, CancellationToken cancellationToken)
         {
             return new Gallery()
             {
                 Title = sourceGallery.Name,
-                FamilyEvent = FamilyEvent.Map(sourceGallery?.FamilyEvent),
-                Owner = $"{sourceGallery.Owner?.FirstName} {sourceGallery.Owner?.LastName}",
-                OwnerId = sourceGallery?.Owner?.ID,
+                FamilyEvent = FamilyEvent.Map(await familyEventReadModel.Load(sourceGallery.FamilyEvent, cancellationToken)),
+                Owner = sourceGallery.Owner.ToString(),
+                OwnerId = sourceGallery?.Owner,
                 Summary = sourceGallery.Summary,
                 Id = sourceGallery.ID,
                 DateCreated = sourceGallery.DateCreated,
@@ -32,7 +35,7 @@ namespace BryceFamily.Web.MVC.Models
             };
         }
 
-        private static List<ImageReferenceModel> MapImageReferences(List<Repo.Core.Model.ImageReference> imageReferences)
+        private static List<ImageReferenceModel> MapImageReferences(List<ImageReference> imageReferences)
         {
             var results = new List<ImageReferenceModel>();
 

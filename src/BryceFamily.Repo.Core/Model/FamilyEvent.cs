@@ -1,10 +1,10 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
 using System;
-using System.Collections.Generic;
+
 
 namespace BryceFamily.Repo.Core.Model
 {
-    [DynamoDBTable("familybryce.familyevent")]
+    [DynamoDBTable("familyEvent")]
     public class FamilyEvent : Entity
     {
         
@@ -22,9 +22,11 @@ namespace BryceFamily.Repo.Core.Model
 
         public EventStatus EventStatus { get; set; }
 
-        public Person  PersonId { get; set; }
+        public string OrganiserName { get; set; }
 
-        public ICollection<Image> EventImages { get; set; }
+        public string OrganiserContact { get; set; }
+
+        public string OrganiserEmail { get; set; }
 
     }
 

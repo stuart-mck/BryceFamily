@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BryceFamily.Repo.Core.Model
+﻿namespace BryceFamily.Repo.Core.Model
 {
     public class ImageReference : Entity
     {
