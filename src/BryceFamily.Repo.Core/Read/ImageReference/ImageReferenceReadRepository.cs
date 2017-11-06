@@ -21,7 +21,7 @@ namespace BryceFamily.Repo.Core.Read.ImageReference
         public async Task<Model.ImageReference> Load(Guid imageId, Guid galleryId, CancellationToken cancellationToken)
         {
             var dynamoContext = _awsClientFactory.GetDynamoDBContext();
-            return await dynamoContext.LoadAsync<Model.ImageReference>(galleryId, imageId, _operationConfig, cancellationToken);
+            return await dynamoContext.LoadAsync<Model.ImageReference>(imageId, galleryId, _operationConfig, cancellationToken);
             
         }
 

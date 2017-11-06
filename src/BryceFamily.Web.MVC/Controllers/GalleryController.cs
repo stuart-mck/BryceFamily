@@ -17,7 +17,7 @@ using BryceFamily.Web.MVC.Infrastructure;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
-    [Route("Gallery")]
+    
     public class GalleryController : Controller
     {
         private readonly IGalleryReadRepository _readModel;
@@ -56,7 +56,7 @@ namespace BryceFamily.Web.MVC.Controllers
             
         }
 
-        [HttpGet, Route("ViewImage/{galleryId}/{imageId}")]
+        [HttpGet, Route("Gallery/ViewImage/{galleryId}/{imageId}")]
         public async Task<IActionResult> ViewImage(Guid galleryId, Guid imageId)
         {
             try
@@ -65,7 +65,7 @@ namespace BryceFamily.Web.MVC.Controllers
                 var galleryImages = (await _imageReferenceReadRepository.LoadByGallery(galleryId, cancellationToken)).ToList();
 
                 var img = await _imageReferenceReadRepository.Load(galleryId, imageId, cancellationToken);
-                var index = galleryImages.IndexOf(img);
+                var index = galleryImages.IndexOf(galleryImages.FirstOrDefault(t => t.ImageID == imageId));
 
                 return View(new ImageViewModel()
                 {
@@ -73,8 +73,8 @@ namespace BryceFamily.Web.MVC.Controllers
                     GalleryId = galleryId,
                     ImageId = imageId,
                     Title = img.Title,
-                    PreviousLink = IndexIsNotFirst(index) ? galleryImages[index - 1].ID : Guid.Empty,
-                    NextLink =  IndexIsNotLast(index, galleryImages.Count())  ? galleryImages[index + 1].ID : Guid.Empty
+                    PreviousLink = IndexIsNotFirst(index) ? galleryImages[index - 1].ImageID : Guid.Empty,
+                    NextLink =  IndexIsNotLast(index, galleryImages.Count())  ? galleryImages[index + 1].ImageID : Guid.Empty
                 });
             }
             catch (Exception ex)
@@ -159,7 +159,7 @@ namespace BryceFamily.Web.MVC.Controllers
                 if (gallery == null)
                     return BadRequest("Ïnvalid Gallery Id");
 
-                files.ForEach(async formFile =>
+                foreach(var formFile in files)
                 {
                     var img = new ImageReferenceModel()
                     {
@@ -182,16 +182,13 @@ namespace BryceFamily.Web.MVC.Controllers
 
                             await _imageReferenceWriteModel.Save(img.MapToEntity(), cancellationToken);
                         }
-                        
                     }
-                });
-
-                
+                }
                 return await Task.FromResult(RedirectToAction("EditGalleryImages", new { id = gallery.ID}));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest("Gallery does not exist");
+                return BadRequest($"Whoops - we had an error {ex.Message}");
             }
             
         }

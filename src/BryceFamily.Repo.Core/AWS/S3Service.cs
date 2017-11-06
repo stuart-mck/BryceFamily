@@ -54,7 +54,7 @@ namespace BryceFamily.Repo.Core.AWS
 
             if (result.HttpStatusCode == HttpStatusCode.OK)
             {
-                return $"{bucketPath}]";
+                return $"{bucketPath}";
             }
             throw new Exception($"Could not save file - status code returned was {result.HttpStatusCode}");
             
