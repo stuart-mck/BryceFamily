@@ -11,6 +11,14 @@ namespace BryceFamily.Web.MVC.Models
         public Guid ImageId { get; set; }
         public string Title { get; set; }
 
+        public string FullSizeLink
+        {
+            get
+            {
+                return $"familybryce.gallery/{GalleryId}/{Title}";
+            }
+        }
+
         public string Description { get; set; }
 
         public Guid PreviousLink { get; set; }

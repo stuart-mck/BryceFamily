@@ -1,5 +1,5 @@
 ﻿@model Gallery
-
+@inject BryceFamily.Web.MVC.Infrastructure.CDNServiceRoot serviceRoot
 
 
 <h2>@Html.DisplayFor(t => t.Title)</h2>
@@ -19,7 +19,7 @@
             }
 
             <div class="col-md-2">
-                <img src="@Url.Action("T", "ImageServer", new { galleryId = Model.Id, imageId = Model.ImageReferences[counter].Id })" />
+                <img src="@Url.Content($"{serviceRoot.ServiceRoot}/{Model.ImageReferences[counter].ThumbnailSizeLink}")" />
                 <label>@Model.ImageReferences[counter].Title</label><br />
                 @Html.ActionLink("View Image", "ViewImage", "Gallery", new { galleryId = Model.Id, imageId = Model.ImageReferences[counter].Id } )
             </div>

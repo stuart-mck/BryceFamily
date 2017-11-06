@@ -13,9 +13,11 @@ using BryceFamily.Repo.Core.Read.Gallery;
 using BryceFamily.Repo.Core.Read.FamilyEvents;
 using BryceFamily.Repo.Core.Read.ImageReference;
 using System.IO;
+using BryceFamily.Web.MVC.Infrastructure;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
+    [Route("Gallery")]
     public class GalleryController : Controller
     {
         private readonly IGalleryReadRepository _readModel;
@@ -40,7 +42,7 @@ namespace BryceFamily.Web.MVC.Controllers
         {
             var gallery = await _readModel.Load(id, CancellationToken.None);
 
-            return View(Models.Gallery.Map(gallery,_familyEventReadRepository, CancellationToken.None));
+            return View(await Models.Gallery.Map(gallery,_familyEventReadRepository, _imageReferenceReadRepository, CancellationToken.None));
         }
 
         public async Task<IActionResult> Index()
@@ -48,13 +50,13 @@ namespace BryceFamily.Web.MVC.Controllers
             var galleries = await _readModel.LoadAll(CancellationToken.None);
 
             var readModel = galleries.Select(
-                g => Models.Gallery.Map(g, _familyEventReadRepository, CancellationToken.None).Result);
+                g => Models.Gallery.Map(g, _familyEventReadRepository, _imageReferenceReadRepository, CancellationToken.None).Result);
 
             return View(readModel);
             
         }
 
-        [HttpGet]
+        [HttpGet, Route("ViewImage/{galleryId}/{imageId}")]
         public async Task<IActionResult> ViewImage(Guid galleryId, Guid imageId)
         {
             try
@@ -128,7 +130,7 @@ namespace BryceFamily.Web.MVC.Controllers
 
             var cancellationToken = new CancellationToken();
 
-            var gallery =await  Models.Gallery.Map(await _readModel.Load(id, cancellationToken), _familyEventReadRepository, cancellationToken);
+            var gallery =await  Models.Gallery.Map(await _readModel.Load(id, cancellationToken), _familyEventReadRepository, _imageReferenceReadRepository,  cancellationToken);
 
             return View(new FileUploadModel()
             {
@@ -166,15 +168,21 @@ namespace BryceFamily.Web.MVC.Controllers
                         Id = Guid.NewGuid(),
                         GalleryReference = galleryId
                     };
-                    
+
                     if (formFile.Length > 0)
                     {
                         using (var stream = new MemoryStream())
                         {
                             await formFile.CopyToAsync(stream);
-                            img.Reference = await _fileService.SaveFile(img.Id, galleryId, stream, formFile.FileName, formFile.ContentType, cancellationToken);
+                            img.Reference = await _fileService.SaveFile(img.Id, galleryId.ToString(), stream, formFile.FileName, formFile.ContentType, cancellationToken);
+
+                            stream.Position = 0;
+                            var resized = FileResizer.GetFileResized(ReadFully(stream), 150);
+                            await _fileService.SaveFile(img.Id, $"{galleryId}/thumbnail", resized, formFile.FileName, formFile.ContentType, cancellationToken);
+
                             await _imageReferenceWriteModel.Save(img.MapToEntity(), cancellationToken);
-                        }   
+                        }
+                        
                     }
                 });
 
@@ -186,6 +194,20 @@ namespace BryceFamily.Web.MVC.Controllers
                 return BadRequest("Gallery does not exist");
             }
             
+        }
+
+        private static byte[] ReadFully(Stream input)
+        {
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
+            }
         }
     }
 }
