@@ -15,6 +15,8 @@ using BryceFamily.Repo.Core.FamilyEvents;
 using BryceFamily.Repo.Core.Read.FamilyEvents;
 using BryceFamily.Repo.Core.Write.Gallery;
 using BryceFamily.Repo.Core.Read.Gallery;
+using BryceFamily.Repo.Core.Write.ImageReference;
+using BryceFamily.Repo.Core.Read.ImageReference;
 
 namespace BryceFamily.Web.MVC
 {
@@ -41,6 +43,9 @@ namespace BryceFamily.Web.MVC
 
             services.AddScoped<IGalleryReadRepository, GalleryReadRepository>();
             services.AddScoped<IWriteRepository<Gallery, Guid>, GalleryWriteRepository<Gallery, Guid>>();
+
+            services.AddScoped<IImageReferenceReadRepository, ImageReferenceReadRepository>();
+            services.AddScoped<IWriteRepository<ImageReference, Guid>, ImageReferenceWriteRepository<ImageReference, Guid>>();
 
             services.AddScoped<IFileService>(context => new S3Service(context.GetRequiredService<IAWSClientFactory>(), "familybryce.gallery"));
 

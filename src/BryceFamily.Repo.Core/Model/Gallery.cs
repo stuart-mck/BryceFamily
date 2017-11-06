@@ -15,7 +15,6 @@ namespace BryceFamily.Repo.Core.Model
 
         public Guid FamilyEvent { get; set; }
 
-        public List<ImageReference> ImageReferences { get; set; }
 
         public DateTime DateCreated { get; set; }
 

@@ -7,6 +7,8 @@ namespace BryceFamily.Web.MVC.Models
     {
         public Guid Id { get; set; }
 
+        public Guid GalleryReference { get; set; }
+
         public string Title { get; set; }
 
         public string Reference { get; set; }
@@ -21,9 +23,10 @@ namespace BryceFamily.Web.MVC.Models
             {
                 Title = Title,
                 ImageLocation = Reference,
-                ID =  Id,
+                ID = GalleryReference,
                 Description = Description,
-                MimeType = MimeType
+                MimeType = MimeType,
+                ImageID = Id
             };
         }
 
@@ -37,7 +40,8 @@ namespace BryceFamily.Web.MVC.Models
                 MimeType = arg.MimeType,
                 Reference = arg.ImageLocation,
                 Title = arg.Title,
-                Id = arg.ID
+                Id = arg.ImageID,
+                GalleryReference = arg.ID
             };
         }
     }

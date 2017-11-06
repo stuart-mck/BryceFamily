@@ -1,5 +1,4 @@
 ﻿using BryceFamily.Repo.Core.Files;
-using BryceFamily.Repo.Core.Repository;
 using BryceFamily.Web.MVC.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +11,8 @@ using BryceFamily.Repo.Core.Model;
 using BryceFamily.Repo.Core.Write;
 using BryceFamily.Repo.Core.Read.Gallery;
 using BryceFamily.Repo.Core.Read.FamilyEvents;
+using BryceFamily.Repo.Core.Read.ImageReference;
+using System.IO;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
@@ -20,13 +21,17 @@ namespace BryceFamily.Web.MVC.Controllers
         private readonly IGalleryReadRepository _readModel;
         private readonly IFamilyEventReadRepository _familyEventReadRepository;
         private readonly IWriteRepository<Repo.Core.Model.Gallery, Guid> _writeModel;
+        private readonly IWriteRepository<ImageReference, Guid> _imageReferenceWriteModel;
+        private readonly IImageReferenceReadRepository _imageReferenceReadRepository;
         private readonly IFileService _fileService;
 
-        public GalleryController(IGalleryReadRepository readModel, IFamilyEventReadRepository familyEventReadRepository, IWriteRepository<Repo.Core.Model.Gallery, Guid> writeModel, IFileService fileService)
+        public GalleryController(IGalleryReadRepository readModel, IFamilyEventReadRepository familyEventReadRepository, IWriteRepository<Repo.Core.Model.Gallery, Guid> galleryWriteModel, IWriteRepository<Repo.Core.Model.ImageReference, Guid> imageReferenceWriteModel, IImageReferenceReadRepository imageReferenceReadRepository, IFileService fileService)
         {
             _readModel = readModel;
             _familyEventReadRepository = familyEventReadRepository;
-            _writeModel = writeModel;
+            _writeModel = galleryWriteModel;
+            _imageReferenceWriteModel = imageReferenceWriteModel;
+            this._imageReferenceReadRepository = imageReferenceReadRepository;
             _fileService = fileService;
         }
 
@@ -54,10 +59,11 @@ namespace BryceFamily.Web.MVC.Controllers
         {
             try
             {
-                var gallery = await _readModel.Load(galleryId, CancellationToken.None);
+                var cancellationToken = CancellationToken.None;
+                var galleryImages = (await _imageReferenceReadRepository.LoadByGallery(galleryId, cancellationToken)).ToList();
 
-                var img = gallery.ImageReferences.First(ir => ir.ID == imageId);
-                var index = gallery.ImageReferences.IndexOf(img);
+                var img = await _imageReferenceReadRepository.Load(galleryId, imageId, cancellationToken);
+                var index = galleryImages.IndexOf(img);
 
                 return View(new ImageViewModel()
                 {
@@ -65,8 +71,8 @@ namespace BryceFamily.Web.MVC.Controllers
                     GalleryId = galleryId,
                     ImageId = imageId,
                     Title = img.Title,
-                    PreviousLink = IndexIsNotFirst(index) ? gallery.ImageReferences[index - 1].ID : Guid.Empty,
-                    NextLink =  IndexIsNotLast(index, gallery )  ? gallery.ImageReferences[index + 1].ID : Guid.Empty
+                    PreviousLink = IndexIsNotFirst(index) ? galleryImages[index - 1].ID : Guid.Empty,
+                    NextLink =  IndexIsNotLast(index, galleryImages.Count())  ? galleryImages[index + 1].ID : Guid.Empty
                 });
             }
             catch (Exception ex)
@@ -75,9 +81,9 @@ namespace BryceFamily.Web.MVC.Controllers
             }
         }
 
-        private bool IndexIsNotLast(int index, Repo.Core.Model.Gallery gallery)
+        private bool IndexIsNotLast(int index, int gallerySize)
         {
-            var length = gallery.ImageReferences.Count;
+            var length = gallerySize;
             return index < length - 1;
         }
 
@@ -109,7 +115,6 @@ namespace BryceFamily.Web.MVC.Controllers
             {
                 ID = Guid.NewGuid(),
                 DateCreated = DateTime.Now,
-                ImageReferences = new List<ImageReference>(),
                 Name = newGallery.Name,
                 Summary = newGallery.Description
             };
@@ -148,27 +153,33 @@ namespace BryceFamily.Web.MVC.Controllers
             {
                 var cancellationToken = new CancellationToken();
 
-                var gallery = await Models.Gallery.Map(await _readModel.Load(galleryId, cancellationToken), _familyEventReadRepository, cancellationToken);
+                var gallery = await  _readModel.Load(galleryId, cancellationToken);
+                if (gallery == null)
+                    return BadRequest("Ïnvalid Gallery Id");
 
-                files.ForEach(async file =>
+                files.ForEach(async formFile =>
                 {
                     var img = new ImageReferenceModel()
                     {
-                        MimeType = file.ContentType,
-                        Title = file.Name,
-                        Id = Guid.NewGuid()
+                        MimeType = formFile.ContentType,
+                        Title = formFile.FileName,
+                        Id = Guid.NewGuid(),
+                        GalleryReference = galleryId
                     };
-                    gallery.ImageReferences.Add(img);
-
-                    if (file.Length > 0)
+                    
+                    if (formFile.Length > 0)
                     {
-                        img.Reference = _fileService.SaveFile(img.Id, galleryId, file, file.Name, cancellationToken);
+                        using (var stream = new MemoryStream())
+                        {
+                            await formFile.CopyToAsync(stream);
+                            img.Reference = await _fileService.SaveFile(img.Id, galleryId, stream, formFile.FileName, formFile.ContentType, cancellationToken);
+                            await _imageReferenceWriteModel.Save(img.MapToEntity(), cancellationToken);
+                        }   
                     }
                 });
 
-                await _writeModel.Save(gallery.MapToEntity(), cancellationToken);
-
-                return await Task.FromResult(RedirectToAction("EditGalleryImages", new { id = gallery.Id}));
+                
+                return await Task.FromResult(RedirectToAction("EditGalleryImages", new { id = gallery.ID}));
             }
             catch (Exception)
             {

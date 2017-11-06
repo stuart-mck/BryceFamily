@@ -19,7 +19,7 @@
 
     public enum ImageReferenceType
     {
-        Gallery,
+        Event,
         Person
     }
 }

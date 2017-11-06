@@ -29,8 +29,7 @@ namespace BryceFamily.Web.MVC.Models
                 OwnerId = sourceGallery?.Owner,
                 Summary = sourceGallery.Summary,
                 Id = sourceGallery.ID,
-                DateCreated = sourceGallery.DateCreated,
-                ImageReferences = MapImageReferences(sourceGallery.ImageReferences)
+                DateCreated = sourceGallery.DateCreated
             }
             );
         }
@@ -52,8 +51,7 @@ namespace BryceFamily.Web.MVC.Models
                 ID = this.Id,
                 DateCreated = this.DateCreated,
                 Name = this.Title,
-                Summary = this.Summary,
-                ImageReferences = BuildImageReferences()
+                Summary = this.Summary
                
             };
         }

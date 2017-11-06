@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +6,7 @@ using BryceFamily.Repo.Core.Files;
 using BryceFamily.Repo.Core.Repository;
 using BryceFamily.Repo.Core.Model;
 using System.Threading;
+using BryceFamily.Repo.Core.Read.ImageReference;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
@@ -15,11 +15,13 @@ namespace BryceFamily.Web.MVC.Controllers
     {
         private IFileService _fileService;
         private readonly IReadModel<Gallery, Guid> _galleryReadModel;
+        private readonly IImageReferenceReadRepository _imageReferenceReadRepository;
 
-        public ResourcesController(IFileService fileService, IReadModel<Gallery, Guid> galleryReadModel)
+        public ResourcesController(IFileService fileService, IReadModel<Gallery, Guid> galleryReadModel, IImageReferenceReadRepository imageReferenceReadRepository)
         {
             _fileService = fileService;
             _galleryReadModel = galleryReadModel;
+            _imageReferenceReadRepository = imageReferenceReadRepository;
         }
         
         [HttpGet, Route("T")]
@@ -27,13 +29,13 @@ namespace BryceFamily.Web.MVC.Controllers
         {
             try
             {
-                var gallery = await _galleryReadModel.Load(galleryId, CancellationToken.None);
+                var cancellationToken = CancellationToken.None;
 
-                var resource = gallery.ImageReferences.FirstOrDefault(t => t.ID == imageId);
+                var resource = await _imageReferenceReadRepository.Load(galleryId, imageId, cancellationToken);
                 if (resource == null)
                     return NotFound();
 
-                return File(await _fileService.GetFileResized(imageId, gallery.ID, 150d), resource.MimeType);
+                return File(await _fileService.GetFileResized(imageId, galleryId, 150d), resource.MimeType);
             }
             catch (Exception ex)
             {
@@ -47,9 +49,8 @@ namespace BryceFamily.Web.MVC.Controllers
         {
             try
             {
-                var gallery = await _galleryReadModel.Load(galleryId, CancellationToken.None);
 
-                var resource = gallery.ImageReferences.FirstOrDefault(t => t.ID == imageId);
+                var resource = await _imageReferenceReadRepository.Load(galleryId, imageId, CancellationToken.None);
                 if (resource == null)
                     return NotFound();
 

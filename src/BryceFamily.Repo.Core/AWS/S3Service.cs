@@ -6,6 +6,7 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using System.Net;
 using System.Threading;
+using System.IO;
 
 namespace BryceFamily.Repo.Core.AWS
 {
@@ -30,7 +31,7 @@ namespace BryceFamily.Repo.Core.AWS
             throw new NotImplementedException();
         }
 
-        public string SaveFile(Guid fileId, Guid galleryId, IFormFile fileStream, string fileName, CancellationToken cancellationToken)
+        public async Task<string> SaveFile(Guid fileId, Guid galleryId, Stream fileStream, string fileName, string contentType, CancellationToken cancellationToken)
         {
             var s3Context = _awsClientFactory.GetS3Context();
 
@@ -38,14 +39,16 @@ namespace BryceFamily.Repo.Core.AWS
             //root/galleryid/fileName or root/personid/filename
 
             var bucketPath = $"{_bucketRoot}/{galleryId}";
-           EnsureBucketExists(s3Context, bucketPath, cancellationToken);
+            EnsureBucketExists(s3Context, bucketPath, cancellationToken);
 
             //write to bucket
-            var result = s3Context.PutObjectAsync(new PutObjectRequest()
+            var result = await s3Context.PutObjectAsync(new PutObjectRequest()
             {
                 BucketName = bucketPath,
-                InputStream = fileStream.OpenReadStream()
-            }, cancellationToken).Result;
+                ContentType = contentType,
+                InputStream = fileStream,
+                Key = fileName,
+            }, cancellationToken);
 
             if (result.HttpStatusCode == HttpStatusCode.OK)
             {
