@@ -153,6 +153,9 @@ namespace BryceFamily.Web.MVC.Controllers
         {
             try
             {
+                var allowedExtensions = new[] { ".png", ".gif", ".jpg" };
+                
+
                 var cancellationToken = new CancellationToken();
 
                 var gallery = await  _readModel.Load(galleryId, cancellationToken);
@@ -161,6 +164,12 @@ namespace BryceFamily.Web.MVC.Controllers
 
                 foreach(var formFile in files)
                 {
+                    var checkextension = Path.GetExtension(formFile.FileName).ToLower();
+
+                    if (!allowedExtensions.Contains(checkextension))
+                        return BadRequest($"Invalid file format {checkextension} on file {formFile.FileName}");
+
+
                     var img = new ImageReferenceModel()
                     {
                         MimeType = formFile.ContentType,
