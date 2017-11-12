@@ -44,7 +44,7 @@ namespace BryceFamily.Web.MVC.Models
                 SubscribeToEmail = SubscribeToEmail,
                 Suburb = Suburb,
                 Occupation = Occupation,
-                Clan = int.Parse(Clan),
+                Clan = Clan,
                 ID = Id
             };
         }

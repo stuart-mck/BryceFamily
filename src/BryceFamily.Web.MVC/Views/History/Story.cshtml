@@ -1,0 +1,48 @@
+﻿@model StoryWriteModel
+@inject BryceFamily.Web.MVC.Infrastructure.ClanAndPeopleService ClanService
+
+@{
+    ViewData["Title"] = "Story";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var peopleSelect = ClanService.People.Select(c => new SelectListItem()
+    {
+        Selected = c.ID == Model.PersonID,
+        Text = $"{c.LastName}, {c.FirstName}",
+        Value = c.ID.ToString()
+    });
+}
+
+<h2>Contribute A Story</h2>
+
+<form asp-action="Story" asp-controller="History">
+    <div class="row">
+        <label asp-for="PersonID">Select Related Person</label>
+        <select asp-for="PersonID" asp-items="peopleSelect"></select>
+    </div>
+    <div class="row">
+        @Html.TextAreaFor(m => m.Story, new
+{
+    rows = "20",
+    style = "resize:none;width:400px;",
+    placeholder = Html.DisplayNameFor(m => m.Story),
+    @class = "form-control input-lg textarea-editor"
+})
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+
+
+ @section Scripts{
+    <script language="javascript">
+        $('.textarea-editor').summernote({
+            height: 300, // set editor height  
+            minHeight: null, // set minimum height of editor  
+            maxHeight: null, // set maximum height of editor  
+            focus: true // set focus to editable area after initializing summernote  
+        });  
+    </script>
+
+ }

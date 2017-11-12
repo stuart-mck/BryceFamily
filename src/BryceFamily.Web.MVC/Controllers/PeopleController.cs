@@ -13,6 +13,7 @@ using System.Threading;
 using BryceFamily.Repo.Core.Read.People;
 using System.Globalization;
 using BryceFamily.Repo.Core.Model;
+using BryceFamily.Web.MVC.Infrastructure;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
@@ -20,11 +21,13 @@ namespace BryceFamily.Web.MVC.Controllers
     {
         private readonly IWriteRepository<Repo.Core.Model.Person, Guid> _writeModel;
         private readonly IPersonReadRepository _readModel;
+        private readonly ClanAndPeopleService _clanAndPeopleService;
 
-        public PeopleController(IPersonReadRepository readModel, IWriteRepository<Repo.Core.Model.Person, Guid> writeModel)
+        public PeopleController(IPersonReadRepository readModel, IWriteRepository<Repo.Core.Model.Person, Guid> writeModel, ClanAndPeopleService clanAndPeopleService)
         {
             _readModel = readModel;
             _writeModel = writeModel;
+            _clanAndPeopleService = clanAndPeopleService;
         }
 
         public IActionResult Index()
@@ -155,7 +158,7 @@ namespace BryceFamily.Web.MVC.Controllers
                                 person.MiddleName = ReadStringCell(sheet, rowId, PersonImport.MiddleName).ToTitleCase();
                                 person.MaidenName = ReadStringCell(sheet, rowId, PersonImport.MaindenName).ToUpper();
                                 person.Phone = ReadStringCell(sheet, rowId, PersonImport.PhoneNumber);
-                                person.Clan = ReadIntCell(sheet, rowId, PersonImport.Clan);
+                                person.Clan =   _clanAndPeopleService.Clans[ReadIntCell(sheet, rowId, PersonImport.Clan) + 1];
                                 person.MotherID = GetNullableInt(sheet, PersonImport.MotherId, rowId);
                                 person.FatherID = GetNullableInt(sheet, PersonImport.FatherId, rowId);
                                 person.Address1 = ReadStringCell(sheet, rowId, PersonImport.Address1);

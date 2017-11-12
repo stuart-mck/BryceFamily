@@ -2,7 +2,6 @@ gallery management
 	- associate with family event
 	- (image ref editing)
 contacts
-	- upload bulk list
 	- emails editor
 	- message filters?
 	- subcription / unsubscription
@@ -26,7 +25,6 @@ view family tree
 
 static pages for history for now?
 
-finish mapping of blue book data
 
 
 

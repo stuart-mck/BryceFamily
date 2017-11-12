@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using BryceFamily.Repo.Core.Read.People.DTO;
+using System.Linq;
 
 namespace BryceFamily.Repo.Core.Read.People
 {
@@ -18,6 +20,22 @@ namespace BryceFamily.Repo.Core.Read.People
         {
             _awsClientFactory = awsClientFactory;
             _operationConfig = operationConfig;
+        }
+
+        public async Task<List<LightWeightPerson>> GetAllPeople(CancellationToken cancellationToken)
+        {
+            var dbContext = _awsClientFactory.GetDynamoDBContext();
+
+            var results = await dbContext.ScanAsync<Person>(new List<ScanCondition>(), _operationConfig).GetRemainingAsync(cancellationToken);
+
+            return results.Select(p => new LightWeightPerson()
+            {
+                Clan = "",
+                FirstName = p.FirstName,
+                LastName = p.LastName,
+                ID = p.ID
+            }).ToList();
+
         }
 
         public Task<Person> Load(Guid id, CancellationToken cancellationToken)

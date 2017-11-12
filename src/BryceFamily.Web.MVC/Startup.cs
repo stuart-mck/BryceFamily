@@ -62,7 +62,7 @@ namespace BryceFamily.Web.MVC
             services.AddSingleton(context => new CDNServiceRoot("https://s3-ap-southeast-2.amazonaws.com"));
 
 
-            services.AddSingleton(new ClanService());
+            services.AddScoped<ClanAndPeopleService>();
 
             services.AddMemoryCache();
 

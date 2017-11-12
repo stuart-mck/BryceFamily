@@ -13,7 +13,7 @@ namespace BryceFamily.Repo.Core.Model
 
         public int PersonID { get; set; }
 
-        public int Clan { get; set; }
+        public string Clan { get; set; }
 
         public string FirstName { get; set; }
 
