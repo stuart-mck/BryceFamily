@@ -2,16 +2,24 @@
 {
     public enum PersonImport 
     {
+        ID = 1,
+        Clan,
         FirstName,
-        LastName,
         MiddleName,
+        LastName,
+        MaindenName,
+        Gender,
+        DOB,
+        DOD,
+        MotherId,
+        FatherId,
+        Occupation,
         Address1,
         Address2,
         Suburb,
         State,
         PostCode,
         EmailAddress,
-        Occupation,
-        Country
+        PhoneNumber
     }
 }

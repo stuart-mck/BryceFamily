@@ -24,7 +24,7 @@ namespace BryceFamily.Repo.Core.Write.ImageReference
             throw new NotImplementedException();
         }
 
-        public Task<Model.ImageReference> FindByQuery(IQueryParameter repository)
+        public Task<Model.ImageReference> FindByQuery(IQueryParameter repository, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

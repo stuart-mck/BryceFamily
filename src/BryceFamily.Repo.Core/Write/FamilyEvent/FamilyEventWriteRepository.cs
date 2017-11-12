@@ -25,7 +25,7 @@ namespace BryceFamily.Repo.Core.FamilyEvents
             throw new NotImplementedException();
         }
 
-        public Task<FamilyEvent> FindByQuery(IQueryParameter repository)
+        public Task<FamilyEvent> FindByQuery(IQueryParameter repository, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

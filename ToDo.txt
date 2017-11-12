@@ -24,11 +24,6 @@ view family tree
  search
  - event by date / clan
 
- finish s3 implementation
-	- path is not correct
-	- imageReference is not saving
-	- do thumbnail as well
-
 static pages for history for now?
 
 finish mapping of blue book data

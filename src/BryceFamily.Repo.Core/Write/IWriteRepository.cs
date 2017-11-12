@@ -11,6 +11,6 @@ namespace BryceFamily.Repo.Core.Write
 
         void Delete(TId entityId);
 
-       Task<TEntity> FindByQuery(IQueryParameter repository);
+       Task<TEntity> FindByQuery(IQueryParameter repository, CancellationToken cancellationToken);
     }
 }

@@ -25,10 +25,11 @@ namespace BryceFamily.Repo.Core.Write.People
             throw new NotImplementedException();
         }
 
-        public async Task<Person> FindByQuery(IQueryParameter query)
+        public async Task<Person> FindByQuery(IQueryParameter query, CancellationToken cancellationToken)
         {
             var personQuery = (PersonIdentifier)query;
             var dynamoContext = _clientFactory.GetDynamoDBContext();
+
 
             var dynamoOperationContext = new DynamoDBOperationConfig()
             {
@@ -36,12 +37,22 @@ namespace BryceFamily.Repo.Core.Write.People
                 TableNamePrefix = "familybryce."
             };
 
-            dynamoOperationContext.QueryFilter.Add(new ScanCondition("FirstName", ScanOperator.Equal, personQuery.FirstName));
-            dynamoOperationContext.QueryFilter.Add(new ScanCondition("LastName", ScanOperator.Equal, personQuery.LastName));
-            dynamoOperationContext.QueryFilter.Add(new ScanCondition("EmailAddress", ScanOperator.Equal, personQuery.EmailAddress));
-
-            var person = await dynamoContext.QueryAsync<Person>(dynamoOperationContext).GetRemainingAsync();
-            return person.FirstOrDefault();
+            
+            if (personQuery.PersonId.HasValue)
+            {
+                dynamoOperationContext.IndexName = "PersonID-index";
+                var queryResult = await dynamoContext.QueryAsync<Person>(personQuery.PersonId.Value, dynamoOperationContext).GetRemainingAsync(cancellationToken);
+                return queryResult.FirstOrDefault();
+            }
+            else
+            {
+                dynamoOperationContext.QueryFilter.Add(new ScanCondition("FirstName", ScanOperator.Equal, personQuery.FirstName));
+                dynamoOperationContext.QueryFilter.Add(new ScanCondition("LastName", ScanOperator.Equal, personQuery.LastName));
+                dynamoOperationContext.QueryFilter.Add(new ScanCondition("EmailAddress", ScanOperator.Equal, personQuery.EmailAddress));
+                var person = await dynamoContext.QueryAsync<Person>(dynamoOperationContext).GetRemainingAsync();
+                return person.FirstOrDefault();
+            }
+            
         }
 
         public async Task Save(Person entity, CancellationToken cancellationToken)

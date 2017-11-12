@@ -10,9 +10,8 @@ namespace BryceFamily.Web.MVC.Models
 
         public string LastName { get; set; }
 
-        public string MobilePhone { get; set; }
 
-        public string HomePhone { get; set; }
+        public string Phone { get; set; }
 
         public string Address { get; set; }
         public string Address1 { get; set; }
@@ -21,8 +20,6 @@ namespace BryceFamily.Web.MVC.Models
 
         public string State { get; set; }
 
-        public string Country { get; set; }
-
         public string PostCode { get; set; }
 
         public string EmailAddress { get; set; }
@@ -30,25 +27,24 @@ namespace BryceFamily.Web.MVC.Models
         public string Occupation { get; set; }
 
         public bool SubscribeToEmail { get; set; }
+        public string MiddleName { get; private set; }
 
         public Repo.Core.Model.Person MapToEntity()
         {
             return new Repo.Core.Model.Person()
             {
-                Address = Address,
-                Address1 = Address1,
-                Country = Country,
+                Address1 = Address,
+                Address2 = Address1,
                 EmailAddress = EmailAddress,
                 FirstName = FirstName,
-                HomePhone = HomePhone,
+                Phone = Phone,
                 LastName = LastName,
-                MobilePhone = MobilePhone,
                 PostCode = PostCode,
                 State = State,
                 SubscribeToEmail = SubscribeToEmail,
                 Suburb = Suburb,
                 Occupation = Occupation,
-                Clan = Clan,
+                Clan = int.Parse(Clan),
                 ID = Id
             };
         }
@@ -57,20 +53,19 @@ namespace BryceFamily.Web.MVC.Models
         {
             return new Person()
             {
-                Address = person.Address,
-                Address1 = person.Address1,
-                Country = person.Country,
+                Address = person.Address1,
+                Address1 = person.Address2,
                 EmailAddress = person.EmailAddress,
                 FirstName = person.FirstName,
-                HomePhone = person.HomePhone,
+                MiddleName = person.MiddleName,
+                Phone = person.Phone,
                 LastName = person.LastName,
-                MobilePhone = person.MobilePhone,
                 PostCode = person.PostCode,
                 State = person.State,
                 SubscribeToEmail = person.SubscribeToEmail,
                 Suburb = person.Suburb,
                 Occupation = person.Occupation,
-                Clan = person.Clan,
+                Clan = person.Clan.ToString(),
                 Id = person.ID
             };
         }

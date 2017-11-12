@@ -8,11 +8,10 @@
 
 <div class="row">
     <div class="btn-group">
-        <button class="btn btn-sm">Send SMS</button>
-        @Html.ActionLink("Send Email", "Email", "People", null, new  { @class="btn btn-sm" })
         @Html.ActionLink("Edit People", "List", "People", null, new { @class = "btn btn-sm" })
         @Html.ActionLink("Add New Person", "Person", "People", null, new { @class = "btn btn-sm" })
         @Html.ActionLink("Find People", "Search", "People", null, new { @class = "btn btn-sm" })
+        @Html.ActionLink("Import People File", "Import", "People", null, new { @class = "btn btn-sm" })
     </div>
 </div>
 

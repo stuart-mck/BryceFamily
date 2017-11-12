@@ -25,7 +25,7 @@ namespace BryceFamily.Repo.Core.Write.Gallery
             throw new NotImplementedException();
         }
 
-        public Task<Model.Gallery> FindByQuery(IQueryParameter repository)
+        public Task<Model.Gallery> FindByQuery(IQueryParameter repository, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
