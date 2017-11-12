@@ -10,7 +10,15 @@
         Selected = c.ID == Model.PersonID,
         Text = $"{c.LastName}, {c.FirstName}",
         Value = c.ID.ToString()
-    });
+    }).Union(new List<SelectListItem>()
+    {
+        new SelectListItem()
+    {
+        Text = "Select ...",
+        Value = "",
+        Selected = true
+    }
+    }).OrderBy(t => t.Value); ;
 }
 
 <h2>Contribute A Story</h2>
