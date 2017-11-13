@@ -1,5 +1,6 @@
 ﻿using System;
-    
+using System.Security.AccessControl;
+
 namespace BryceFamily.Web.MVC.Models
 {
     public class PersonLookup
@@ -12,5 +13,11 @@ namespace BryceFamily.Web.MVC.Models
         public string LastName { get; set; }
 
         public string Clan { get; set; }
+
+        public int? MotherId { get; set; }
+
+        public int? FatherId { get; set; }
+
+        public int PersonId { get; set; }
     }
 }

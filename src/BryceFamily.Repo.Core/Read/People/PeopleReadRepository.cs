@@ -33,7 +33,10 @@ namespace BryceFamily.Repo.Core.Read.People
                 Clan = "",
                 FirstName = p.FirstName,
                 LastName = p.LastName,
-                ID = p.ID
+                ID = p.ID,
+                MotherId = p.MotherID,
+                FatherId = p.FatherID,
+                PersonId = p.PersonID
             }).ToList();
 
         }
@@ -42,6 +45,21 @@ namespace BryceFamily.Repo.Core.Read.People
         {
             var dbContext = _awsClientFactory.GetDynamoDBContext();
             return dbContext.LoadAsync<Person>(id, _operationConfig);
+        }
+
+        public async Task<Person> Load(int personId, CancellationToken cancellationToken)
+        {
+            var dbContext = _awsClientFactory.GetDynamoDBContext();
+
+            var dynamoOperationContext = new DynamoDBOperationConfig()
+            {
+                ConditionalOperator = ConditionalOperatorValues.And,
+                TableNamePrefix = "familybryce."
+            };
+
+            dynamoOperationContext.IndexName = "PersonID-index";
+            var queryResult = await dbContext.QueryAsync<Person>(personId, dynamoOperationContext).GetRemainingAsync(cancellationToken);
+            return queryResult.FirstOrDefault();
         }
 
         public async Task<List<Person>> SearchByName(string clan, string firstName, string lastName, string emailAddress, string occupation, CancellationToken cancellationToken)

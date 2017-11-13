@@ -1,6 +1,7 @@
 ﻿using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.Runtime;
 using Amazon.S3;
 
 namespace BryceFamily.Repo.Core.AWS
@@ -11,9 +12,12 @@ namespace BryceFamily.Repo.Core.AWS
 
         private IAmazonDynamoDB GetDynamoDbClient()
         {
-            if (_client == null)
-                _client = new AmazonDynamoDBClient(RegionEndpoint.APSoutheast2);
-            return _client;
+            return new AmazonDynamoDBClient(new BasicAWSCredentials("AKIAJ3GK4E3FECZ6CQJQ", "LEHCAi/ln5TfkpsJfG0i43E8LmeSj30xM96YlnkN"), RegionEndpoint.APSoutheast2);
+
+
+            //    new BasicAWSCredentials("AKIAJ3GK4E3FECZ6CQJQ", "LEHCAi/ln5TfkpsJfG0i43E8LmeSj30xM96YlnkN"), 
+            //RegionEndpoint.APSoutheast2));
+
         }
 
         public IDynamoDBContext GetDynamoDBContext()

@@ -14,6 +14,8 @@ using BryceFamily.Repo.Core.Read.People;
 using System.Globalization;
 using BryceFamily.Repo.Core.Model;
 using BryceFamily.Web.MVC.Infrastructure;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Person = BryceFamily.Web.MVC.Models.Person;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
@@ -100,11 +102,7 @@ namespace BryceFamily.Web.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Person(Guid? id = null)
         {
-            Models.Person p = null;
-            if (id != null)
-                p = Models.Person.Map(await _readModel.Load(id.Value, new CancellationToken()));
-            else
-                p = new Models.Person();
+            var p = id != null ? Models.Person.Map(await _readModel.Load(id.Value, new CancellationToken())) : new Person();
 
             return View(p);
         }
@@ -122,12 +120,11 @@ namespace BryceFamily.Web.MVC.Controllers
             if (files.Count > 0)
             {
 
-
                 foreach (var file in files)
                 {
                     using (var excel = new ExcelPackage(file.OpenReadStream()))
                     {
-                        var sheet = excel.Workbook.Worksheets["Family Master"]; 
+                        var sheet = excel.Workbook.Worksheets["Family Master"];
                         if (sheet != null)
                         {
                             var rowId = 2; // sheet has header row!
@@ -144,7 +141,8 @@ namespace BryceFamily.Web.MVC.Controllers
 
                                 var person = await _writeModel.FindByQuery(identifier, CancellationToken.None);
 
-                                if (person == null) {
+                                if (person == null)
+                                {
                                     person = new Repo.Core.Model.Person()
                                     {
                                         PersonID = ReadIntCell(sheet, rowId, PersonImport.ID),
@@ -158,7 +156,7 @@ namespace BryceFamily.Web.MVC.Controllers
                                 person.MiddleName = ReadStringCell(sheet, rowId, PersonImport.MiddleName).ToTitleCase();
                                 person.MaidenName = ReadStringCell(sheet, rowId, PersonImport.MaindenName).ToUpper();
                                 person.Phone = ReadStringCell(sheet, rowId, PersonImport.PhoneNumber);
-                                person.Clan =   _clanAndPeopleService.Clans[ReadIntCell(sheet, rowId, PersonImport.Clan) - 1];
+                                person.Clan = _clanAndPeopleService.Clans[ReadIntCell(sheet, rowId, PersonImport.Clan) - 1];
                                 person.MotherID = GetNullableInt(sheet, PersonImport.MotherId, rowId);
                                 person.FatherID = GetNullableInt(sheet, PersonImport.FatherId, rowId);
                                 person.Address1 = ReadStringCell(sheet, rowId, PersonImport.Address1);
@@ -174,55 +172,40 @@ namespace BryceFamily.Web.MVC.Controllers
 
                             }
                         }
-                    }
-                }
-            }
-            return RedirectToAction("Index");
-        }
 
-        public async Task<IActionResult> Relationships(List<IFormFile> files)
-        {
-            if (files.Count > 0)
-            {
-
-
-                foreach (var file in files)
-                {
-                    using (var excel = new ExcelPackage(file.OpenReadStream()))
-                    {
-                        var sheet = excel.Workbook.Worksheets["Spouses"];
-                        if (sheet != null)
+                        var spouseSheet = excel.Workbook.Worksheets["Spouses"];
+                        if (spouseSheet == null) continue;
                         {
                             var rowId = 2; // sheet has header row!
-                            while (sheet.Cells[rowId, 1].Text != string.Empty)
+                            while (spouseSheet.Cells[rowId, 1].Text != string.Empty)
                             {
                                 var husbandId = new PersonIdentifier()
                                 {
-                                    PersonId = ReadIntCell(sheet, rowId, 1),
+                                    PersonId = ReadIntCell(spouseSheet, rowId, 1),
                                 };
 
-                                var wifeID = new PersonIdentifier()
+                                var wifeId = new PersonIdentifier()
                                 {
-                                    PersonId = ReadIntCell(sheet, rowId, 2),
+                                    PersonId = ReadIntCell(spouseSheet, rowId, 2),
                                 };
 
 
                                 var husband = await _writeModel.FindByQuery(husbandId, CancellationToken.None);
-                                var wife = await _writeModel.FindByQuery(wifeID, CancellationToken.None);
+                                var wife = await _writeModel.FindByQuery(wifeId, CancellationToken.None);
 
                                 if (husband != null && wife != null)
                                 {
-                                    
-                                    var relationShip = new SpousalRelationship()
-                                        {
-                                            HusbandID = husband.PersonID,
-                                            WifeID = wife.PersonID
-                                        };
-                                    
-                                    relationShip.MarriageDate = ReadNullableDate(sheet, rowId, 3);
-                                    relationShip.DivorceDate = ReadNullableDate(sheet, rowId, 4);
 
-                                    
+                                    var relationShip = new SpousalRelationship()
+                                    {
+                                        HusbandID = husband.PersonID,
+                                        WifeID = wife.PersonID
+                                    };
+
+                                    relationShip.MarriageDate = ReadNullableDate(spouseSheet, rowId, 3);
+                                    relationShip.DivorceDate = ReadNullableDate(spouseSheet, rowId, 4);
+
+
                                     if (husband.Relationships.Any(r => r.WifeID == relationShip.WifeID))
                                         husband.Relationships.Remove(husband.Relationships.First(t => t.WifeID == relationShip.WifeID));
                                     husband.Relationships.Add(relationShip);
@@ -241,53 +224,100 @@ namespace BryceFamily.Web.MVC.Controllers
                     }
                 }
             }
-
             return RedirectToAction("Index");
         }
 
-        private DateTime? ReadNullableDate(ExcelWorksheet sheet, int rowId, int columnId)
+     
+
+        public async Task<IActionResult> RebuildDescendants()
+        {
+            var people = _clanAndPeopleService.People;
+
+            
+            var children = people.ToDictionary(person => person.PersonId,
+                                                    person => ProcessChildren(person.PersonId, people, 1));
+
+            foreach (var descendantList in children)
+            {
+                var person = await _writeModel.FindByQuery(new PersonIdentifier()
+                {
+                    PersonId = descendantList.Key
+                }, CancellationToken.None);
+
+                person.Descendants = descendantList.Value;
+
+                await _writeModel.Save(person, CancellationToken.None);
+            }
+            
+           
+            return Ok();
+        }
+
+        private List<Descendant> ProcessChildren(int personId, IReadOnlyList<PersonLookup> people, int level)
+        {
+            var descendants = new List<Descendant>();
+            // mothers
+            
+            if (people.Any(t => t.MotherId.HasValue && t.MotherId == personId))
+            {
+                people.Where(t => t.MotherId == personId).ToList().ForEach(des => descendants.Add(new Descendant
+                {
+                    Level = level,
+                    PersonID = des.PersonId,
+                    Descendants = ProcessChildren(des.PersonId, people, level + 1)
+                }));
+            }
+
+            // fathers
+            if (people.Any(t => t.FatherId.HasValue && t.FatherId == personId))
+            {
+                people.Where(t => t.FatherId == personId).ToList().ForEach(des => descendants.Add(new Descendant
+                {
+                    Level = level,
+                    PersonID = des.PersonId,
+                    Descendants = ProcessChildren(des.PersonId, people, level + 1)
+                }));
+            }
+            
+
+            return descendants;
+        }
+
+        private static DateTime? ReadNullableDate(ExcelWorksheet sheet, int rowId, int columnId)
         {
             var cellValue = sheet.Cells[rowId, columnId].Text;
 
-            if (!string.IsNullOrEmpty(cellValue))
-            {
-                if (DateTime.TryParse(cellValue, out var date))
-                    return date;
-                return null;
-            }
+            if (string.IsNullOrEmpty(cellValue)) return null;
+            if (DateTime.TryParse(cellValue, out var date))
+                return date;
             return null;
         }
 
-        private int ReadIntCell(ExcelWorksheet sheet, int rowNumber, int columnId)
+        private static int ReadIntCell(ExcelWorksheet sheet, int rowNumber, int columnId)
         {
             var cellValue = sheet.Cells[rowNumber, columnId].Text;
-            if (!string.IsNullOrEmpty(cellValue))
-            {
-                if (int.TryParse(cellValue, out var intValue))
-                    return intValue;
-            }
+            if (string.IsNullOrEmpty(cellValue)) throw new ArgumentOutOfRangeException($"Cannot convert {columnId} to integer");
+            if (int.TryParse(cellValue, out var intValue))
+                return intValue;
             throw new ArgumentOutOfRangeException($"Cannot convert {columnId} to integer");
         }
 
-        private int ReadIntCell(ExcelWorksheet sheet, int rowNumber, PersonImport columnId)
+        private static int ReadIntCell(ExcelWorksheet sheet, int rowNumber, PersonImport columnId)
         {
             return ReadIntCell(sheet, rowNumber, columnId.ToInt());
         }
 
-        private string ReadStringCell(ExcelWorksheet sheet, int rowNumber, PersonImport columnId)
+        private static string ReadStringCell(ExcelWorksheet sheet, int rowNumber, PersonImport columnId)
         {
             return sheet.Cells[rowNumber, columnId.ToInt()].Text.Trim();
         }
 
-        private int? GetNullableInt(ExcelWorksheet sheet, PersonImport columnId, int rowNumber)
+        private static int? GetNullableInt(ExcelWorksheet sheet, PersonImport columnId, int rowNumber)
         {
             var cellValue = sheet.Cells[rowNumber, columnId.ToInt()].Text;
-            if (!string.IsNullOrEmpty(cellValue))
-            {
-                if (int.TryParse(cellValue, out var intValue))
-                    return intValue;
-                return null;
-            }
+            if (string.IsNullOrEmpty(cellValue)) return null;
+            if (int.TryParse(cellValue, out var intValue))
+                return intValue;
             return null;
         }
     }

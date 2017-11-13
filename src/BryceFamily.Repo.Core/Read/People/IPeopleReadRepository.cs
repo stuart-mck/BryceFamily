@@ -11,6 +11,8 @@ namespace BryceFamily.Repo.Core.Read.People
     {
         Task<Person> Load(Guid id, CancellationToken cancellationToken);
 
+        Task<Person> Load(int personId, CancellationToken cancellationToken);
+
         Task<List<Person>> SearchByName(string clan, string firstName, string lastName, string emailAddress, string occupation, CancellationToken cancellationToken);
         Task<List<LightWeightPerson>> GetAllPeople(CancellationToken cancellationToken);
     }

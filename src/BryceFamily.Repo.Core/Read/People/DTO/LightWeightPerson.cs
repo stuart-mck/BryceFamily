@@ -14,5 +14,11 @@ namespace BryceFamily.Repo.Core.Read.People.DTO
 
         public string Clan { get; set; }
 
+        public int PersonId { get; set; }
+
+        public int? MotherId { get; set; }
+        public int? FatherId { get; set; }
+
+
     }
 }

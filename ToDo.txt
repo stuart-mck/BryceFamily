@@ -25,6 +25,10 @@ view family tree
 
 static pages for history for now?
 
+missing from person
+- gender
+- date of birth
+- date of death
 
 
 

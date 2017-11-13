@@ -18,14 +18,8 @@ namespace BryceFamily.Web.MVC.Models
         public string MimeType { get; set; }
 
      
+        public string ThumbnailSizeLink => $"{Reference}/thumbnail/{Title}";
 
-        public string ThumbnailSizeLink
-        {
-            get
-            {
-                return $"{Reference}/thumbnail/{Title}";
-            }
-        }
         public ImageReference MapToEntity()
         {
             return new ImageReference()
