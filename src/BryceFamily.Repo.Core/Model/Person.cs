@@ -59,5 +59,6 @@ namespace BryceFamily.Repo.Core.Model
         public string Occupation { get; set; }
         public string Gender { get; set; }
         public string ParentKey { get; internal set; }
+        public bool IsSpouse { get; set; }
     }
 }

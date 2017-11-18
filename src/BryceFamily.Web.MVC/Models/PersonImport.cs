@@ -4,6 +4,7 @@
     {
         ID = 1,
         Clan,
+        IsSpouse,
         FirstName,
         MiddleName,
         LastName,

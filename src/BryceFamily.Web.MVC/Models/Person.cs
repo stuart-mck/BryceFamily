@@ -34,6 +34,7 @@ namespace BryceFamily.Web.MVC.Models
 
         public DateTime? DateOfDeath { get; set; }
         public string Gender { get; private set; }
+        public bool IsSpouse { get; internal set; }
 
         public Repo.Core.Model.Person MapToEntity()
         {
@@ -43,6 +44,7 @@ namespace BryceFamily.Web.MVC.Models
                 Address2 = Address1,
                 EmailAddress = EmailAddress,
                 FirstName = FirstName,
+                MiddleName = MiddleName,
                 Phone = Phone,
                 LastName = LastName,
                 PostCode = PostCode,
@@ -51,7 +53,12 @@ namespace BryceFamily.Web.MVC.Models
                 Suburb = Suburb,
                 Occupation = Occupation,
                 Clan = Clan,
-                ID = Id
+                DateOfBirth = DateOfBirth,
+                DateOfDeath = DateOfDeath,
+                IsSpouse = IsSpouse,
+                Gender = Gender,
+                ID = Id,
+                PersonID = PersonId
             };
         }
 
@@ -77,6 +84,7 @@ namespace BryceFamily.Web.MVC.Models
                 Occupation = person.Occupation,
                 Clan = person.Clan,
                 Id = person.ID,
+                IsSpouse = person.IsSpouse,
                 PersonId = person.PersonID,
                 DateOfBirth = person.DateOfBirth,
                 DateOfDeath = person.DateOfDeath,
