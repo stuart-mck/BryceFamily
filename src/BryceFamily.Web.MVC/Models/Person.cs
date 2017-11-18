@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace BryceFamily.Web.MVC.Models
 {
@@ -9,6 +8,8 @@ namespace BryceFamily.Web.MVC.Models
         public Person()
         {
             Unions = new List<Union>();
+            Stories = new List<Story>();
+            Galleries = new List<Gallery>();
         }
 
         public Guid Id { get; set; }
@@ -36,6 +37,10 @@ namespace BryceFamily.Web.MVC.Models
         public string Gender { get; private set; }
         public bool IsSpouse { get; internal set; }
         public Guid ParentRelationship { get; private set; }
+
+        public List<Story> Stories { get; set; }
+
+        public List<Gallery> Galleries { get; set; }
 
         public Repo.Core.Model.Person MapToEntity()
         {

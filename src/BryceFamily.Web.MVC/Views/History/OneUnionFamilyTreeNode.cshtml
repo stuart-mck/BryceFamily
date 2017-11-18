@@ -1,39 +1,59 @@
 ﻿@model BryceFamily.Web.MVC.Models.Person
 
-@{ 
-    var union = Model.Unions.First();
-
-    var partner = union.Partner1.PersonId == Model.PersonId ? union.Partner2 : union.Partner1;
-
-    var childDiv = 12;
-
-    if (union.Descendents.Any())
-    {
-        childDiv = (int)Math.Ceiling(12f / union.Descendents.Count());
-    }
 
 
-}
-
-
-<div class="parent">
-    <div class="familyMember gender @Model.Gender">
-        @Model.LastName,  @Model.FirstName @Model.MiddleName
-    </div>
-
-    <div class="familyMember spouse">
-        @partner.LastName,  @partner.FirstName @partner.MiddleName
-    </div>
-</div>
-
-<div class="children">
-    @foreach (var child in union.Descendents)
-    {
-        <div class="childPanel">
-            @{
-                Html.RenderPartial("FamilyTreeNode", child);
+<div>
+    <div class="parents">
+        <ul>
+            <li>
+                <div class="ancestorLink">&nbsp;</div>
+                <div class="familyMember gender @Model.Gender"><span><b>@Model.LastName</b>,  @Model.FirstName @Model.MiddleName</span><br />
+                @if (Model.DateOfDeath.HasValue)
+                {
+                    <span>Date Of Death: @Model.DateOfDeath.Value.ToString("dd MMM yyyy")</span><br />
+                }
+                @if (Model.Stories.Any())
+                {
+                    <span>View Stories</span><br />
+                }
+                @if (Model.Galleries.Any())
+                {
+                    <span>View Stories</span><br />
+                }
+                @Html.ActionLink("Select", "Tree", "History", new { id = Model.Id})
+                </div>
+            </li>
+            @if (Model.Unions.Any())
+            {
+                var union = Model.Unions.First();
+                var partner = union.Partner1.PersonId == Model.PersonId ? union.Partner2 : union.Partner1;
+                <li>
+                    <div>&nbsp;</div>
+                    <div class="familyMember spouse gender @partner.Gender">
+                        <span><b>@partner.LastName</b>,  @partner.FirstName @partner.MiddleName</span><br/>
+                        @Html.ActionLink("Select", "Tree", "History", new { id = Model.Id })
+                    </div>
+                </li>
             }
-        </div>
+        </ul>
+    </div>
+    @if (Model.Unions.Any()){
+        var union = Model.Unions.First();
+        if (union.Descendents.Any())
+        {
+    <div class="childHeader"></div>
+    <div class="children">
+        <ul>
+            @foreach (var child in union.Descendents)
+            {
+                <li class="childPanel">
+                    @{
+                        Html.RenderPartial("FamilyTreeNode", child);
+                    }
+                </li>
+             }
+        </ul>
+    </div>
+        }
     }
 </div>
-

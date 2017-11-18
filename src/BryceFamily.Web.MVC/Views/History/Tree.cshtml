@@ -1,13 +1,32 @@
 ﻿@model BryceFamily.Web.MVC.Models.Person
 
 @{
-    Layout = "~/Views/Shared/_LayoutFamilyTree.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Family Tree</h2>
 
-<div class="familyTreePanel">
-    @{
-        Html.RenderPartial("FamilyTreeNode", Model);
+<div class="row">
+    @if (Model.ParentRelationship != Guid.Empty) {
+        var targetId = Guid.Empty;
+
+        if (!(Model.Father?.IsSpouse).Value)
+        {
+            targetId = Model.Father.Id;
+        }
+        else
+        {
+            targetId = Model.Mother.Id;
+        }
+
+        @Html.ActionLink("Up", "Tree", "History", new { id= targetId })
     }
 </div>
+<div class="row">
+    <div class="familyTreePanel">
+        @{
+            Html.RenderPartial("FamilyTreeNode", Model);
+        }
+    </div>
+</div>
+    

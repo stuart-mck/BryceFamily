@@ -258,50 +258,77 @@ ul.event-summary {
 }
 
 .familyTreePanel{
-    overflow-x: scroll;
-    font-size: .8em;
+    font-size: .9em;
+    width: 10000px;
 }
 
-
-
-div.familyMember {
-    display: inline-block;
-    border: 1px solid black;
-    padding: 1em;
-    margin-right: 5em;
-    position: relative
+.spouse {
+    margin-left: 5px;
 }
-
-.familyMember:before,
-.familyMember:after {
-    content: '';
-    width: 5em; /* size of your margin */
-    border-bottom: 1px solid;
-    position: absolute;
-    top: 50%;
-}
-
-:after {
-    left: 100%;
-}
-
-:before {
-    right: 100%;
-}
-
-.familyMember:first-of-type:before,
-.familyMember:last-of-type:after {
-    display: none;
-}
-
-
-
 
 .right-panel {
     float: left;
 }
 
-.children {
-    overflow-x: visible;
-    float: left;
+.children ul {
+    white-space: nowrap;
+    display: inline-block;
+    list-style: none;
+}
+
+.children ul li {
+    display: table-cell;
+}
+
+.parents ul {
+    white-space: nowrap;
+    display: inline-block;
+    list-style: none;
+}
+
+.parents ul li {
+    display: table-cell;
+}
+
+.familyMember {
+    border: 1px solid;
+    padding: 2px;
+}
+
+.parents ul {
+    display: flex;
+    justify-content: center;
+}
+
+.parents {
+    margin-bottom: 5px;
+}
+
+.childHeader{
+    width: 100%;
+    border-bottom: 1px solid black;
+}
+
+.ancestorLink {
+    width: 100%;
+    height: 20px;
+    position: relative;
+}
+
+    .ancestorLink:before {
+        content: "";
+        width: 1px;
+        height: 100%;
+        display: block;
+        left: 50%;
+        position: absolute;
+        background-image: -webkit-linear-gradient(top, #fff, #000, #fff);
+        background-image: -moz-linear-gradient(top, #fff, #000, #fff);
+        background-image: -ms-linear-gradient(top, #fff, #000, #fff);
+        background-image: -o-linear-gradient(top, #fff, #000, #fff);
+        background-image: linear-gradient(top, #fff, #000, #fff);
+    }
+
+.childPanel{
+    margin-left: 20px;
 }
