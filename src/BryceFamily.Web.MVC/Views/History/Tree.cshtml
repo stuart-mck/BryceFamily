@@ -1,0 +1,13 @@
+﻿@model BryceFamily.Web.MVC.Models.Person
+
+@{
+    Layout = "~/Views/Shared/_LayoutFamilyTree.cshtml";
+}
+
+<h2>Family Tree</h2>
+
+<div class="familyTreePanel">
+    @{
+        Html.RenderPartial("FamilyTreeNode", Model);
+    }
+</div>

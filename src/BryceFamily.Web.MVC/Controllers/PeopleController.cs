@@ -106,11 +106,9 @@ namespace BryceFamily.Web.MVC.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Person(Guid? id = null)
+        public IActionResult Person(Guid id)
         {
-            var p = id != null ? Models.Person.Map(await _readModel.Load(id.Value, new CancellationToken())) : new Models.Person();
-
-            return View(p);
+            return View(_clanAndPeopleService.People.FirstOrDefault(p => p.Id == id));
         }
 
         [HttpGet]
@@ -192,10 +190,10 @@ namespace BryceFamily.Web.MVC.Controllers
                             while (spouseSheet.Cells[rowId, 1].Text != string.Empty)
                             {
 
-                                var husband = await _writeModel.FindByQuery(new PersonIdentifier { PersonId = ReadIntCell(spouseSheet, rowId, 1) }, 
+                                var clanMember = await _writeModel.FindByQuery(new PersonIdentifier { PersonId = ReadIntCell(spouseSheet, rowId, 1) }, 
                                                                                 CancellationToken.None);
 
-                                var wife = await _writeModel.FindByQuery(new PersonIdentifier { PersonId = ReadIntCell(spouseSheet, rowId, 2) },
+                                var spouse = await _writeModel.FindByQuery(new PersonIdentifier { PersonId = ReadIntCell(spouseSheet, rowId, 2) },
                                                                                 CancellationToken.None);
 
                                 var union = await _unionWriteRepository.FindByQuery(new UnionQuery
@@ -221,13 +219,14 @@ namespace BryceFamily.Web.MVC.Controllers
 
                                 await _unionWriteRepository.Save(union, cancellationToken);
 
-                                await ProcessDirectChildrenOfUnion(union, husband, wife, cancellationToken);
+                                await ProcessDirectChildrenOfUnion(union, clanMember, spouse, cancellationToken);
                                 
                                 rowId++;
                             }
                         }
                     }
                 }
+                _clanAndPeopleService.ClearPeople();
             }
             return RedirectToAction("Index");
         }
@@ -240,6 +239,14 @@ namespace BryceFamily.Web.MVC.Controllers
                 c.ParentRelationship = union.ID;
                 await _writeModel.Save(c, cancellationToken);
             });
+
+            var children2 = await _readModel.GetChildrenByParents(union.Partner2ID, union.PartnerID, cancellationToken);
+            children2.ForEach(async c =>
+            {
+                c.ParentRelationship = union.ID;
+                await _writeModel.Save(c, cancellationToken);
+            });
+
         }
 
         private List<Descendant> ProcessChildren(int personId, IReadOnlyList<PersonLookup> people, int level)

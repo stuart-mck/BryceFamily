@@ -35,6 +35,7 @@ namespace BryceFamily.Web.MVC.Models
         public DateTime? DateOfDeath { get; set; }
         public string Gender { get; private set; }
         public bool IsSpouse { get; internal set; }
+        public Guid ParentRelationship { get; private set; }
 
         public Repo.Core.Model.Person MapToEntity()
         {
@@ -64,7 +65,7 @@ namespace BryceFamily.Web.MVC.Models
 
   
 
-        public static Person Map(Repo.Core.Model.Person person)
+        public static Person FlatMap(Repo.Core.Model.Person person)
         {
             if (person == null)
                 return null;
@@ -88,7 +89,10 @@ namespace BryceFamily.Web.MVC.Models
                 PersonId = person.PersonID,
                 DateOfBirth = person.DateOfBirth,
                 DateOfDeath = person.DateOfDeath,
-                Gender = person.Gender
+                Gender = person.Gender,
+                //Mother = Map(peopleLookup.FirstOrDefault(m => person.MotherID == m.PersonID), peopleLookup),
+                //Father = peopleLookup.FirstOrDefault(m => person.FatherID == m.PersonId),
+                ParentRelationship = person.ParentRelationship
             };
         }
 

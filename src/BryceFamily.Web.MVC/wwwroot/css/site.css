@@ -239,3 +239,69 @@ ul.event-summary {
         padding-top: 50px;
     }
 }
+
+
+.familyTreeNode {
+    border: 1px solid;
+}
+
+.gender.M{
+    border-color: aquamarine
+}
+
+.gender.F {
+    border-color: palevioletred
+}
+
+.childPanel {
+    float: left;
+}
+
+.familyTreePanel{
+    overflow-x: scroll;
+    font-size: .8em;
+}
+
+
+
+div.familyMember {
+    display: inline-block;
+    border: 1px solid black;
+    padding: 1em;
+    margin-right: 5em;
+    position: relative
+}
+
+.familyMember:before,
+.familyMember:after {
+    content: '';
+    width: 5em; /* size of your margin */
+    border-bottom: 1px solid;
+    position: absolute;
+    top: 50%;
+}
+
+:after {
+    left: 100%;
+}
+
+:before {
+    right: 100%;
+}
+
+.familyMember:first-of-type:before,
+.familyMember:last-of-type:after {
+    display: none;
+}
+
+
+
+
+.right-panel {
+    float: left;
+}
+
+.children {
+    overflow-x: visible;
+    float: left;
+}

@@ -1,10 +1,19 @@
-﻿@model FamilyTreeViewModel
+﻿@model BryceFamily.Web.MVC.Models.Person
 
-<div class="familyTreeNode gender-@Model.Gender">
+@{
+    var unions = Model.Unions.Count();
+}
 
-    <div class="parent row" >
-        
-    </div>
-    
-</div>
+@switch (unions)
+{
+    case 0:
+        Html.RenderPartial("NoUnionFamilyTreeNode", Model);
+        break;
+    case 1:
+        Html.RenderPartial("OneUnionFamilyTreeNode", Model);
+        break;
+    default:
+        Html.RenderPartial("TwoUnionFamilyTreeNode", Model);
+        break;
 
+}

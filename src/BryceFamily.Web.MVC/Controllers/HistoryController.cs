@@ -31,19 +31,19 @@ namespace BryceFamily.Web.MVC.Controllers
             return View();
         }
 
-
-        public IActionResult Tree (Guid top)
+        [Route("History/Tree/{id}")]
+        public IActionResult Tree (Guid id)
         {
             Person startNode;
-            if (top == null)
+            if (id == Guid.Empty)
                 startNode = _clanService.People.First(p => p.IsSpouse == false && p.Mother == null & p.Father == null);
             else
-                startNode = _clanService.People.FirstOrDefault(p => p.Id == top);
+                startNode = _clanService.People.FirstOrDefault(p => p.Id == id);
 
             if (startNode == null)
                 return BadRequest("Invalid Person reference");
 
-                return View(startNode);
+            return View(startNode);
         }
     }
 }

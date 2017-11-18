@@ -61,7 +61,12 @@ namespace BryceFamily.Web.MVC.Infrastructure
 
                     //hydrate the master list of people
 
-                    peopleList.AddRange(temp.Select(p => Person.Map(p)));
+                    peopleList.AddRange(temp.Select(p => Person.FlatMap(p)));
+
+                    foreach(var person in temp)
+                    {
+                        MapParents(person, peopleList);
+                    }
 
                     var processedUnions = new List<Guid>();
 
@@ -79,6 +84,13 @@ namespace BryceFamily.Web.MVC.Infrastructure
             }
         }
 
+        private void MapParents(Repo.Core.Model.Person dbPerson,  List<Person> peopleList)
+        {
+            var person = peopleList.First(p => p.Id == dbPerson.ID);
+            person.Father = peopleList.FirstOrDefault(f => f.PersonId == dbPerson.FatherID);
+            person.Mother = peopleList.FirstOrDefault(f => f.PersonId == dbPerson.MotherID);
+        }
+
         private void ProcessUnionDescendants(List<Repo.Core.Model.Union> unions, Repo.Core.Model.Union union, List<Repo.Core.Model.Person> peopleLookup, List<Person> peopleList, List<Guid> processedUnions)
         {
 
@@ -87,7 +99,8 @@ namespace BryceFamily.Web.MVC.Infrastructure
 
             var partner1 = peopleList.First(p => p.PersonId == union.PartnerID);
             var partner2 = peopleList.First(p => p.PersonId == union.Partner2ID);
-            var children = peopleLookup.Where(f => f?.ParentRelationship == union.ID);
+            var children = peopleList.Where(c => c.ParentRelationship == union.ID);
+            //var children = peopleLookup.Where(f => f?.ParentRelationship == union.ID);
             //make the union
             var newUnion = new Models.Union
             {
@@ -95,16 +108,10 @@ namespace BryceFamily.Web.MVC.Infrastructure
                 Partner2 = partner2,
                 DateOfUnion = union.MarriageDate,
                 DateOfDissolution = union.DivorceDate,
-                Descendents = children.Select(Person.Map).ToList()
+                Descendents = children.ToList()
             };
             processedUnions.Add(union.ID);
 
-            //if (children.Any())
-            //{
-            //    children.Where(t => unions.Any(u => t.PersonID == u.PartnerID || t.PersonID == u.Partner2ID))
-            //        .ToList()
-            //        .ForEach(child => )
-            //}
 
             partner1.Unions.Add(newUnion);
             partner2.Unions.Add(newUnion);

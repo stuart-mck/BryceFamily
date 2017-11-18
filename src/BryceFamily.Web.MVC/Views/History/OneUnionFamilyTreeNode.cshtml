@@ -1,0 +1,39 @@
+﻿@model BryceFamily.Web.MVC.Models.Person
+
+@{ 
+    var union = Model.Unions.First();
+
+    var partner = union.Partner1.PersonId == Model.PersonId ? union.Partner2 : union.Partner1;
+
+    var childDiv = 12;
+
+    if (union.Descendents.Any())
+    {
+        childDiv = (int)Math.Ceiling(12f / union.Descendents.Count());
+    }
+
+
+}
+
+
+<div class="parent">
+    <div class="familyMember gender @Model.Gender">
+        @Model.LastName,  @Model.FirstName @Model.MiddleName
+    </div>
+
+    <div class="familyMember spouse">
+        @partner.LastName,  @partner.FirstName @partner.MiddleName
+    </div>
+</div>
+
+<div class="children">
+    @foreach (var child in union.Descendents)
+    {
+        <div class="childPanel">
+            @{
+                Html.RenderPartial("FamilyTreeNode", child);
+            }
+        </div>
+    }
+</div>
+
