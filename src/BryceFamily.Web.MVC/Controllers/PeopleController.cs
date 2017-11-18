@@ -198,8 +198,7 @@ namespace BryceFamily.Web.MVC.Controllers
 
                                     var relationShip = new Union()
                                     {
-                                        PartnerID = husband.PersonID,
-                                        WifeID = wife.PersonID
+                                        PartnerID = husband.PersonID
                                     };
 
                                     relationShip.MarriageDate = ReadNullableDate(spouseSheet, rowId, 3);
