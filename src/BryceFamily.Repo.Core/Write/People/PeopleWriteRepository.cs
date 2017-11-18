@@ -61,7 +61,10 @@ namespace BryceFamily.Repo.Core.Write.People
             if (entity.ID == Guid.Empty)
                 entity.ID = Guid.NewGuid();
             entity.SortKey = $"{entity.FirstName}_{entity.LastName}_{entity.EmailAddress}";
+            entity.ParentKey = $"{entity.FatherID}_{entity.MotherID}";
             await dynamoContext.SaveAsync(entity, _dynamoDBOperationConfig, cancellationToken);
         }
+
+
     }
 }

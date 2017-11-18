@@ -28,6 +28,21 @@ namespace BryceFamily.Repo.Core.Read.People
             return results;
         }
 
+        public async Task<List<Person>> GetChildrenByParents(int fatherId, int motherId, CancellationToken cancellationToken)
+        {
+            var dbContext = _awsClientFactory.GetDynamoDBContext();
+
+            var dynamoOperationContext = new DynamoDBOperationConfig()
+            {
+                ConditionalOperator = ConditionalOperatorValues.And,
+                TableNamePrefix = "familybryce."
+            };
+
+            dynamoOperationContext.IndexName = "ParentKey-index";
+            var queryResult = await dbContext.QueryAsync<Person>($"{fatherId}_{motherId}", dynamoOperationContext).GetRemainingAsync(cancellationToken);
+            return queryResult;
+        }
+
         public Task<Person> Load(Guid id, CancellationToken cancellationToken)
         {
             var dbContext = _awsClientFactory.GetDynamoDBContext();

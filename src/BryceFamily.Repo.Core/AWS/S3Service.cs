@@ -1,6 +1,5 @@
 ﻿using BryceFamily.Repo.Core.Files;
 using System;
-using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Amazon.S3;
 using Amazon.S3.Model;
@@ -67,20 +66,14 @@ namespace BryceFamily.Repo.Core.AWS
 
         private void EnsureBucketExists(IAmazonS3 s3Context, string bucketPath, CancellationToken cancellationToken)
         {
-            try
+            
+            if (!s3Context.DoesS3BucketExistAsync(bucketPath).Result)
             {
-                if (!s3Context.DoesS3BucketExistAsync(bucketPath).Result)
-                {
-                    var result = s3Context.PutBucketAsync(bucketPath, cancellationToken).Result;
-                    if (result.HttpStatusCode != HttpStatusCode.OK)
-                        throw new Exception($"Could not create location to save photo status code {result.HttpStatusCode}");
-                }
+                var result = s3Context.PutBucketAsync(bucketPath, cancellationToken).Result;
+                if (result.HttpStatusCode != HttpStatusCode.OK)
+                    throw new Exception($"Could not create location to save photo status code {result.HttpStatusCode}");
             }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
+            
         }
     }
 }

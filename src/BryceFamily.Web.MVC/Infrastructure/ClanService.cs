@@ -1,10 +1,10 @@
 ﻿using BryceFamily.Repo.Core.Read.People;
 using BryceFamily.Web.MVC.Models;
 using Microsoft.Extensions.Caching.Memory;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace BryceFamily.Web.MVC.Infrastructure
 {
@@ -12,12 +12,13 @@ namespace BryceFamily.Web.MVC.Infrastructure
     {
         private readonly IPersonReadRepository _peopleReadRepository;
         private readonly IMemoryCache _memoryCache;
+        private readonly IUnionReadRepository _unionReadRepository;
 
-        public ClanAndPeopleService(IPersonReadRepository peopleReadRepository, IMemoryCache memoryCache)
+        public ClanAndPeopleService(IPersonReadRepository peopleReadRepository, IMemoryCache memoryCache, IUnionReadRepository unionReadRepository)
         {
             _peopleReadRepository = peopleReadRepository;
             _memoryCache = memoryCache;
-
+            _unionReadRepository = unionReadRepository;
         }
 
         private readonly IReadOnlyList<string> _clans = new List<string>()
@@ -44,16 +45,30 @@ namespace BryceFamily.Web.MVC.Infrastructure
         private const string _PEOPLELIST = "peopleList";
         private const string _FAMILYTREE = "familyTree";
 
+        
         public IReadOnlyList<Person> People
         {
             get
             {
-                if (!_memoryCache.TryGetValue(_PEOPLELIST, out var peopleList))
+                // Key not in cache, so get data.
+                if (!_memoryCache.TryGetValue(_PEOPLELIST, out List<Person> peopleList))
                 {
-                    // Key not in cache, so get data.
+                     var processedPeople = new List<Person>();
+        
                     var temp = _peopleReadRepository.GetAllPeople(CancellationToken.None).Result;
 
-                    peopleList = temp.Select(Person.Map);
+                    peopleList = new List<Person>();
+
+                    //hydrate the master list of people
+
+                    peopleList.AddRange(temp.Select(p => Person.Map(p)));
+
+                    var processedUnions = new List<Guid>();
+
+                    var unions = _unionReadRepository.GetAllUnions(CancellationToken.None).Result;
+
+                    unions.ForEach(union => ProcessUnionDescendants(unions, union, temp, peopleList, processedUnions));
+                  
 
                     //// Save data in cache.
                     _memoryCache.Set(_PEOPLELIST, peopleList);
@@ -64,96 +79,42 @@ namespace BryceFamily.Web.MVC.Infrastructure
             }
         }
 
-        //public FamilyTreeViewModel GetFamilyTreeViewModelFromRootNode(int personId, int maxLevel)
-        //{
-        //    FamilyTreeViewModel tree = null;
-        //    if (!_memoryCache.TryGetValue(_FAMILYTREE, out var familyTree))
-        //    {
-        //        //build new family tree from scratch
-        //        lock (_familyTreeLock)
-        //        {
-        //            var person = _peopleReadRepository.Load(personId, CancellationToken.None).Result;
+        private void ProcessUnionDescendants(List<Repo.Core.Model.Union> unions, Repo.Core.Model.Union union, List<Repo.Core.Model.Person> peopleLookup, List<Person> peopleList, List<Guid> processedUnions)
+        {
 
-        //            tree = new FamilyTreeViewModel
-        //            {
-        //                FirstNames = $"{person.FirstName} {person.MiddleName}",
-        //                LastName = person.LastName,
-        //                Gender = "M",
-        //                Level = 1,
-        //                Spouses = ResolveSpouse(person),
-        //                Descendents = ResolveDescendents(person, maxLevel)
-        //            };
+            if (processedUnions.Any(u => u == union.ID))
+                return;
 
+            var partner1 = peopleList.First(p => p.PersonId == union.PartnerID);
+            var partner2 = peopleList.First(p => p.PersonId == union.Partner2ID);
+            var children = peopleLookup.Where(f => f?.ParentRelationship == union.ID);
+            //make the union
+            var newUnion = new Models.Union
+            {
+                Partner1 = partner1,
+                Partner2 = partner2,
+                DateOfUnion = union.MarriageDate,
+                DateOfDissolution = union.DivorceDate,
+                Descendents = children.Select(Person.Map).ToList()
+            };
+            processedUnions.Add(union.ID);
 
-        //        }
-        //    }
-        //    else
-        //    {
-        //        //does the node exist in the stored cache? if not add it to the 
-        //        var resolvedTree = (FamilyTreeViewModel) familyTree;
+            //if (children.Any())
+            //{
+            //    children.Where(t => unions.Any(u => t.PersonID == u.PartnerID || t.PersonID == u.Partner2ID))
+            //        .ToList()
+            //        .ForEach(child => )
+            //}
 
-        //        lock (_familyTreeLock)
-        //        {
+            partner1.Unions.Add(newUnion);
+            partner2.Unions.Add(newUnion);
 
-        //        }
+        }
 
-        //    }
-
-        //    return tree;
-        //}
-
-        //private List<FamilyTreeViewModel> ResolveDescendents(Repo.Core.Model.Person person, int maxLevel)
-        //{
-        //    var descendants = new List<FamilyTreeViewModel>();
-
-        //    person.Descendants.ForEach(des =>
-        //    {
-        //        var descendant = People.FirstOrDefault(p => p.PersonId == des.PersonID);
-        //        var vm = new FamilyTreeViewModel()
-        //        {
-        //            FirstNames = descendant.FirstName,
-        //            LastName = descendant.LastName,
-        //            //DOB, Gender etc
-        //            Descendents = ResolveDescendents(des, maxLevel)
-        //        };
-        //        descendants.Add(vm);
-        //    });
-
-        //    return descendants;
-        //}
-
-        //private List<FamilyTreeViewModel> ResolveSpouse(Repo.Core.Model.Person person)
-        //{
-        //    var spouses = new List<FamilyTreeViewModel>();
-        //    if (person.Relationships.Any())
-        //    {
-        //        person.Relationships.ForEach(sp =>
-        //        {
-        //            if (sp.HusbandID != person.PersonID)
-        //            {
-        //                var spouse = People.FirstOrDefault(t => t.PersonId == sp.HusbandID);
-        //                if (spouse != null)
-        //                    spouses.Add(new FamilyTreeViewModel()
-        //                    {
-        //                        FirstNames = spouse.FirstName,
-        //                        Gender = "M"
-        //                    });
-        //            }
-        //            else
-        //            {
-        //                var spouse = People.FirstOrDefault(t => t.PersonId == sp.WifeID);
-        //                if (spouse != null)
-        //                    spouses.Add(new FamilyTreeViewModel()
-        //                    {
-        //                        FirstNames = spouse.FirstName,
-        //                        Gender = "F"
-        //                    });
-        //            }
-                        
-        //        });
-        //    }
-
-        //    return spouses;
-        //}
+        public void ClearPeople()
+        {
+            if (_memoryCache.TryGetValue(_PEOPLELIST, out var peopleList))
+                _memoryCache.Remove(_PEOPLELIST);
+        }
     }
 }

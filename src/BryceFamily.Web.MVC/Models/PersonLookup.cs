@@ -25,6 +25,6 @@ namespace BryceFamily.Web.MVC.Models
 
         public int PersonId { get; set; }
 
-        public List<Spouse> Spouses { get; set; }
+        public List<Union> Spouses { get; set; }
     }
 }

@@ -50,7 +50,9 @@ namespace BryceFamily.Web.MVC
             services.AddScoped<IFileService>(context => new S3Service(context.GetRequiredService<IAWSClientFactory>(), "familybryce.gallery"));
 
             services.AddScoped<IPersonReadRepository, PeopleReadRepository>();
+            services.AddScoped<IUnionReadRepository, UnionReadRepository>();
             services.AddScoped<IWriteRepository<Person, Guid>, PeopleWriteRepository<Person, Guid>>();
+            services.AddScoped<IWriteRepository<Union, Guid>, UnionWriteRepository<Union, Guid>>();
 
             services.AddSingleton<IAWSClientFactory, AWSClientFactory>();
 

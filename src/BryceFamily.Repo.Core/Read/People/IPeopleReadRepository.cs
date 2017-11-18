@@ -13,6 +13,8 @@ namespace BryceFamily.Repo.Core.Read.People
         Task<Person> Load(int personId, CancellationToken cancellationToken);
 
         Task<List<Person>> SearchByName(string clan, string firstName, string lastName, string emailAddress, string occupation, CancellationToken cancellationToken);
+        Task<List<Person>> GetChildrenByParents(int fatherId, int motherId, CancellationToken cancellationToken);
+
         Task<List<Person>> GetAllPeople(CancellationToken cancellationToken);
     }
 }
