@@ -196,9 +196,9 @@ namespace BryceFamily.Web.MVC.Controllers
                                 if (husband != null && wife != null)
                                 {
 
-                                    var relationShip = new SpousalRelationship()
+                                    var relationShip = new Union()
                                     {
-                                        HusbandID = husband.PersonID,
+                                        PartnerID = husband.PersonID,
                                         WifeID = wife.PersonID
                                     };
 
@@ -210,8 +210,8 @@ namespace BryceFamily.Web.MVC.Controllers
                                         husband.Relationships.Remove(husband.Relationships.First(t => t.WifeID == relationShip.WifeID));
                                     husband.Relationships.Add(relationShip);
 
-                                    if (wife.Relationships.Any(r => r.HusbandID == relationShip.HusbandID))
-                                        wife.Relationships.Remove(wife.Relationships.First(t => t.HusbandID == relationShip.HusbandID));
+                                    if (wife.Relationships.Any(r => r.PartnerID == relationShip.PartnerID))
+                                        wife.Relationships.Remove(wife.Relationships.First(t => t.PartnerID == relationShip.PartnerID));
                                     wife.Relationships.Add(relationShip);
 
                                     await _writeModel.Save(husband, CancellationToken.None);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.AccessControl;
 
 namespace BryceFamily.Web.MVC.Models
@@ -16,8 +17,14 @@ namespace BryceFamily.Web.MVC.Models
 
         public int? MotherId { get; set; }
 
+        public Person Mother { get; }
+
+        public Person Father { get; }
+
         public int? FatherId { get; set; }
 
         public int PersonId { get; set; }
+
+        public List<Spouse> Spouses { get; set; }
     }
 }

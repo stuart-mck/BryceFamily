@@ -8,7 +8,7 @@ namespace BryceFamily.Repo.Core.Model
     {
         public Person()
         {
-            Relationships = new List<SpousalRelationship>();
+            Relationships = new List<Union>();
             Descendants = new List<Descendant>();
         }
 
@@ -38,7 +38,7 @@ namespace BryceFamily.Repo.Core.Model
 
         public int? FatherID { get; set; }
 
-        public List<SpousalRelationship> Relationships { get; set; }
+        public List<Union> Relationships { get; set; }
 
         public List<Descendant> Descendants { get; set; }
 
