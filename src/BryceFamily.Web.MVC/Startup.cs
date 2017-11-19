@@ -17,6 +17,9 @@ using BryceFamily.Repo.Core.Write.Gallery;
 using BryceFamily.Repo.Core.Read.Gallery;
 using BryceFamily.Repo.Core.Write.ImageReference;
 using BryceFamily.Repo.Core.Read.ImageReference;
+using System.Linq;
+using BryceFamily.Repo.Core.Read.Story;
+using BryceFamily.Repo.Core.Write.Story;
 
 namespace BryceFamily.Web.MVC
 {
@@ -54,6 +57,10 @@ namespace BryceFamily.Web.MVC
             services.AddScoped<IWriteRepository<Person, Guid>, PeopleWriteRepository<Person, Guid>>();
             services.AddScoped<IWriteRepository<Union, Guid>, UnionWriteRepository<Union, Guid>>();
 
+            services.AddScoped<IStoryReadRepository, StoryReadRepository>();
+            services.AddScoped<IWriteRepository<StoryContent, Guid>, StoryWriteRepository<StoryContent, Guid>>();
+
+
             services.AddSingleton<IAWSClientFactory, AWSClientFactory>();
 
             services.AddSingleton(context => new DynamoDBOperationConfig()
@@ -65,6 +72,14 @@ namespace BryceFamily.Web.MVC
 
 
             services.AddScoped<ClanAndPeopleService>();
+            services.AddScoped(context => new ContextService
+            {
+                LoggedInPerson = context.GetService<ClanAndPeopleService>().People.FirstOrDefault(t => t.FirstName == "Stuart"),
+                EditMode = true,
+                IsClanManager = false,
+                IsSuperUser = true
+
+            });
 
             services.AddMemoryCache();
 

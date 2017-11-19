@@ -1,5 +1,6 @@
 ﻿@model BryceFamily.Web.MVC.Models.Person
 @inject BryceFamily.Web.MVC.Infrastructure.ClanAndPeopleService ClanService
+@inject BryceFamily.Web.MVC.Infrastructure.ContextService ContextService
 
 @{
     ViewData["Title"] = "Person";
@@ -16,10 +17,10 @@
 
 <h2>Person</h2>
 
-<h4>PersonWriteModel</h4>
-<hr />
+
+@if (ContextService.IsLoggedIn && (ContextService.IsClanManager || ContextService.IsSuperUser) && ContextService.EditMode )
+{
 <div class="row">
-    <a href="~/Views/People/Person.cshtml">~/Views/People/Person.cshtml</a>
     <div class="col-md-4">
         <form asp-action="Person">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -92,10 +93,48 @@
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </form>
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+
     </div>
 </div>
+    }
+    else
+    {
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="form-group">
+        <label asp-for="Clan" class="control-label"></label>
+        @Model.Clan
+    </div>
+        <div class="form-group">
+            <label asp-for="FirstName" class="control-label"></label>
+            @Model.LastName, @Model.FirstName @Model.MiddleName
+        </div>
+        <div class="form-group">
+            <label asp-for="Phone" class="control-label"></label>
+            @Model.Phone
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Address" class="control-label"></label>
+            @Model.Address<br />
+            @Model.Address1<br />
+            @Model.Suburb, @Model.State
+            @Model.PostCode
+        </div>
+        <div class="form-group">
+            <label asp-for="EmailAddress" class="control-label"></label>
+            @Model.EmailAddress
+        </div>
+        <div class="form-group">
+            <label asp-for="Occupation" class="control-label"></label>
+            @Model.Occupation
+        </div>
+        <div class="form-group">
+            <label asp-for="SubscribeToEmail" class="control-label"></label>
+            @Model.SubscribeToEmail
+        </div>
+}
+
 

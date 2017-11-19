@@ -1,4 +1,5 @@
-﻿
+﻿@inject BryceFamily.Web.MVC.Infrastructure.ContextService ContextService
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,6 +8,15 @@
 <div class=col-md-10>
     <h1>Bryce Family History</h1>
     <iframe width="640" height="360" src="https://www.youtube.com/embed/isOxYKWUOhk" frameborder="0" allowfullscreen></iframe>
+    <div>
+        @Html.ActionLink("View Family Tree", "Tree", "History", new { id = Guid.Empty })<br />
+        @if (ContextService.IsClanManager || ContextService.IsSuperUser)
+        {
+        @Html.ActionLink("Add Story", "Story", "History", new { id = Guid.Empty })
+        }
+
+    </div>
+    
     <div class="text row">
         <h3>More family stuff</h3>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>

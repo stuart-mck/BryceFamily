@@ -1,4 +1,5 @@
 ﻿using BryceFamily.Repo.Core.Read.People;
+using BryceFamily.Repo.Core.Read.Story;
 using BryceFamily.Web.MVC.Models;
 using Microsoft.Extensions.Caching.Memory;
 using System;
@@ -13,12 +14,14 @@ namespace BryceFamily.Web.MVC.Infrastructure
         private readonly IPersonReadRepository _peopleReadRepository;
         private readonly IMemoryCache _memoryCache;
         private readonly IUnionReadRepository _unionReadRepository;
+        private readonly IStoryReadRepository _storyReadRepository;
 
-        public ClanAndPeopleService(IPersonReadRepository peopleReadRepository, IMemoryCache memoryCache, IUnionReadRepository unionReadRepository)
+        public ClanAndPeopleService(IPersonReadRepository peopleReadRepository, IMemoryCache memoryCache, IUnionReadRepository unionReadRepository, IStoryReadRepository storyReadRepository)
         {
             _peopleReadRepository = peopleReadRepository;
             _memoryCache = memoryCache;
             _unionReadRepository = unionReadRepository;
+            _storyReadRepository = storyReadRepository;
         }
 
         private readonly IReadOnlyList<string> _clans = new List<string>()
@@ -45,6 +48,7 @@ namespace BryceFamily.Web.MVC.Infrastructure
         private const string _PEOPLELIST = "peopleList";
         private const string _FAMILYTREE = "familyTree";
 
+
         
         public IReadOnlyList<Person> People
         {
@@ -53,9 +57,10 @@ namespace BryceFamily.Web.MVC.Infrastructure
                 // Key not in cache, so get data.
                 if (!_memoryCache.TryGetValue(_PEOPLELIST, out List<Person> peopleList))
                 {
+                    var cancellationToken = CancellationToken.None;
                      var processedPeople = new List<Person>();
         
-                    var temp = _peopleReadRepository.GetAllPeople(CancellationToken.None).Result;
+                    var temp = _peopleReadRepository.GetAllPeople(cancellationToken).Result;
 
                     peopleList = new List<Person>();
 
@@ -70,11 +75,31 @@ namespace BryceFamily.Web.MVC.Infrastructure
 
                     var processedUnions = new List<Guid>();
 
-                    var unions = _unionReadRepository.GetAllUnions(CancellationToken.None).Result;
+                    var unions = _unionReadRepository.GetAllUnions(cancellationToken).Result;
 
                     unions.ForEach(union => ProcessUnionDescendants(unions, union, temp, peopleList, processedUnions));
-                  
 
+                    try
+                    {
+                        var stories = _storyReadRepository.GetStories(cancellationToken).Result;
+
+                        foreach (var story in stories.Where(t => t.PersonID.HasValue))
+                        {
+                            var person = peopleList.FirstOrDefault(p => p.Id == story.PersonID);
+                            person.Stories.Add(Story.MapToIndex(story));
+                        }
+                    }
+                    catch (AggregateException ex)
+                    {
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw;
+                    }
+
+                  
                     //// Save data in cache.
                     _memoryCache.Set(_PEOPLELIST, peopleList);
 

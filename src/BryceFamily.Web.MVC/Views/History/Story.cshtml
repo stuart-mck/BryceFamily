@@ -5,11 +5,11 @@
     ViewData["Title"] = "Story";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var peopleSelect = ClanService.People.Select(c => new SelectListItem()
+    var peopleSelect = ClanService.People.OrderBy(t => t.LastName).ThenBy(t => t.FirstName).Select(c => new SelectListItem()
     {
-        Selected = c.ID == Model.PersonID,
+        Selected = c.Id == Model.PersonID,
         Text = $"{c.LastName}, {c.FirstName}",
-        Value = c.ID.ToString()
+        Value = c.Id.ToString()
     }).Union(new List<SelectListItem>()
     {
         new SelectListItem()
@@ -27,6 +27,10 @@
     <div class="row">
         <label asp-for="PersonID">Select Related Person</label>
         <select asp-for="PersonID" asp-items="peopleSelect"></select>
+    </div>
+    <div class="row">
+        <label asp-for="Title">Story Title</label>
+        <input type="text" asp-for="Title" />
     </div>
     <div class="row">
         @Html.TextAreaFor(m => m.Story, new

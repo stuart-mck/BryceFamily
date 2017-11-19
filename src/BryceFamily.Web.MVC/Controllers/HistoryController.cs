@@ -3,16 +3,28 @@ using BryceFamily.Web.MVC.Models;
 using BryceFamily.Web.MVC.Infrastructure;
 using System.Linq;
 using System;
+using System.Threading.Tasks;
+using BryceFamily.Repo.Core.Write;
+using BryceFamily.Repo.Core.Model;
+using BryceFamily.Repo.Core.Write.Query;
+using System.Threading;
+using BryceFamily.Repo.Core.Read.Story;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
     public class HistoryController : Controller
     {
         private readonly ClanAndPeopleService _clanService;
+        private readonly IWriteRepository<StoryContent, Guid> _writeRepository;
+        private readonly ContextService _contextService;
+        private readonly IStoryReadRepository _storyReadRepository;
 
-        public HistoryController(ClanAndPeopleService clanService )
+        public HistoryController(ClanAndPeopleService clanService, IWriteRepository<StoryContent, Guid>  writeRepository, ContextService contextService, IStoryReadRepository storyReadRepository)
         {
             _clanService = clanService;
+            _writeRepository = writeRepository;
+            _contextService = contextService;
+            _storyReadRepository = storyReadRepository;
         }
 
         public IActionResult Index()
@@ -26,15 +38,35 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Story(StoryWriteModel storyWriteModel)
+        public async Task<IActionResult> Story(StoryWriteModel storyWriteModel)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                var cancellationToken = CancellationToken.None;
+                var existing = await _writeRepository.FindByQuery(new StoryQuery()
+                {
+                    StoryId = storyWriteModel.StoryID
+                }, cancellationToken);
+
+                if (existing == null)
+                    existing = new StoryContent
+                    {
+                        AuthorID = _contextService.LoggedInPerson.Id,
+                        PersonID = storyWriteModel.PersonID,
+                        ID = Guid.NewGuid(),
+                        StoryContents = storyWriteModel.Story,
+                        Title = storyWriteModel.Title
+                    };
+                await _writeRepository.Save(existing, cancellationToken);
+            }
+
+            return View(storyWriteModel);
         }
 
         [Route("History/Tree/{id}")]
         public IActionResult Tree (Guid id)
         {
-            Person startNode;
+            Models.Person startNode;
             if (id == Guid.Empty)
                 startNode = _clanService.People.First(p => p.IsSpouse == false && p.Mother == null & p.Father == null);
             else
@@ -44,6 +76,15 @@ namespace BryceFamily.Web.MVC.Controllers
                 return BadRequest("Invalid Person reference");
 
             return View(startNode);
+        }
+
+        [Route("History/Stories/{id}")]
+        public async Task<IActionResult> StoriesForPerson(Guid id)
+        {
+            var person = _clanService.People.First(t => t.Id == id);
+            
+
+            return View(person.Stories);
         }
     }
 }
