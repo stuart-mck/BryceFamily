@@ -2,9 +2,9 @@
 {
 	internal static class Constants
 	{
-		public const string DefaultTableName = "users";
-		public const string DefaultRolesTableName = "roles";
-		public const string DefaultRoleClaimsTableName = "roleClaims";
-		public const string DefaultRoleUsersTableName = "roleUsers";
+		public const string DefaultTableName = "familybryce.users";
+		public const string DefaultRolesTableName = "familybryce.roles";
+		public const string DefaultRoleClaimsTableName = "familybryce.roleClaims";
+		public const string DefaultRoleUsersTableName = "familybryce.roleUsers";
 	}
 }

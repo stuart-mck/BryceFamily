@@ -14,7 +14,7 @@ using BryceFamily.Repo.Core.Read.People;
 using BryceFamily.Repo.Core.Model;
 using BryceFamily.Web.MVC.Infrastructure;
 
-namespace BryceFamily.Web.MVC.Controllers
+namespace BryceFamily.Web.MVC.Models
 {
     public class PeopleController : Controller
     {

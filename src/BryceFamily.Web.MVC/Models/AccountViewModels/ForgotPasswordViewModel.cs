@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BryceFamily.Web.MVC.Controllers.AccountViewModels
+namespace BryceFamily.Web.MVC.Models.AccountViewModels
 {
     public class ForgotPasswordViewModel
     {

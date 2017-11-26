@@ -10,7 +10,7 @@ using BryceFamily.Repo.Core.Write.Query;
 using System.Threading;
 using BryceFamily.Repo.Core.Read.Story;
 
-namespace BryceFamily.Web.MVC.Controllers
+namespace BryceFamily.Web.MVC.Models
 {
     public class HistoryController : Controller
     {
