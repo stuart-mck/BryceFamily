@@ -79,7 +79,7 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [Route("History/Stories/{id}")]
-        public async Task<IActionResult> StoriesForPerson(Guid id)
+        public IActionResult StoriesForPerson(Guid id)
         {
             var person = _clanService.People.First(t => t.Id == id);
             

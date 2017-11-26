@@ -20,6 +20,14 @@ using BryceFamily.Repo.Core.Read.ImageReference;
 using System.Linq;
 using BryceFamily.Repo.Core.Read.Story;
 using BryceFamily.Repo.Core.Write.Story;
+using AspNetCore.Identity.DynamoDB;
+using System.IO;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
+using Amazon.DynamoDBv2;
+using Amazon;
 
 namespace BryceFamily.Web.MVC
 {
@@ -70,7 +78,6 @@ namespace BryceFamily.Web.MVC
 
             services.AddSingleton(context => new CDNServiceRoot("https://s3-ap-southeast-2.amazonaws.com"));
 
-
             services.AddScoped<ClanAndPeopleService>();
             services.AddScoped(context => new ContextService
             {
@@ -81,17 +88,63 @@ namespace BryceFamily.Web.MVC
 
             });
 
+            services.AddDynamoDBIdentity<DynamoIdentityUser, DynamoIdentityRole>()
+                .AddUserStore()
+                .AddRoleStore()
+                .AddRoleUsersStore();
+                
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                var dataProtectionPath = Path.Combine(HostingEnvironment.WebRootPath, "identity-artifacts");
+                options.Lockout.AllowedForNewUsers = true;
+            });
+
+            services.Configure<DynamoDbSettings>(Configuration.GetSection("DynamoDB"));
+
+            //AddDefaultTokenProviders(services);
+
+            // Services used by identity
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/LogIn";
+            });
+
+
+            services.AddOptions();
+            services.AddDataProtection();
+
+            // Hosting doesn't add IHttpContextAccessor by default
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddMemoryCache();
+
+
 
         }
 
-      
+        private void AddDefaultTokenProviders(IServiceCollection services)
+        {
+            var dataProtectionProviderType = typeof(DataProtectorTokenProvider<>).MakeGenericType(typeof(DynamoIdentityUser));
+            var phoneNumberProviderType = typeof(PhoneNumberTokenProvider<>).MakeGenericType(typeof(DynamoIdentityUser));
+            var emailTokenProviderType = typeof(EmailTokenProvider<>).MakeGenericType(typeof(DynamoIdentityUser));
+            AddTokenProvider(services, TokenOptions.DefaultProvider, dataProtectionProviderType);
+        }
 
-        
+
+        private void AddTokenProvider(IServiceCollection services, string providerName, Type provider)
+        {
+            services.Configure<IdentityOptions>(
+                options => { options.Tokens.ProviderMap[providerName] = new TokenProviderDescriptor(provider); });
+
+            services.AddSingleton(provider);
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseAuthentication();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -110,6 +163,31 @@ namespace BryceFamily.Web.MVC
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            var options = app.ApplicationServices.GetService<IOptions<DynamoDbSettings>>();
+            var client =  new AmazonDynamoDBClient(RegionEndpoint.APSoutheast2);
+
+            var context = new DynamoDBContext(client);
+
+            var userStore = app.ApplicationServices
+                    .GetService<IUserStore<DynamoIdentityUser>>()
+                as DynamoUserStore<DynamoIdentityUser, DynamoIdentityRole>;
+            var roleStore = app.ApplicationServices
+                    .GetService<IRoleStore<DynamoIdentityRole>>()
+                as DynamoRoleStore<DynamoIdentityRole>;
+            var roleUsersStore = app.ApplicationServices
+                .GetService<DynamoRoleUsersStore<DynamoIdentityRole, DynamoIdentityUser>>();
+
+            userStore.EnsureInitializedAsync(client, context, options.Value.UsersTableName).Wait();
+            roleStore.EnsureInitializedAsync(client, context, options.Value.RolesTableName).Wait();
+            roleUsersStore.EnsureInitializedAsync(client, context, options.Value.RoleUsersTableName).Wait();
         }
+    }
+
+    public class DynamoDbSettings
+    {
+        public string UsersTableName { get; set; }
+        public string RolesTableName { get; set; }
+        public string RoleUsersTableName { get; set; }
     }
 }
