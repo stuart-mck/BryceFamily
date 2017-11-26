@@ -5,11 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNetCore.Identity.DynamoDB" Version="1.0.0" />
     <PackageReference Include="bootstrap" Version="3.3.7" />
     <PackageReference Include="EPPlus.Core" Version="1.5.2" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.1" />
     <PackageReference Include="RevStackCore-ImageSharp" Version="0.9.0" />
   </ItemGroup>
 
@@ -18,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AspNetCore.Identity.DynamoDB\AspNetCore.Identity.DynamoDB.csproj" />
     <ProjectReference Include="..\BryceFamily.Repo.Core\BryceFamily.Repo.Core.csproj" />
   </ItemGroup>
 
