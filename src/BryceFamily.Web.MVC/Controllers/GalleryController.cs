@@ -15,7 +15,7 @@ using BryceFamily.Repo.Core.Read.ImageReference;
 using System.IO;
 using BryceFamily.Web.MVC.Infrastructure;
 
-namespace BryceFamily.Web.MVC.Controllers
+namespace BryceFamily.Web.MVC.Models
 {
     
     public class GalleryController : Controller

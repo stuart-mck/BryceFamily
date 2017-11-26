@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
-using BryceFamily.Web.MVC.Controllers.AccountViewModels;
+using BryceFamily.Web.MVC.Models.AccountViewModels;
 using AspNetCore.Identity.DynamoDB;
+using System;
 
-namespace BryceFamily.Web.MVC.Controllers
+namespace BryceFamily.Web.MVC.Models
 {
     public class AccountController : Controller
     {
@@ -50,19 +51,30 @@ namespace BryceFamily.Web.MVC.Controllers
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
-                if (result.Succeeded)
+                try
                 {
-                    _logger.LogInformation(1, "User logged in.");
-                    return RedirectToLocal(returnUrl);
+                    var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+
+                    if (result.Succeeded)
+                    {
+                        _logger.LogInformation(1, "User logged in.");
+                        return RedirectToLocal(returnUrl);
+                    }
+
+                    if (result.IsLockedOut)
+                    {
+                        _logger.LogWarning(2, "User account locked out.");
+                        return View("Lockout");
+                    }
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                 }
-              
-                if (result.IsLockedOut)
+                catch (Exception ex)
                 {
-                    _logger.LogWarning(2, "User account locked out.");
-                    return View("Lockout");
+                    _logger.LogError("Could not verify user login attempt", ex);
+                    throw;
                 }
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+
+             
                 return View(model);
             }
 

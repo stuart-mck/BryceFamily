@@ -9,7 +9,7 @@ using BryceFamily.Repo.Core.Write;
 using BryceFamily.Repo.Core.Read.FamilyEvents;
 using System.Threading;
 
-namespace BryceFamily.Web.MVC.Controllers
+namespace BryceFamily.Web.MVC.Models
 {
     public class EventController : Controller
     {

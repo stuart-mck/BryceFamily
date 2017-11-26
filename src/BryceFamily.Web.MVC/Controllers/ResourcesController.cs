@@ -7,17 +7,18 @@ using BryceFamily.Repo.Core.Repository;
 using BryceFamily.Repo.Core.Model;
 using System.Threading;
 using BryceFamily.Repo.Core.Read.ImageReference;
+using BryceFamily.Repo.Core.Read.Gallery;
 
-namespace BryceFamily.Web.MVC.Controllers
+namespace BryceFamily.Web.MVC.Models
 {
     [Route("ImageServer")]
     public class ResourcesController : Controller
     {
         private IFileService _fileService;
-        private readonly IReadModel<Gallery, Guid> _galleryReadModel;
+        private readonly IGalleryReadRepository _galleryReadModel;
         private readonly IImageReferenceReadRepository _imageReferenceReadRepository;
 
-        public ResourcesController(IFileService fileService, IReadModel<Gallery, Guid> galleryReadModel, IImageReferenceReadRepository imageReferenceReadRepository)
+        public ResourcesController(IFileService fileService, IGalleryReadRepository galleryReadModel, IImageReferenceReadRepository imageReferenceReadRepository)
         {
             _fileService = fileService;
             _galleryReadModel = galleryReadModel;
