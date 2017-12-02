@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using BryceFamily.Web.MVC.Models.AccountViewModels;
 using AspNetCore.Identity.DynamoDB;
 using System;
+using BryceFamily.Web.MVC.Infrastructure.Authentication;
 
 namespace BryceFamily.Web.MVC.Models
 {
@@ -83,7 +84,7 @@ namespace BryceFamily.Web.MVC.Models
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Roles = RoleNameConstants.SuperAdminRole)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {

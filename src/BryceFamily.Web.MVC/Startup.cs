@@ -21,7 +21,6 @@ using System.Linq;
 using BryceFamily.Repo.Core.Read.Story;
 using BryceFamily.Repo.Core.Write.Story;
 using AspNetCore.Identity.DynamoDB;
-using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -31,8 +30,9 @@ using Amazon;
 using System.Threading;
 using BryceFamily.Web.MVC.Infrastructure.Authentication;
 using System.Threading.Tasks;
-using AspNetCore.Identity.DynamoDB.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.IO;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace BryceFamily.Web.MVC
 {
@@ -94,7 +94,6 @@ namespace BryceFamily.Web.MVC
             });
 
 
-
             // Identity Management
             services.Configure<DynamoDbSettings>(Configuration.GetSection("DynamoDB"));
 
@@ -105,20 +104,25 @@ namespace BryceFamily.Web.MVC
 
             services.Configure<IdentityOptions>(options =>
             {
-                var dataProtectionPath = Path.Combine(HostingEnvironment.WebRootPath, "identity-artifacts");
                 options.Lockout.AllowedForNewUsers = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = true;
             });
 
-            services.AddAuthentication(options =>
+            services.ConfigureApplicationCookie(options =>
             {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            })
-            .AddCookie(options =>
-                 {
-                     options.LoginPath = "/Account/LogIn";
-                     options.LogoutPath = "/Account/LogOff";
-                 });
+                var dataProtectionPath = Path.Combine(HostingEnvironment.WebRootPath, "identity-artifacts");
+                options.LoginPath = "/Account/LogIn";
+                options.LogoutPath = "/Account/LogOff";
+                options.DataProtectionProvider = DataProtectionProvider.Create(dataProtectionPath);
+            }
+            );
+
+            services.AddAuthentication(IdentityConstants.ApplicationScheme)
+                .AddCookie(IdentityConstants.ApplicationScheme);
+                
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -127,7 +131,7 @@ namespace BryceFamily.Web.MVC
 
             services.TryAddSingleton<IUserValidator<DynamoIdentityUser>, UserValidator<DynamoIdentityUser>>();
             services.TryAddSingleton<IPasswordValidator<DynamoIdentityUser>, PasswordValidator<DynamoIdentityUser>>();
-            services.TryAddSingleton<IPasswordHasher<DynamoIdentityUser>, PasswordHasher<DynamoIdentityUser>>();
+            services.TryAddSingleton<IPasswordHasher<DynamoIdentityUser>, BCryptPasswordHasher<DynamoIdentityUser>>();
             services.TryAddSingleton<ILookupNormalizer, UpperInvariantLookupNormalizer>();
             services.TryAddSingleton<IdentityErrorDescriber>();
             services.TryAddSingleton<ISecurityStampValidator, SecurityStampValidator<DynamoIdentityUser>>();
@@ -139,12 +143,6 @@ namespace BryceFamily.Web.MVC
 
             AddDefaultTokenProviders(services);
 
-
-            // Services used by identity
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = "/Account/LogIn";
-            });
 
             services.AddMemoryCache();
 
@@ -210,54 +208,54 @@ namespace BryceFamily.Web.MVC
             roleStore.EnsureInitializedAsync(client, context, options.Value.RolesTableName).Wait();
             roleUsersStore.EnsureInitializedAsync(client, context, options.Value.RoleUsersTableName).Wait();
 
-            SeedRoles(roleStore);
-            SeedUsers(app, roleUsersStore, roleStore);
+            //SeedRoles(roleStore);
+            //SeedUsers(app, roleUsersStore, roleStore);
 
         }
 
-        private void SeedUsers(IApplicationBuilder app, DynamoRoleUsersStore<DynamoIdentityRole, DynamoIdentityUser> roleUsersStore, DynamoRoleStore<DynamoIdentityRole> roleStore)
-        {
-            var cancellationToken = CancellationToken.None;
-            Task.Run(async () =>
-            {
-                var usermanager = app.ApplicationServices.GetService<UserManager<DynamoIdentityUser>>();
-                if (await usermanager.FindByEmailAsync("stuart@mckenziebryce.com") == null)
-                {
-                    var user = new DynamoIdentityUser("stuart@mckenziebryce.com", "stuart@mckenziebryce.com");
-                    var result = await usermanager.CreateAsync(user, "Cr@nkyP@nts2017");
-                    if (result.Succeeded)
-                    {
-                        await roleUsersStore.AddToRoleAsync(user, RoleNameConstants.SuperAdminRole, cancellationToken);
-                    }
-                }
-            });
-        }
+        //private void SeedUsers(IApplicationBuilder app, DynamoRoleUsersStore<DynamoIdentityRole, DynamoIdentityUser> roleUsersStore, DynamoRoleStore<DynamoIdentityRole> roleStore)
+        //{
+        //    var cancellationToken = CancellationToken.None;
+        //    Task.Run(async () =>
+        //    {
+        //        var usermanager = app.ApplicationServices.GetService<UserManager<DynamoIdentityUser>>();
+        //        if (await usermanager.FindByEmailAsync("stuart@mckenziebryce.com") == null)
+        //        {
+        //            var user = new DynamoIdentityUser("stuart@mckenziebryce.com", "stuart@mckenziebryce.com");
+        //            var result = await usermanager.CreateAsync(user, "Cr@nkyP@nts2017");
+        //            if (result.Succeeded)
+        //            {
+        //                await roleUsersStore.AddToRoleAsync(user, RoleNameConstants.SuperAdminRole, cancellationToken);
+        //            }
+        //        }
+        //    });
+        //}
 
-        private void SeedRoles(DynamoRoleStore<DynamoIdentityRole> roleStore)
-        {
-            var cancellationToken = CancellationToken.None;
-            if ((roleStore.FindByNameAsync(RoleNameConstants.AdminRole, cancellationToken).Result) == null)
-            {
-                Task.Run(async () => await roleStore.CreateAsync(new DynamoIdentityRole
-                {
-                    Name = RoleNameConstants.AdminRole
-                }, cancellationToken));
-            }
-            if ((roleStore.FindByNameAsync(RoleNameConstants.UserRole, cancellationToken).Result) == null)
-            {
-                Task.Run(async () => await roleStore.CreateAsync(new DynamoIdentityRole
-                {
-                    Name = RoleNameConstants.UserRole
-                }, cancellationToken));
-            }
-            if ((roleStore.FindByNameAsync(RoleNameConstants.SuperAdminRole, cancellationToken).Result) == null)
-            {
-                Task.Run(async () => await roleStore.CreateAsync(new DynamoIdentityRole
-                {
-                    Name = RoleNameConstants.SuperAdminRole
-                }, cancellationToken));
-            }
-        }
+        //private void SeedRoles(DynamoRoleStore<DynamoIdentityRole> roleStore)
+        //{
+        //    var cancellationToken = CancellationToken.None;
+        //    if ((roleStore.FindByNameAsync(RoleNameConstants.AdminRole, cancellationToken).Result) == null)
+        //    {
+        //        Task.Run(async () => await roleStore.CreateAsync(new DynamoIdentityRole
+        //        {
+        //            Name = RoleNameConstants.AdminRole
+        //        }, cancellationToken));
+        //    }
+        //    if ((roleStore.FindByNameAsync(RoleNameConstants.UserRole, cancellationToken).Result) == null)
+        //    {
+        //        Task.Run(async () => await roleStore.CreateAsync(new DynamoIdentityRole
+        //        {
+        //            Name = RoleNameConstants.UserRole
+        //        }, cancellationToken));
+        //    }
+        //    if ((roleStore.FindByNameAsync(RoleNameConstants.SuperAdminRole, cancellationToken).Result) == null)
+        //    {
+        //        Task.Run(async () => await roleStore.CreateAsync(new DynamoIdentityRole
+        //        {
+        //            Name = RoleNameConstants.SuperAdminRole
+        //        }, cancellationToken));
+        //    }
+        //}
     }
 
     public class DynamoDbSettings

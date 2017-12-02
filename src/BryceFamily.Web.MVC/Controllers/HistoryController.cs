@@ -9,6 +9,8 @@ using BryceFamily.Repo.Core.Model;
 using BryceFamily.Repo.Core.Write.Query;
 using System.Threading;
 using BryceFamily.Repo.Core.Read.Story;
+using Microsoft.AspNetCore.Authorization;
+using BryceFamily.Web.MVC.Infrastructure.Authentication;
 
 namespace BryceFamily.Web.MVC.Models
 {
@@ -38,6 +40,7 @@ namespace BryceFamily.Web.MVC.Models
         }
 
         [HttpPost]
+        [Authorize(Roles = RoleNameConstants.AdminRole)]
         public async Task<IActionResult> Story(StoryWriteModel storyWriteModel)
         {
             if (ModelState.IsValid)

@@ -7,8 +7,10 @@ namespace BryceFamily.Web.MVC.Infrastructure.Authentication
 {
     public static class RoleNameConstants
     {
-        public const string UserRole = "üser";
+        public const string UserRole = "user";
         public const string AdminRole = "admin";
         public const string SuperAdminRole = "superAdmin";
+        public const string AllAdminRoles = "admin,superAdmin";
+        
     }
 }
