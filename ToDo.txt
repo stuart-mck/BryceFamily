@@ -13,8 +13,7 @@ google maps integration
   - people ?
 contact
 - captcha
-view family tree
- xml - json?
+
 
  lookups
  - occupations
@@ -23,7 +22,10 @@ view family tree
  search
  - event by date / clan
 
-static pages for history for now?
+- blue book export
+
+- family photos and event photos only - we want photos associated only with these
+- 
 
 
 
