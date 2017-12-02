@@ -5,7 +5,8 @@ html {
 
 body {
     padding-top: 0;
-    background-color: rgba(191, 207, 255, .75);
+    /*background-color: rgba(191, 207, 255, .75);*/
+    font-family: "Georgia, serif"
 }
 
 .page-wrapper {
@@ -39,14 +40,14 @@ body {
 .header > .container > h1 {
     padding-top: 80px;
     padding-bottom: 15px;
-    color: #337ab7;
+    color: #000000;
     font-weight: bold;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+    /*font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif*/
 }
 
 .header > .container > p {
     padding-bottom: 40px;
-    color: #337ab7;
+    /*color: #337ab7;*/
     font-size: 1.2em;
 }
 
@@ -94,8 +95,9 @@ body {
 
 /* ====== Header ====== */
 .header {
-    background-image: linear-gradient(rgba(255, 210, 76, 0.85), rgba(255, 210, 76, 0.85)), url('../images/fields.jpg');
-    color: rgba(255, 255, 255, 0.85);
+    /*background-image: linear-gradient(rgba(255, 210, 76, 0.85), rgba(255, 210, 76, 0.85)), url('../images/fields.jpg');*/
+    background-image: url('../images/yarriambiack.png');
+    /*color: rgba(255, 255, 255, 0.85);*/
     padding: 0;
     margin: 0;
     background-position: 60% 40%;
@@ -117,12 +119,37 @@ body {
 }
 
 .nav-panel {
-    border-top: 2px solid black;
+    border: 2px solid black;
+    border-radius: 3px 4px;
     background-color: white;
     padding: 10px;
-    min-height: 150px;
+    min-height: 200px;
     margin-bottom: 15px;
 }
+
+.nav-panel-icon {
+    float: left;
+    min-width: 132px;
+    background-repeat: no-repeat;
+    height: 160px;
+}
+
+
+
+.history > .nav-panel-icon {
+    background-image: url('../images/Emmanuel Wilde.png')
+}
+
+.nav-panel .events {
+}
+
+.nav-panel .gallery {
+}
+
+.nav-panel .people {
+}
+
+
 
 
 
@@ -331,4 +358,13 @@ ul.event-summary {
 
 .childPanel{
     margin-left: 20px;
+}
+
+a {
+    color: black;
+}
+
+a:hover {
+    color: black;
+    text-decoration: underline;
 }

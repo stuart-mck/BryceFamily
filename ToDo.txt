@@ -6,15 +6,12 @@ contacts
 	- message filters?
 	- subcription / unsubscription
 	- send email
-auth / authentication
 style tidy
 google maps integration
   - events
   - people ?
 contact
 - captcha
-
-
  lookups
  - occupations
  - users / current user
@@ -23,9 +20,16 @@ contact
  - event by date / clan
 
 - blue book export
-
 - family photos and event photos only - we want photos associated only with these
-- 
+- rename clan - family
+- limit family tree to 2 levels at a time
+- rowes into family tree
+- yarraimbut creek pic?
+- program for reunion
+- email unsubscriptions
+- facebook link (people page)
+- text for events from the email heading
+- pin march event to the front page
 
 
 
