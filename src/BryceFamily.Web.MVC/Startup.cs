@@ -27,10 +27,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Amazon.DynamoDBv2;
 using Amazon;
-using System.Threading;
-using BryceFamily.Web.MVC.Infrastructure.Authentication;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using System.IO;
 using Microsoft.AspNetCore.DataProtection;
 
@@ -117,11 +113,14 @@ namespace BryceFamily.Web.MVC
                 options.LoginPath = "/Account/LogIn";
                 options.LogoutPath = "/Account/LogOff";
                 options.DataProtectionProvider = DataProtectionProvider.Create(dataProtectionPath);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                options.SlidingExpiration = true;
             }
             );
 
-            services.AddAuthentication(IdentityConstants.ApplicationScheme)
-                .AddCookie(IdentityConstants.ApplicationScheme);
+            services.AddAuthentication(options => {
+                options.DefaultScheme = IdentityConstants.ApplicationScheme;
+            } ).AddCookie(IdentityConstants.ApplicationScheme);
                 
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
