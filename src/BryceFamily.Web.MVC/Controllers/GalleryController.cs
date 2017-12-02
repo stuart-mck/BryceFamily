@@ -14,6 +14,8 @@ using BryceFamily.Repo.Core.Read.FamilyEvents;
 using BryceFamily.Repo.Core.Read.ImageReference;
 using System.IO;
 using BryceFamily.Web.MVC.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
+using BryceFamily.Web.MVC.Infrastructure.Authentication;
 
 namespace BryceFamily.Web.MVC.Models
 {
@@ -95,6 +97,7 @@ namespace BryceFamily.Web.MVC.Models
         }
 
         [HttpGet]
+        [Authorize(Roles = RoleNameConstants.AdminRole)]
         public IActionResult EditGallery()
         {
             return View(new Models.Gallery()
@@ -105,12 +108,14 @@ namespace BryceFamily.Web.MVC.Models
         }
 
         [HttpGet]
+        [Authorize(Roles = RoleNameConstants.AdminRole)]
         public IActionResult NewGallery()
         {
             return View(new GalleryCreateModel());
         }
 
         [HttpPost]
+        [Authorize(Roles = RoleNameConstants.AdminRole)]
         public IActionResult NewGallery(GalleryCreateModel newGallery)
         {
             var gallery = new Repo.Core.Model.Gallery()
@@ -125,6 +130,7 @@ namespace BryceFamily.Web.MVC.Models
         }
 
         [HttpGet]
+        [Authorize(Roles = RoleNameConstants.AdminRole)]
         public async Task<IActionResult> EditGalleryImages(Guid id)
         {
 
@@ -140,6 +146,7 @@ namespace BryceFamily.Web.MVC.Models
         }
 
         [HttpPost]
+        [Authorize(Roles = RoleNameConstants.AdminRole)]
         public IActionResult EditGallery(Models.Gallery gallery)
         {
             if (!ModelState.IsValid) return BadRequest();
@@ -149,6 +156,7 @@ namespace BryceFamily.Web.MVC.Models
         }
 
         [HttpPost]
+        [Authorize(Roles = RoleNameConstants.AdminRole)]
         public async Task<IActionResult> UploadFiles(Guid galleryId, List<IFormFile> files)
         {
             try
