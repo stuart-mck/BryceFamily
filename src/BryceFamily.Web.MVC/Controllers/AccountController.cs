@@ -112,10 +112,7 @@ namespace BryceFamily.Web.MVC.Models
             return View(model);
         }
 
-        //
-        // POST: /Account/LogOff
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         public async Task<IActionResult> LogOff()
         {
             await _signInManager.SignOutAsync();
@@ -123,8 +120,7 @@ namespace BryceFamily.Web.MVC.Models
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
-        //
-        // GET: /Account/ForgotPassword
+        
         [HttpGet]
         [AllowAnonymous]
         public IActionResult ForgotPassword()

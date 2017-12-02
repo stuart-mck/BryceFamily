@@ -13,6 +13,8 @@ using System.Threading;
 using BryceFamily.Repo.Core.Read.People;
 using BryceFamily.Repo.Core.Model;
 using BryceFamily.Web.MVC.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
+using BryceFamily.Web.MVC.Infrastructure.Authentication;
 
 namespace BryceFamily.Web.MVC.Models
 {
@@ -39,12 +41,14 @@ namespace BryceFamily.Web.MVC.Models
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult EmailUnsubscribe([FromQuery] Guid personId)
         {
             return Ok();
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult EmailSubscribe([FromQuery] Guid personId)
         {
             return Ok();
@@ -52,12 +56,14 @@ namespace BryceFamily.Web.MVC.Models
 
 
         [HttpGet]
+        [Authorize]
         public IActionResult Search()
         {
             return View(new SearchPersonModel());
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Search(SearchPersonModel searchPersonModel)
         {
             var results = _clanAndPeopleService.People.Where(p => (string.IsNullOrWhiteSpace(searchPersonModel.Clan) || p.Clan.Equals(searchPersonModel.Clan, StringComparison.CurrentCultureIgnoreCase))
@@ -71,6 +77,7 @@ namespace BryceFamily.Web.MVC.Models
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> List(IEnumerable<Models.Person> people)
         {
             return await Task.FromResult(View(people));
@@ -79,6 +86,7 @@ namespace BryceFamily.Web.MVC.Models
 
 
         [HttpPost]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public async Task<IActionResult> Person(Models.Person person)
         {
 
@@ -87,18 +95,21 @@ namespace BryceFamily.Web.MVC.Models
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult Email()
         {
             return View(new EmailCreateModel());
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Email(EmailCreateModel email)
         {
             return View();
         }
 
         [HttpPut, Route("{personId}")]
+        [Authorize]
         public IActionResult Person([FromRoute]Guid personId, [FromBody]PersonWriteModel person)
         {
             return Ok();
@@ -106,12 +117,14 @@ namespace BryceFamily.Web.MVC.Models
 
 
         [HttpGet]
+        [Authorize]
         public IActionResult Person(Guid id)
         {
             return View(_clanAndPeopleService.People.FirstOrDefault(p => p.Id == id));
         }
 
         [HttpGet]
+        [Authorize(Roles = RoleNameConstants.SuperAdminRole)]
         public IActionResult Import()
         {
             return View();
@@ -119,6 +132,7 @@ namespace BryceFamily.Web.MVC.Models
 
 
         [HttpPost]
+        [Authorize(Roles = RoleNameConstants.SuperAdminRole)]
         public async Task<IActionResult> MasterList(List<IFormFile> files)
         {
             var cancellationToken = CancellationToken.None;
@@ -126,7 +140,7 @@ namespace BryceFamily.Web.MVC.Models
             if (files.Count > 0)
             {
 
-                foreach (var file in files)
+                foreach (var file in files) 
                 {
                     using (var excel = new ExcelPackage(file.OpenReadStream()))
                     {

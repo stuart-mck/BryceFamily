@@ -1,11 +1,16 @@
 ﻿@model IEnumerable<FamilyEvent>
+@using BryceFamily.Web.MVC.Infrastructure.Authentication
 @{
     Layout = "_Layout";
 }
 
     <div class="col-md-10">
         <div class="row">
-            <h1>Upcoming Events</h1><span class="editorButton">@Html.ActionLink("Add New", "NewEvent", "Event", null, new { @class="btn btn-primary"})</span>
+            <h1>Upcoming Events</h1>
+            @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
+            {
+            <span class="editorButton">@Html.ActionLink("Add New", "NewEvent", "Event", null, new { @class = "btn btn-primary" })</span>
+            }
         </div>
         <ul class="event-summary">
             @foreach (var evt in Model)

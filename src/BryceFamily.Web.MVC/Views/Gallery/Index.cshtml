@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<Gallery>
+@using BryceFamily.Web.MVC.Infrastructure.Authentication
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,7 +9,11 @@
 
 <div class="col-md-10">
     <div class="row">
-        <h2>Galleries</h2><span class="editorButton">@Html.ActionLink("Add New", "NewGallery", "Gallery", null, new { @class = "btn btn-primary" })</span>
+        <h2>Galleries</h2>
+        @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
+        {
+            <span class="editorButton">@Html.ActionLink("Add New", "NewGallery", "Gallery", null, new { @class = "btn btn-primary" })</span>
+        }
     </div>
     <ul class="event-summary">
         @foreach (var evt in Model)
@@ -23,7 +29,10 @@
                         <div class="col-md-2">Event Date: @Html.DisplayFor(t => evt.FamilyEvent.StartDate)</div>
 
                     }
-                    @Html.ActionLink("Edit Images", "EditGalleryImages", "Gallery", new { id = evt.Id }, new { @class = "btn btn-sml" })
+                    @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
+                    {
+                        @Html.ActionLink("Edit Images", "EditGalleryImages", "Gallery", new { id = evt.Id }, new { @class = "btn btn-sml" })
+                    }
                 </div>
             </li>
         }

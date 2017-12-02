@@ -1,4 +1,5 @@
 ﻿@inject BryceFamily.Web.MVC.Infrastructure.ContextService ContextService
+@using BryceFamily.Web.MVC.Infrastructure.Authentication
 
 @{
     ViewData["Title"] = "Index";
@@ -10,9 +11,9 @@
     <iframe width="640" height="360" src="https://www.youtube.com/embed/isOxYKWUOhk" frameborder="0" allowfullscreen></iframe>
     <div>
         @Html.ActionLink("View Family Tree", "Tree", "History", new { id = Guid.Empty })<br />
-        @if (ContextService.IsClanManager || ContextService.IsSuperUser)
+        @if (User.IsInRole(RoleNameConstants.AdminRole) && ContextService.IsClanManager || User.IsInRole(RoleNameConstants.SuperAdminRole))
         {
-        @Html.ActionLink("Add Story", "Story", "History", new { id = Guid.Empty })
+            @Html.ActionLink("Add Story", "Story", "History", new { id = Guid.Empty })
         }
 
     </div>
