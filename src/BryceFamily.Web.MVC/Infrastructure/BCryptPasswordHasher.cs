@@ -1,9 +1,4 @@
-﻿using DevOne.Security.Cryptography.BCrypt;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace BryceFamily.Web.MVC.Infrastructure
 {
@@ -18,14 +13,13 @@ namespace BryceFamily.Web.MVC.Infrastructure
         
         public string HashPassword(TUser user, string password)
         {
-            return BCryptHelper.HashPassword(password, BCryptHelper.GenerateSalt(_rounds));
+            return BCrypt.Net.BCrypt.HashPassword(password,_rounds);
         }
 
         public PasswordVerificationResult VerifyHashedPassword(TUser user, string hashedPassword, string providedPassword)
         {
-            if (BCryptHelper.CheckPassword(providedPassword, hashedPassword))
-                return PasswordVerificationResult.Success;
-            return PasswordVerificationResult.Failed;
+            return BCrypt.Net.BCrypt.Verify(providedPassword, hashedPassword) ? PasswordVerificationResult.Success 
+                : PasswordVerificationResult.Failed;
 
         }
     }
