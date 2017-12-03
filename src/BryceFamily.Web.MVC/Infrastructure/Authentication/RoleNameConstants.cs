@@ -11,6 +11,6 @@ namespace BryceFamily.Web.MVC.Infrastructure.Authentication
         public const string AdminRole = "admin";
         public const string SuperAdminRole = "superAdmin";
         public const string AllAdminRoles = "admin,superAdmin";
-        
+        public const string AllRoles = "admin,superAdmin,user";
     }
 }

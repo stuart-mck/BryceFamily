@@ -56,14 +56,14 @@ namespace BryceFamily.Web.MVC.Controllers
 
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = RoleNameConstants.AllRoles)]
         public IActionResult Search()
         {
             return View(new SearchPersonModel());
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = RoleNameConstants.AllRoles)]
         public IActionResult Search(SearchPersonModel searchPersonModel)
         {
             var results = _clanAndPeopleService.People.Where(p => (string.IsNullOrWhiteSpace(searchPersonModel.Clan) || p.Clan.Equals(searchPersonModel.Clan, StringComparison.CurrentCultureIgnoreCase))
@@ -77,7 +77,7 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = RoleNameConstants.AllRoles)]
         public async Task<IActionResult> List(IEnumerable<Models.Person> people)
         {
             return await Task.FromResult(View(people));
@@ -109,7 +109,7 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [HttpPut, Route("{personId}")]
-        [Authorize]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public IActionResult Person([FromRoute]Guid personId, [FromBody]PersonWriteModel person)
         {
             return Ok();
@@ -117,7 +117,7 @@ namespace BryceFamily.Web.MVC.Controllers
 
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = RoleNameConstants.AllRoles)]
         public IActionResult Person(Guid id)
         {
             return View(_clanAndPeopleService.People.FirstOrDefault(p => p.Id == id));

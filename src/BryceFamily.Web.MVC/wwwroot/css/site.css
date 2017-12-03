@@ -40,7 +40,7 @@ body {
     padding-top: 80px;
     padding-bottom: 15px;
     color: antiquewhite;
-    font-size: 5em;
+    font-size: 6em;
 }
 
 .header > .container > p {
@@ -93,9 +93,7 @@ body {
 
 /* ====== Header ====== */
 .header {
-    /*background-image: linear-gradient(rgba(255, 210, 76, 0.85), rgba(255, 210, 76, 0.85)), url('../images/fields.jpg');*/
     background-image: url('../images/yarriambiack.png');
-    /*color: rgba(255, 255, 255, 0.85);*/
     padding: 0;
     margin: 0;
     background-position: 60% 40%;
@@ -106,6 +104,11 @@ body {
 
 .history .header {
     background-image: url('../images/history-heading.png');
+    color: antiquewhite;
+}
+
+.events .header {
+    background-image: url('../images/events-header.png');
     color: antiquewhite;
 }
 
