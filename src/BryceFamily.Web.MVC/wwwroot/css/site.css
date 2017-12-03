@@ -100,17 +100,22 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
+    color: antiquewhite;
 }
 
 .history .header {
     background-image: url('../images/history-heading.png');
-    color: antiquewhite;
 }
 
 .events .header {
     background-image: url('../images/events-header.png');
-    color: antiquewhite;
+    
 }
+
+.people .header {
+    background-image: url('../images/peopl-header.png');
+}
+
 
 .home-page{
     padding-left: 50px;

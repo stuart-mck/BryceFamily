@@ -30,6 +30,7 @@ contact
 - facebook link (people page)
 - text for events from the email heading
 - pin march event to the front page
+- remove lorum ipsum from history and replace with links to stories
 
 
 
