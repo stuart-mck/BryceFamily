@@ -8,7 +8,7 @@ using AspNetCore.Identity.DynamoDB;
 using System;
 using BryceFamily.Web.MVC.Infrastructure.Authentication;
 
-namespace BryceFamily.Web.MVC.Models
+namespace BryceFamily.Web.MVC.Controllers
 {
     public class AccountController : Controller
     {

@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BryceFamily.Web.MVC.Models;
 
-namespace BryceFamily.Web.MVC.Models
+namespace BryceFamily.Web.MVC.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
+        public HomeController():base("Family Bryce", "home")
+        {
+
+        }
+
         public IActionResult Index()
         {
             return View();

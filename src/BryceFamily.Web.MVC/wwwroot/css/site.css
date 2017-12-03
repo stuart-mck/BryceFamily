@@ -119,13 +119,21 @@ body {
 }
 
 .nav-panel {
-    border: 2px solid black;
-    border-radius: 3px 4px;
+    border-right: 1px solid black;
     background-color: white;
     padding: 10px;
     min-height: 200px;
     margin-bottom: 15px;
 }
+
+.nav-panel.people{
+        border:none;
+}
+
+    .nav-panel.highlight {
+        border-top: 1px solid black;
+        border-right: none;
+    }
 
 .nav-panel-icon {
     float: left;
@@ -140,16 +148,17 @@ body {
     background-image: url('../images/Emmanuel Wilde.png')
 }
 
-.nav-panel .events {
+.events > .nav-panel-icon {
+    background-image: url('../images/events.png')
 }
 
-.nav-panel .gallery {
+.gallery > .nav-panel-icon {
+    background-image: url('../images/galleries.png')
 }
 
-.nav-panel .people {
+.people > .nav-panel-icon {
+    background-image: url('../images/people.png')
 }
-
-
 
 
 

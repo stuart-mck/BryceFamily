@@ -12,16 +12,16 @@ using BryceFamily.Repo.Core.Read.Story;
 using Microsoft.AspNetCore.Authorization;
 using BryceFamily.Web.MVC.Infrastructure.Authentication;
 
-namespace BryceFamily.Web.MVC.Models
+namespace BryceFamily.Web.MVC.Controllers
 {
-    public class HistoryController : Controller
+    public class HistoryController : BaseController
     {
         private readonly ClanAndPeopleService _clanService;
         private readonly IWriteRepository<StoryContent, Guid> _writeRepository;
         private readonly ContextService _contextService;
         private readonly IStoryReadRepository _storyReadRepository;
 
-        public HistoryController(ClanAndPeopleService clanService, IWriteRepository<StoryContent, Guid>  writeRepository, ContextService contextService, IStoryReadRepository storyReadRepository)
+        public HistoryController(ClanAndPeopleService clanService, IWriteRepository<StoryContent, Guid>  writeRepository, ContextService contextService, IStoryReadRepository storyReadRepository):base("History", "history")
         {
             _clanService = clanService;
             _writeRepository = writeRepository;

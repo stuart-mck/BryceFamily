@@ -16,9 +16,9 @@ using BryceFamily.Web.MVC.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using BryceFamily.Web.MVC.Infrastructure.Authentication;
 
-namespace BryceFamily.Web.MVC.Models
+namespace BryceFamily.Web.MVC.Controllers
 {
-    public class PeopleController : Controller
+    public class PeopleController : BaseController
     {
         private readonly IWriteRepository<Repo.Core.Model.Person, Guid> _writeModel;
         private readonly IPersonReadRepository _readModel;
@@ -26,7 +26,7 @@ namespace BryceFamily.Web.MVC.Models
         private readonly IUnionReadRepository _unionReadRepository;
         private readonly IWriteRepository<Repo.Core.Model.Union, Guid> _unionWriteRepository;
 
-        public PeopleController(IPersonReadRepository readModel, IWriteRepository<Repo.Core.Model.Person, Guid> writeModel, ClanAndPeopleService clanAndPeopleService, IUnionReadRepository unionReadRepository, IWriteRepository<Repo.Core.Model.Union, Guid> unionWriteRepository)
+        public PeopleController(IPersonReadRepository readModel, IWriteRepository<Repo.Core.Model.Person, Guid> writeModel, ClanAndPeopleService clanAndPeopleService, IUnionReadRepository unionReadRepository, IWriteRepository<Repo.Core.Model.Union, Guid> unionWriteRepository):base("People", "people")
         {
             _readModel = readModel;
             _writeModel = writeModel;

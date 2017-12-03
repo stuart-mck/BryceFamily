@@ -17,10 +17,10 @@ using BryceFamily.Web.MVC.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using BryceFamily.Web.MVC.Infrastructure.Authentication;
 
-namespace BryceFamily.Web.MVC.Models
+namespace BryceFamily.Web.MVC.Controllers
 {
     
-    public class GalleryController : Controller
+    public class GalleryController : BaseController
     {
         private readonly IGalleryReadRepository _readModel;
         private readonly IFamilyEventReadRepository _familyEventReadRepository;
@@ -29,7 +29,7 @@ namespace BryceFamily.Web.MVC.Models
         private readonly IImageReferenceReadRepository _imageReferenceReadRepository;
         private readonly IFileService _fileService;
 
-        public GalleryController(IGalleryReadRepository readModel, IFamilyEventReadRepository familyEventReadRepository, IWriteRepository<Repo.Core.Model.Gallery, Guid> galleryWriteModel, IWriteRepository<Repo.Core.Model.ImageReference, Guid> imageReferenceWriteModel, IImageReferenceReadRepository imageReferenceReadRepository, IFileService fileService)
+        public GalleryController(IGalleryReadRepository readModel, IFamilyEventReadRepository familyEventReadRepository, IWriteRepository<Repo.Core.Model.Gallery, Guid> galleryWriteModel, IWriteRepository<Repo.Core.Model.ImageReference, Guid> imageReferenceWriteModel, IImageReferenceReadRepository imageReferenceReadRepository, IFileService fileService):base("Galleries", "gallery")
         {
             _readModel = readModel;
             _familyEventReadRepository = familyEventReadRepository;

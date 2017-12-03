@@ -7,15 +7,16 @@ using BryceFamily.Repo.Core.Read.FamilyEvents;
 using System.Threading;
 using Microsoft.AspNetCore.Authorization;
 using BryceFamily.Web.MVC.Infrastructure.Authentication;
+using BryceFamily.Web.MVC.Models;
 
-namespace BryceFamily.Web.MVC.Models
+namespace BryceFamily.Web.MVC.Controllers
 {
-    public class EventController : Controller
+    public class EventController : BaseController
     {
         private readonly IFamilyEventReadRepository _readmodel;
         private readonly IWriteRepository<Repo.Core.Model.FamilyEvent, Guid> _writeModel;
 
-        public EventController(IFamilyEventReadRepository readmodel, IWriteRepository<Repo.Core.Model.FamilyEvent, Guid> writeModel)
+        public EventController(IFamilyEventReadRepository readmodel, IWriteRepository<Repo.Core.Model.FamilyEvent, Guid> writeModel):base("Family Events", "events")
         {
             _readmodel = readmodel;
             _writeModel = writeModel;
