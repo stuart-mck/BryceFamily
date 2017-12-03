@@ -5,7 +5,6 @@ html {
 
 body {
     padding-top: 0;
-    /*background-color: rgba(191, 207, 255, .75);*/
     font-family: "Georgia, serif"
 }
 
@@ -40,9 +39,8 @@ body {
 .header > .container > h1 {
     padding-top: 80px;
     padding-bottom: 15px;
-    color: #000000;
-    font-weight: bold;
-    /*font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif*/
+    color: antiquewhite;
+    font-size: 5em;
 }
 
 .header > .container > p {
@@ -106,7 +104,10 @@ body {
     position: relative;
 }
 
-
+.history .header {
+    background-image: url('../images/history-heading.png');
+    color: antiquewhite;
+}
 
 .home-page{
     padding-left: 50px;
