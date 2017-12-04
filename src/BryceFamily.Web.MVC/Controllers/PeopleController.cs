@@ -176,7 +176,7 @@ namespace BryceFamily.Web.MVC.Controllers
                                 person.MiddleName = ReadStringCell(sheet, rowId, PersonImport.MiddleName).ToTitleCase();
                                 person.MaidenName = ReadStringCell(sheet, rowId, PersonImport.MaindenName).ToUpper();
                                 person.Phone = ReadStringCell(sheet, rowId, PersonImport.PhoneNumber);
-                                person.Clan = _clanAndPeopleService.Clans[ReadIntCell(sheet, rowId, PersonImport.Clan) - 1];
+                                person.Clan = _clanAndPeopleService.Clans.First(c => c.Id == ReadIntCell(sheet, rowId, PersonImport.Clan)).Family;
                                 person.IsSpouse = ReadStringCell(sheet, rowId, PersonImport.IsSpouse).Equals("y", StringComparison.CurrentCultureIgnoreCase);
                                 person.MotherID = GetNullableInt(sheet, PersonImport.MotherId, rowId);
                                 person.FatherID = GetNullableInt(sheet, PersonImport.FatherId, rowId);

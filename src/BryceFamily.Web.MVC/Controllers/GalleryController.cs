@@ -97,7 +97,7 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = RoleNameConstants.AdminRole)]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public IActionResult EditGallery()
         {
             return View(new Models.Gallery()
@@ -108,15 +108,15 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = RoleNameConstants.AdminRole)]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public IActionResult NewGallery()
         {
-            return View(new GalleryCreateModel());
+            return View(new FamilyEventGalleryCreateModel());
         }
 
         [HttpPost]
-        [Authorize(Roles = RoleNameConstants.AdminRole)]
-        public IActionResult NewGallery(GalleryCreateModel newGallery)
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        public IActionResult NewGallery(FamilyEventGalleryCreateModel newGallery)
         {
             var gallery = new Repo.Core.Model.Gallery()
             {
@@ -126,11 +126,11 @@ namespace BryceFamily.Web.MVC.Controllers
                 Summary = newGallery.Description
             };
             _writeModel.Save(gallery, new CancellationToken());
-            return View(new GalleryCreateModel());
+            return View(new FamilyEventGalleryCreateModel());
         }
 
         [HttpGet]
-        [Authorize(Roles = RoleNameConstants.AdminRole)]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public async Task<IActionResult> EditGalleryImages(Guid id)
         {
 
@@ -146,7 +146,7 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = RoleNameConstants.AdminRole)]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public IActionResult EditGallery(Models.Gallery gallery)
         {
             if (!ModelState.IsValid) return BadRequest();
@@ -156,7 +156,7 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = RoleNameConstants.AdminRole)]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public async Task<IActionResult> UploadFiles(Guid galleryId, List<IFormFile> files)
         {
             try
