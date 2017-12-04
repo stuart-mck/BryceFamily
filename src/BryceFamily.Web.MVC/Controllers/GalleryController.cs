@@ -139,6 +139,15 @@ namespace BryceFamily.Web.MVC.Controllers
             return View(new FamilyGalleryCreateModel(_clanAndPeopleService.Clans));
         }
 
+
+        [HttpGet]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        public IActionResult NewGallery()
+        {
+            return View();
+        }
+
+
         [HttpGet]
         [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public async Task<IActionResult> EventGallery()
