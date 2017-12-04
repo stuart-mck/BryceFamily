@@ -24,23 +24,23 @@ namespace BryceFamily.Web.MVC.Infrastructure
             _storyReadRepository = storyReadRepository;
         }
 
-        private readonly IReadOnlyList<string> _clans = new List<string>()
+        private readonly IReadOnlyList<FamilyClan> _clans = new List<FamilyClan>
         {
-            "Smith",
-            "Thomas",
-            "Robson",
-            "Moore",
-            "GBryce",
-            "CBryce",
-            "DBryce",
-            "HBryce",
-            "RBryce",
-            "Shield",
-            "Hose",
-            "Barmby"
+            new FamilyClan(1,"Smith", "Marty"),
+            new FamilyClan(2, "Thomas", "Frank"),
+            new FamilyClan(3, "Robson", "Ivan"),
+            new FamilyClan(4, "Moore", "Thomas"),
+            new FamilyClan(5, "Bryce", "George (Lindsay)"),
+            new FamilyClan(6, "Bryce", "Cecil"),
+            new FamilyClan(7, "Bryce", "Desmond"),
+            new FamilyClan(8, "Bryce", "Harold"),
+            new FamilyClan(9, "Bryce", "Roy"),
+            new FamilyClan(10, "Shield", "William"),
+            new FamilyClan(11, "Hose", "Harold"),
+            new FamilyClan(12, "Barmby", "George")
         };
 
-        public IReadOnlyList<string> Clans => _clans;
+        public IReadOnlyList<FamilyClan> Clans => _clans;
 
         private static readonly object _peopleLock = new object();
         private static readonly object _familyTreeLock = new object();

@@ -15,6 +15,7 @@ namespace BryceFamily.Repo.Core.Model
 
         public Guid FamilyEvent { get; set; }
 
+        public string Family { get; set; }
 
         public DateTime DateCreated { get; set; }
 
