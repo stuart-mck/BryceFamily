@@ -6,19 +6,20 @@ namespace BryceFamily.Web.MVC.Infrastructure
 {
     public class ContextService
     {
-        private readonly HttpContext _context;
+        private readonly IHttpContextAccessor _context;
         private readonly ClanAndPeopleService _clanAndPeopleService;
 
-        public ContextService(HttpContext  context, ClanAndPeopleService clanAndPeopleService)
+        public ContextService(IHttpContextAccessor  context, ClanAndPeopleService clanAndPeopleService)
         {
             _context = context;
             _clanAndPeopleService = clanAndPeopleService;
         }
 
         public Models.Person LoggedInPerson { get {
-                if (_context.User != null)
+                if (_context.HttpContext.User != null)
                 {
-                    var userEmail = _context.User.Claims;
+                    var userEmail = _context.HttpContext.User.Identity.Name;
+                    return _clanAndPeopleService.People.FirstOrDefault(p => p.EmailAddress == userEmail);
                 }
                 return null;
             } }
