@@ -2,7 +2,13 @@
 @{
     ViewData["Title"] = "NewGallery";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var familyEvents = 
+    var familyEvents = Model.FamilyEvents.OrderBy(x => x.Title).Select(f => new SelectListItem()
+    {
+        Text = f.Title,
+        Value = f.EntityId.ToString(),
+        Selected = Model.FamilyEventId == f.EntityId
+
+    });
 }
 
 <h2>Add New Gallery</h2>
@@ -28,11 +34,7 @@
             <label>Family Event:</label>
         </div>
         <div class="col-md-10">
-            <select asp-for="FamilyEventId">
-                <option value="be23b299-8299-4ddf-bcc1-874dfed9e299">A family event</option>
-                <option value="be23b299-8299-4ddf-bcc1-874dfed9e299">Another family event</option>
-                <option value="be23b299-8299-4ddf-bcc1-874dfed9e299">The one in march</option>
-            </select>
+            <select asp-for="FamilyEventId" asp-items="familyEvents"></select>
         </div>
     </div>
     <button type="submit" class="btn btn-primary">Save</button>

@@ -7,22 +7,26 @@ using BryceFamily.Web.MVC.Models.AccountViewModels;
 using AspNetCore.Identity.DynamoDB;
 using System;
 using BryceFamily.Web.MVC.Infrastructure.Authentication;
+using BryceFamily.Web.MVC.Infrastructure;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
     public class AccountController : Controller
     {
         private readonly SignInManager<DynamoIdentityUser> _signInManager;
+        private readonly ContextService _contextService;
         private readonly ILogger<AccountController> _logger;
         private readonly UserManager<DynamoIdentityUser> _userManager;
 
         public AccountController(
             UserManager<DynamoIdentityUser> userManager,
             SignInManager<DynamoIdentityUser> signInManager,
+            ContextService contextService,
             ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _contextService = contextService;
             _logger = logger;
         }
 
@@ -59,6 +63,7 @@ namespace BryceFamily.Web.MVC.Controllers
                     if (result.Succeeded)
                     {
                         _logger.LogInformation(1, "User logged in.");
+                        
                         return RedirectToLocal(returnUrl);
                     }
 

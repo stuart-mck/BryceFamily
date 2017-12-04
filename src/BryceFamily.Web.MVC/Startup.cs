@@ -80,14 +80,8 @@ namespace BryceFamily.Web.MVC
             services.AddSingleton(context => new CDNServiceRoot("https://s3-ap-southeast-2.amazonaws.com"));
 
             services.AddScoped<ClanAndPeopleService>();
-            services.AddScoped(context => new ContextService
-            {
-                LoggedInPerson = context.GetService<ClanAndPeopleService>().People.FirstOrDefault(t => t.FirstName == "Stuart"),
-                EditMode = true,
-                IsClanManager = false,
-                IsSuperUser = true
-
-            });
+            services.AddScoped<ContextService>();
+            
 
 
             // Identity Management
