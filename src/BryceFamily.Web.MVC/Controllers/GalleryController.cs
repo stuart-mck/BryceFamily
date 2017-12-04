@@ -1,25 +1,25 @@
 ﻿using BryceFamily.Repo.Core.Files;
+using BryceFamily.Repo.Core.Model;
+using BryceFamily.Repo.Core.Read.FamilyEvents;
+using BryceFamily.Repo.Core.Read.Gallery;
+using BryceFamily.Repo.Core.Read.ImageReference;
+using BryceFamily.Repo.Core.Write;
+using BryceFamily.Web.MVC.Infrastructure;
+using BryceFamily.Web.MVC.Infrastructure.Authentication;
 using BryceFamily.Web.MVC.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using BryceFamily.Repo.Core.Model;
-using BryceFamily.Repo.Core.Write;
-using BryceFamily.Repo.Core.Read.Gallery;
-using BryceFamily.Repo.Core.Read.FamilyEvents;
-using BryceFamily.Repo.Core.Read.ImageReference;
-using System.IO;
-using BryceFamily.Web.MVC.Infrastructure;
-using Microsoft.AspNetCore.Authorization;
-using BryceFamily.Web.MVC.Infrastructure.Authentication;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
-    
+
     public class GalleryController : BaseController
     {
         private readonly IGalleryReadRepository _readModel;
@@ -28,15 +28,19 @@ namespace BryceFamily.Web.MVC.Controllers
         private readonly IWriteRepository<ImageReference, Guid> _imageReferenceWriteModel;
         private readonly IImageReferenceReadRepository _imageReferenceReadRepository;
         private readonly IFileService _fileService;
+        private readonly ClanAndPeopleService _clanAndPeopleService;
+        private readonly ContextService _contextService;
 
-        public GalleryController(IGalleryReadRepository readModel, IFamilyEventReadRepository familyEventReadRepository, IWriteRepository<Repo.Core.Model.Gallery, Guid> galleryWriteModel, IWriteRepository<Repo.Core.Model.ImageReference, Guid> imageReferenceWriteModel, IImageReferenceReadRepository imageReferenceReadRepository, IFileService fileService):base("Galleries", "gallery")
+        public GalleryController(IGalleryReadRepository readModel, IFamilyEventReadRepository familyEventReadRepository, IWriteRepository<Repo.Core.Model.Gallery, Guid> galleryWriteModel, IWriteRepository<Repo.Core.Model.ImageReference, Guid> imageReferenceWriteModel, IImageReferenceReadRepository imageReferenceReadRepository, IFileService fileService, ClanAndPeopleService clanAndPeopleService, ContextService contextService):base("Galleries", "gallery")
         {
             _readModel = readModel;
             _familyEventReadRepository = familyEventReadRepository;
             _writeModel = galleryWriteModel;
             _imageReferenceWriteModel = imageReferenceWriteModel;
-            this._imageReferenceReadRepository = imageReferenceReadRepository;
+            _imageReferenceReadRepository = imageReferenceReadRepository;
             _fileService = fileService;
+            _clanAndPeopleService = clanAndPeopleService;
+            _contextService = contextService;
         }
 
 
@@ -107,26 +111,59 @@ namespace BryceFamily.Web.MVC.Controllers
             });
         }
 
+     
+
         [HttpGet]
         [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
-        public IActionResult NewGallery()
+        public IActionResult FamilyGallery()
         {
-            return View(new FamilyEventGalleryCreateModel());
+            return View(new FamilyGalleryCreateModel(_clanAndPeopleService.Clans));
         }
+
 
         [HttpPost]
         [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
-        public IActionResult NewGallery(FamilyEventGalleryCreateModel newGallery)
+        public async Task<IActionResult> FamilyGallery(FamilyGalleryCreateModel newGallery)
         {
             var gallery = new Repo.Core.Model.Gallery()
             {
                 ID = Guid.NewGuid(),
                 DateCreated = DateTime.Now,
                 Name = newGallery.Name,
-                Summary = newGallery.Description
+                Summary = newGallery.Description,
+                FamilyId = newGallery.FamilyId,
+                Owner = _contextService.LoggedInPerson.Id
             };
-            _writeModel.Save(gallery, new CancellationToken());
-            return View(new FamilyEventGalleryCreateModel());
+
+            await _writeModel.Save(gallery, new CancellationToken());
+            return View(new FamilyGalleryCreateModel(_clanAndPeopleService.Clans));
+        }
+
+        [HttpGet]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        public async Task<IActionResult> EventGallery()
+        {
+            var events = (await _familyEventReadRepository.GetAllEvents(CancellationToken.None)).Select(Models.FamilyEvent.Map);
+            return View(new FamilyEventGalleryCreateModel(events));
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        public async Task<IActionResult> EventGallery(FamilyEventGalleryCreateModel newGallery)
+        {
+            var gallery = new Repo.Core.Model.Gallery()
+            {
+                ID = Guid.NewGuid(),
+                DateCreated = DateTime.Now,
+                Name = newGallery.Name,
+                Summary = newGallery.Description,
+                FamilyEvent = newGallery.FamilyEventId,
+                Owner = _contextService.LoggedInPerson.Id 
+            };
+            await _writeModel.Save(gallery, new CancellationToken());
+            var events = (await _familyEventReadRepository.GetAllEvents(CancellationToken.None)).Select(Models.FamilyEvent.Map);
+            return View(new FamilyEventGalleryCreateModel(events));
         }
 
         [HttpGet]
