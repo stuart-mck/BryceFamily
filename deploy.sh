@@ -1,5 +1,4 @@
-﻿#!/bin/bash
-
+#!/bin/bash
 
 eval_aws_variables()
 {
@@ -34,41 +33,13 @@ push_image_to_dc()
     echo "# Finished pushing docker images"
 }
 
-update_task_definition()
-{
-    echo "####### Update task definition and running blue/green on tasks"
-
-	npm install aws-sdk-promise
-	npm install aws-sdk
-	npm install chalk
-	npm install commander
-
-    node ecs-task-deploy.js \
-        -k $AWS_ACCESS_KEY_ID \
-        -s $AWS_SECRET_ACCESS_KEY \
-        -r $region \
-        -c $cluster \
-        -n $service \
-        -i $REPO_URL/$service:$TRAVIS_BUILD_NUMBER \
-        -e APPLICATION_VERSION=$TRAVIS_BUILD_NUMBER \
-        -t 300
-        -v
-}
-
-truncate_images_in_dc()
-{
-    echo "# Truncating docker images in ECR (will keep the latest 5)"
-    bash `pwd`/ecr-truncate_docker_images --repository $service --region $region
-    echo "# Finished truncating docker images"
-}
 
 
 
 # Run the deployment
 eval_aws_variables 
 push_image_to_dc 
-update_task_definition 
-truncate_images_in_dc 
+
 
 
 
