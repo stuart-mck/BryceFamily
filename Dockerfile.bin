@@ -1,0 +1,20 @@
+FROM microsoft/dotnet:2.0-sdk
+
+COPY ./ /app
+
+WORKDIR /app/src
+
+RUN ls -la
+
+WORKDIR /app/src/HrCoreApi
+
+RUN ls -la
+
+
+RUN dotnet restore
+
+RUN dotnet build -c Release
+
+EXPOSE 3000
+
+ENTRYPOINT ["dotnet", "run"]
