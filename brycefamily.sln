@@ -8,6 +8,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F8A358DB-EE81-4818-949B-1D6DE6DA859D}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		.travis.yml = .travis.yml
+		deploy.sh = deploy.sh
+		deploy_manually.sh = deploy_manually.sh
+		docker-compose.yml = docker-compose.yml
+		Dockerfile = Dockerfile
+		ecr-truncate_docker_images.bin = ecr-truncate_docker_images.bin
 		ToDo.txt = ToDo.txt
 	EndProjectSection
 EndProject
