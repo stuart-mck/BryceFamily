@@ -1,19 +1,40 @@
-﻿<div class="sidenav">
-    <ul class='nav navbar-nav'>
+﻿@inject BryceFamily.Web.MVC.Infrastructure.ContextService ContextService
+<ul class='nav navbar-nav'>
+    <li>
+        @Html.ActionLink("Home", "Index", "Home")
+    </li>
+    <li>
+        @Html.ActionLink("History", "Index", "History")
+    </li>
+    <li>
+        @Html.ActionLink("Events", "Index", "Event")
+    </li>
+    <li>
+        @Html.ActionLink("Gallery", "Index", "Gallery")
+    </li>
+    @*<li>
+        @Html.ActionLink("Family History", "Index", "History")
+    </li>
+    <li>
+        @Html.ActionLink("Events", "Index", "Event")
+    </li>
+    <li>
+        @Html.ActionLink("People", "Index", "People")
+    </li>
+    <li>
+        @Html.ActionLink("Gallery", "Index", "Gallery")
+    </li>*@
+    
+    @if (!ContextService.IsLoggedIn)
+    {
         <li>
-            @Html.ActionLink("Home", "Index", "Home")
+            @Html.ActionLink("Log In", "LogIn", "Account")
         </li>
+    }
+    else
+    {
         <li>
-            @Html.ActionLink("Family History", "Index", "History")
+            @Html.ActionLink("Log Out", "LogOff", "Account")
         </li>
-        <li>
-            @Html.ActionLink("Events", "Index", "Event")
-        </li>    
-        <li>
-            @Html.ActionLink("People", "Index", "People")
-        </li>
-        <li>
-            @Html.ActionLink("Gallery", "Index", "Gallery")
-        </li>
-    </ul>
-</div>
+    }
+</ul>

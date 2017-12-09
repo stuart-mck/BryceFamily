@@ -1,7 +1,5 @@
-﻿using BryceFamily.Repo.Core.Model;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using System.Linq;
-
 namespace BryceFamily.Web.MVC.Infrastructure
 {
     public class ContextService
