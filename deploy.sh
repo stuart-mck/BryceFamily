@@ -21,7 +21,7 @@ eval_aws_variables()
 push_image_to_dc()
 {
     echo "# Pushing docker images to $REPO_URL"
-    $(aws ecr get-login --region $region --no-include-email) # does docker login
+    $(aws ecr get-login --region ap-southeast-2 --no-include-email) # does docker login
     set -x
 
     echo "# Pushing Docker Image"
