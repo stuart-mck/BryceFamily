@@ -1,22 +1,12 @@
 version: "3"
 services:
-  api:
+  web:
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      ENVIRONMENT: local
-      REGION: local
-      DATACENTER: local
     ports:
       - 3000:3000
-    depends_on:
-      - authlocal
-    image: hrcore
+ 
+ 
 
-  authlocal:
-    build:
-      context: ./src
-      dockerfile: authlocal-docker
-    ports:
-      - 4050:4050
+  
