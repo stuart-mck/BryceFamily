@@ -1,16 +1,20 @@
-FROM microsoft/dotnet:1.1.0-sdk-msbuild
+FROM microsoft/dotnet:2.0-sdk
 
-RUN apt-get update
-RUN wget -qO- https://deb.nodesource.com/setup_6.x | bash -
-RUN apt-get install -y build-essential nodejs
+COPY ./ /app
 
-COPY . /app
+WORKDIR /app/src
 
-WORKDIR /app
+RUN ls -la
 
-RUN ["dotnet", "restore"]
-RUN ["dotnet", "build"]
+WORKDIR /app/src/BryceFamily.Web.MVC
 
-EXPOSE 5000/tcp
+RUN ls -la
 
-CMD ["dotnet", "run", "--server.urls", "http://*:5000"]
+
+RUN dotnet restore
+
+RUN dotnet build -c Release
+
+EXPOSE 3000
+
+ENTRYPOINT ["dotnet", "run"]
