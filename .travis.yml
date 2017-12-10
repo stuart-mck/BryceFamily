@@ -22,7 +22,7 @@ after_success:
   - export PATH=$PATH:$HOME/.local/bin # put aws in the path
   - eval $(aws ecr get-login --region ap-southeast-2) #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars
   - docker-compose build
-  - docker tag personal.brycefamily:latest 896879620219.dkr.ecr.ap-southeast-2.amazonaws.com/personal.brycefamily:$TRAVIS_BUILD_NUMBER
+  - docker tag bryceFamily:latest 896879620219.dkr.ecr.ap-southeast-2.amazonaws.com/personal.brycefamily:$TRAVIS_BUILD_NUMBER
   - docker push 896879620219.dkr.ecr.ap-southeast-2.amazonaws.com/personal.brycefamily:$TRAVIS_BUILD_NUMBER
   
 
