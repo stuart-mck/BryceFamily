@@ -19,19 +19,55 @@ contact
  search
  - event by date / clan
 
-- blue book export
-- family photos and event photos only - we want photos associated only with these
 - rename clan - family
-- limit family tree to 2 levels at a time
 - rowes into family tree
-- yarraimbut creek pic?
 - program for reunion
 - email unsubscriptions
-- facebook link (people page)
-- text for events from the email heading
 - pin march event to the front page
 - remove lorum ipsum from history and replace with links to stories
 
+- home page
+	- login
+	- add new user
+	- password retrieval
+	- password reset
+	- email subscription / unsubscription
+
+- menu
+	- fix styling
+
+- history
+	- remove lorum ipsom
+	- links to stories
+	- links to video?
+	- family tree to 2 levels only
+
+- story edit
+	- styling
+	- sort person list (search?)
+
+- events
+	- list styling
+	- add RTE to editor
+	- cancel button
+	- styling
+	- generate email?
+	- past v upcoming?
+	- filter by type?
+	- add intro text
+
+- gallery
+	- list by family
+	- list by event
+	- 
+- people
+	- facebook link
+	- blue book export
+	- add new person / add relationship / add person to relationship
+	- edit other properties 
+		- dob / dod
+		- place of death?
+		- marriage date / divorce date
 
 
 

@@ -25,7 +25,7 @@ push_image_to_dc()
     set -x
 
     echo "# Pushing Docker Image"
-    docker tag $IMAGE_NAME:latest $REPO_URL/$service:$TRAVIS_BUILD_NUMBER
+    docker tag $IMAGE_NAME:latest $REPO_URL/familyBryce:$TRAVIS_BUILD_NUMBER
     docker push $REPO_URL/$service:$TRAVIS_BUILD_NUMBER
 
     set +x

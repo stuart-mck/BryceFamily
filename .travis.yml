@@ -5,17 +5,10 @@ services:
 - docker
 env:
   global:
-  - secure: OlbTiamsxGkhcEWcmvAdHZovZ9+PZ8rtVCLV74fhloTakSzcyAsNb/gbGnBTrFTIjh4YFylo/mWrh3hdZiuOt9DbJ/Ss7OMkUnErce4VEHxy54xZRstuQTY7RZcrQogWWg/h2nONERO+WfN1x4Vce+3yYTXc/d++PoZfag8fYwBCtFUHMQ9aBJI965ekW6Sce3FdvnHD301nDlXSi6SHKukGaVR3CuFmC8Qw9X4VB2Mwsh9BRkhoEWyedEDRZzFB2XCfYABIaoaHHnQbJ73RkIzBe32qYJ/S0e07R4abrJLOTk5cjo/usqV1fva3dcIftUQl6UnkpQDV8DWQdI1SfukxMXJhcLEJ8Prt/GwyuKZaZh5Q9/u7ot9A6pFZwbWsnSwnTqAKZA4EGaYP8PpWt7Oo/zZQnqYuzv3ttYyLtPhB7yi0UXOJjmNLpu7OqeitNrK8VIgsLca7UvWdrNoBl1vRK+/mcRedUyTphsctuaF7ts1pACrWGm8yCXkgiuR5/TVR7F3AXmCv760fwwVtFqnfgJGSxV3zs1bnq5yiNq1BBufd+5rquHcChIzRvJvHOjBepiZYmUPmJYh9cWp8ltcYGsYGgfX/gtQmk3GrfiMjialZyLzBW5V93Su1DffpR07meO3fkZulAAXUOW0WYz74R/NppCPI+IodSyPnOmk=
-  - secure: DhST/xPE4va6kr3pz29T3qIaTSzKsPkzF8x3DWN5/cd9xXffiNF5y3zhCtJ50q6lmyQ06c9xp5N596V6ZxseL58+f+xGVsJRFQ75SkFeZmGFkOV8AICofGsqxWQ4zXUd901TVh/u366MKkime+NvDcORZsmmE24niNr2ihI8/soj9j16X+srp1nLx9qa9/qWPAs299j6wAtjiUfLryjFEpFjpDFBCXj+xmdLExEkw1pF6YEBy2/5OrbQ+u/DHOfIHuTgFdbb9x6Jy2PVj7sINXzzsi7ULilsxV6OiUG99tas5W2FjfJLc8V3E8RwNuniRBkwzrQhQpRSOKPqP7KFZUByFevP3BTGL8/4CgL8IJ+71jZtilJicp9tbf5Mji0kn6jGjjeqVGiGDxtSDlwcofEjbvVHLDev1mbaPG0/B3iIZtc4ylp3XCBUuOL4eD/OEnjSr/TpP0Apu6gJpRb1BIiUQroHbmnE65l34GSfl2F/djB+hJYBvUbxRlxM38+xhJN2BKLca5wPIN/5CMPngMw3dVufGMUHUZznk0u6rfey00idPzzo5GrD+0dNyI7dYs3xSLh8i0P9MZLao22uiWfF0Z/6kgZGK/8DjLicX+zHWd3OUlRrtybtE2l7i3pgNdP6VHC20HmoPjH3D5iV6EhSJ46deL//9NitvcaLY9E=
-  - secure: Z3/eNjPELXOzRz+7lhyEdOd1pRwUy6ZfAM6eiKZv4Y6ITRkHEOdMsHlhGiuVxzFaW+7uIL9XQj5Gzy3Y5hOsxvB71KkJCJllIIymUexZ4ohJar0AK2mZ/Hc5WEK3It5UoyUKm5l1h6L7JK7Q3xDdV1Yl0OueRYN0pNlbkuYA3xmW8F/b/Ndvifi0hvjdRJgwQz7k4oy3Y68O8bjPtYaYLXtKl7zt38FqSmIn6TIbVXY4bDNZh887tEmA6DtGAmmtbp3Cflr8n5PM6kMOk/rfV9x0UQ+RwBcQcHRVR0wDnouzf9ZrAYxIpvxLAE21JwZ1cOpbyc446x9gDU0unTiHKLdu4iNCNc/cc5WOrfoNxoDPdWGDmH9vhuXGtCf/qbZpLLzWLvok3agIH1XdDSQMwD9X0R5TJLgFh1hanyEmEPC4HviAHWP7X03IMmRLCfJwhBU8kQTr+HKUq0rOcZLJl0pkWsG3H02EsqaM4DETU3Yzqhk5q2FzhlYdwhwRQ0ie/w1dBDh18P24MKnvfQABmIZr/uD2+z5sOeyHIsZWLHv2aEBMG7Yy6u6oAeFMnfwBLByoqnTyT3MpG63rUYPc6purDH2gFd4gIN0RYmnxybWnr/XSlcAibX7JKN3zbL4Vd9eqMDjeBzM11FRoNbbB8hgk1d+n0SLfIZDtRga2oZ8=
+  - secure: Ut9g99YGmyRo8jxNqRujGAfI6rBvSIs47aT8nj72kagqcmhf3jroERbV77UEBPIxV1IgdP5nnKoRcE0c7B15L4NNsOGvUd2l67bkWX0izTtnHB3bF2R9nxYYI1eCDKDGktmibD0ZGjR92d9HbCQBqCNYG0wU1N4o29ZivxA1uy60SB+a+12zI1CfAn5DdVW5V+dphBOeQwwoao3F2QNH1+PoQefjkMoS7rKjrGXyZV0gliXInvcJV+YUeGapue40Jvx5ObxA/z8C2u0/xS9qJazgtK2jNI1lAY8sTRqQLkOw/tHJhM7pj4kj6N/g5z9eGRf8g7aJ/Q141pxZ69BduKnOT/gu+0nhwQhhj7y1N9JJdL/oj58Cg11IRgmIbw0suQpQsDULGOPVdQhr19QAW1BMYkhv+Z5bWgTeADO5UgmWlR9PpbZTZR/NMeYR2BbPTnbWUvJeSzXKNsmA4jqBiXj9SNr+VWAyStr+u/G84P2yoysJItmpyJ5QEiQJ/qVIE5fXsfYBg0dLetgrZz5ejhQq04PXsj4tcdqcuQquEiYUC64Wnm0aoXYK1SS1sTGO01opA0HYoA2cP/2IiouV83BloZk/1gC3Zrug5zpFuWtYIO5rG06f0xGZkIMzwIz4L2x7J/rdILLGIo4zM14BjX52ugKvhu5s1kJseGCoP/c=
+  - secure: ELBylWrSDxG98PMfGAUOKYM03qnst3WNmvkvUbRTsaYDGxxPDf0JiBPA1Wh8w/+viEvh/sYT+fMCbTxjHJ7tJNsELTz2d8byrt/GaXg7RQSAGfolh9eCPdqfl3fX+tkRwWv8i2k6jFu7wcq5R3RINhj1xbjF6z4lXghTSXvWrISAQ/hbR33A8hMegfo/HbjLG20Gk6Djl7FGAwD27ytvbcQKExlCPWRXDQHkP9zW13vmPgBvN24yFANGRQVao6/Oq2p8F0/y3mZZv2uvcp7ZlxsMxd4zTwprTAHVtqRZYlK0pi+7Wvo9w96gGJbSbi6c//cdPrzU3dAn2+p9rjiD+gJHtY1gcsvU+brWgg/Yf+xlTSS3WEnyjuH0PkuPvv5qWAWWSdoRwP/e+v7JoicXJoe2YhNEhdCFe0CB5GJUN3rXVKe33KcvErG7QAZ2p/1to6FD/CRHTjxpodqtjVkpHCGwRbNwJMVn1MUowgjZMJgS1J97Xq6F5wWoDGx6Mmu7NXXIV+kfbSiKqTZPYk+kgrfexwCcX7e+CIphJuZf6dmFhHGkVxcIOf9aY8x0rDZB9JOU2kZ7UIg9RSSfL3D6OZ4J19IpKdUxCH1fhRwAb5ZbyPPg3Yl9/E5uTuNBikEMp1xHVMBdN8WDxGR43Bt3/SSo0DtplfZaHva/oXyU+9I=
 
 before_install:
-- pip install --user awscli
-- export PATH=$PATH:$HOME/.local/bin
-- export HOST_IP=$(/sbin/ifconfig -a | awk '/(cast)/ {print $2 }' | cut -d':' -f2
-  | head -1)
-- echo "Travis docker ip being used is $HOST_IP"
-- npm install -g ecs-task-deploy
 
 install:
 - docker-compose build
@@ -24,9 +17,15 @@ script:
 - "./test.sh"
 
 after_success:
-- "./deploy.sh"
+  - docker --version  # document the version travis is using
+  - pip install --user awscli # install aws cli w/o sudo
+  - export PATH=$PATH:$HOME/.local/bin # put aws in the path
+  - eval $(aws ecr get-login --region ap-southeast-2) #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars
+  - docker-compose build
+  - docker tag brycefamily:latest 896879620219.dkr.ecr.ap-southeast-2.amazonaws.com/personal.brycefamily:latest
+  - docker push 896879620219.dkr.ecr.ap-southeast-2.amazonaws.com/personal.brycefamily:latest
+  
 
 branches:
   only:
   - master
-
