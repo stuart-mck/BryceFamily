@@ -10,19 +10,22 @@ env:
   - secure: XUr2vZinttbNV23ai59IWiqChmE+iVoPkQ/aJd92phZ7U9gVe2WdJUqUeiIL6/O2m0VqwoEBWO2xThRw5NuOcLoLMMtCuqDPFrFzirUVI8BOKIGGYvHR05vf0isKkhcxtFGWYqGC7r3e0Vq4zrKRjyMZyXGJ5ut3WYfiIfzH8AXm2QPWzKAOhXlHjPImDYSyEnrII0eX/gbJka9orkHjPdxfKtlHslhSQfzbHF6qUdZvCnylozcBkLLA5H/SUlPJUTADFJYBQVA2HpeA04VBzpircoL9zDHjI8YDpmDFjyVw5qwDGxUTZB+6P+7+QMG0Jg3Qa57fK3kU+1aDF1VyTW14t3GQg2nNfFQ495/GS1w0FYHk3jMpw8HQltNBediHzfpIX4Nb+vWYlvsnt1le3sW6k88TbQonEM4W+NLissy8u9OxJed6kTENeEroKqVXQQJ6WbhWtRdNiRhLQGgcM/qNt6ax3MUnNTc7paAEO4yiZv8XRznEKDTFm9bpURTHxjNfq1MuFMoz1XPUmOYsVYErWufDST+b0rRqbgKLrIXxTaxCd/0ImQV76K1W8hBOBfgHsyq0hRL8RQvk50eOJ55biiku1KPC6/NNvP2H2Po/GRNP61M4fcIjHe57vbFBKWQvKjjCS1+PH05AU5ePqlaNZdgx83VpPeeb7rENZBY=
 
 before_install:
-- pip install --user awscli
-- export PATH=$PATH:$HOME/.local/bin
-- export HOST_IP=$(/sbin/ifconfig -a | awk '/(cast)/ {print $2 }' | cut -d':' -f2
-  | head -1)
-- npm install -g ecs-task-deploy
 
 install:
 - docker-compose build
+
 script:
 - "./test.sh"
 
 after_success:
-- "./deploy.sh"
+  - docker --version  # document the version travis is using
+  - pip install --user awscli # install aws cli w/o sudo
+  - export PATH=$PATH:$HOME/.local/bin # put aws in the path
+  - eval $(aws ecr get-login --region us-east-1) #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars
+  - docker-compose build
+  - docker tag $IMAGE_NAME:latest $REPO_URL/familyBryce:$TRAVIS_BUILD_NUMBER
+  - docker push $REPO_URL/$service:$TRAVIS_BUILD_NUMBER
+  
 
 branches:
   only:
