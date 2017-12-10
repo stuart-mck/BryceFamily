@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<Gallery>
 @using BryceFamily.Web.MVC.Infrastructure.Authentication
+@inject BryceFamily.Web.MVC.Infrastructure.ContextService ContextService
 
 @{
     ViewData["Title"] = "Index";
@@ -9,34 +10,52 @@
 
 <div class="col-md-10">
     <div class="row">
-        <h2>Galleries</h2>
-        @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
-        {
-            <span class="editorButton">@Html.ActionLink("Add New", "NewGallery", "Gallery", null, new { @class = "btn btn-primary" })</span>
-        }
+        <div class="col-md-6">
+            <h3>Family Galleries</h3>
+            <ul class="event-summary">
+                @foreach(var evt in Model.Where(g => !string.IsNullOrEmpty(g.Family)))
+                {
+                        <li class="event">
+                            <h3>@Html.ActionLink(evt.Title, "View", "Gallery", new { id = evt.Id }, new { @class = "detail-link" })</h3>
+                            <div class="row">
+                                <div class="col-md-2">Summary: @Html.DisplayFor(t => evt.Summary)</div>
+                                <div class="col-md-2">[@Html.DisplayFor(t => evt.Family)]</div>
+                                @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
+                                {
+                                    @Html.ActionLink("Edit Images", "EditGalleryImages", "Gallery", new { id = evt.Id }, new { @class = "btn btn-sml" })
+                                }
+                            </div>
+                        </li>
+                    }
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h3>Event Galleries</h3>
+            <ul class="event-summary">
+                @foreach (var evt in Model.Where(g => g.FamilyEvent != null))
+                {
+                    <li class="event">
+                        <h3>@Html.ActionLink(evt.Title, "View", "Gallery", new { id = evt.Id }, new { @class = "detail-link" })</h3>
+                        <div class="row">
+                            <div class="col-md-2">Summary: @Html.DisplayFor(t => evt.Summary)</div>
+                            <div class="col-md-2">Event: @Html.DisplayFor(t => evt.FamilyEvent.Title)</div>
+                            @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
+                            {
+                                @Html.ActionLink("Edit Images", "EditGalleryImages", "Gallery", new { id = evt.Id }, new { @class = "btn btn-sml" })
+                            }
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
     </div>
-    <ul class="event-summary">
-        @foreach (var evt in Model)
-            {
-            <li class="event">
-                <h3>@Html.ActionLink(evt.Title, "Detail", "Gallery", new { id = evt.Id }, new { @class = "detail-link" })</h3>
-                <div class="row">
-                    <div class="col-md-2">Owned By: @Html.DisplayFor(t => evt.Owner)</div>
-                    <div class="col-md-2">Summary: @Html.DisplayFor(t => evt.Summary)</div>
-                    @if (evt.FamilyEvent != null)
-                    {
-                        <div class="col-md-2">Event: @Html.DisplayFor(t => evt.FamilyEvent.Title)</div>
-                        <div class="col-md-2">Event Date: @Html.DisplayFor(t => evt.FamilyEvent.StartDate)</div>
-
-                    }
-                    @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
-                    {
-                        @Html.ActionLink("Edit Images", "EditGalleryImages", "Gallery", new { id = evt.Id }, new { @class = "btn btn-sml" })
-                    }
-                </div>
-            </li>
-        }
-    </ul>
-
+    @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
+    {
+        <div class="row">
+            <div class="col-md-4">
+                <span class="editorButton">@Html.ActionLink("Add New", "NewGallery", "Gallery", null, new { @class = "btn btn-primary" })</span>
+            </div>
+        </div>
+    }
 </div>
 

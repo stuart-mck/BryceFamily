@@ -1,5 +1,6 @@
 using System;
 using BryceFamily.Repo.Core.Model;
+using System.Collections.Generic;
 
 namespace BryceFamily.Web.MVC.Models
 {
@@ -22,6 +23,10 @@ namespace BryceFamily.Web.MVC.Models
         public string OrganiserName { get; set; }
         public string OrganiserContact { get; set; }
         public string OrganiserEmail { get; set; }
+
+        public Guid ImageReference { get; set; }
+
+        public List<string> GalleryImageList { get; }
 
         public string FormattedStartDate
         {

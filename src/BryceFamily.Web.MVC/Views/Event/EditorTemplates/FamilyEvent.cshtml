@@ -9,65 +9,73 @@
         <input type="text" asp-for="Title" class="form-control" />
     </div>
 </div>
-<div class="row">
-    <div class="col-md-2">
-        <label>Starts:</label>
-    </div>
-    <div class="col-md-3">
-        <input type="date" asp-for="StartDate" class="form-control" />
-    </div>
-    <div class="col-md-1">
-        <label>Ends:</label>
-    </div>
-    <div class="col-md-3 ">
-        <input type="date" asp-for="EndDate" class="form-control" />
-    </div>
-</div>
-<div class="row">
-    @Html.HiddenFor(t => t.EventStatus)
-    <div class="col-md-2">
-        <label>Type:</label>
-    </div>
-    <div class="col-md-3 ">
-        <select asp-for="EventType" asp-items="Html.GetEnumSelectList<eventType>()" class="form-control">
-            <option selected="selected" value="">Please select</option>
-        </select>
-    </div>
-</div>
+
 <div class="row">
     <div class="col-md-2">
         <label>Description:</label>
     </div>
-    <div class="col-md-10">
-        <textarea asp-for="Details" cols="10" rows="10" class="form-control">
+    <div class=" col-md-10">
+            @Html.TextAreaFor(m => m.Details, new
+           {
+               rows = "20",
+               style = "resize:none;width:400px;",
+               placeholder = Html.DisplayNameFor(m => m.Details),
+               @class = "form-control input-lg textarea-editor"
+           })
+    </div>
+</div>
+<div>
+    <h4>Event Details</h4>
+    <div class="row">
+        @Html.HiddenFor(t => t.EventStatus)
+        <div class="col-md-2">
+            <label>Type:</label>
+        </div>
+        <div class="col-md-3 ">
+            <select asp-for="EventType" asp-items="Html.GetEnumSelectList<eventType>()" class="form-control">
+                <option selected="selected" value="">Please select</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <label>Starts:</label>
+        </div>
+        <div class="col-md-3">
+            <input type="date" asp-for="StartDate" class="form-control" />
+        </div>
+        <div class="col-md-1">
+            <label>Ends:</label>
+        </div>
+        <div class="col-md-3 ">
+            <input type="date" asp-for="EndDate" class="form-control" />
+        </div>
+    </div>
+    <div class="row address">
+        <div class="col-md-2">
+            <label>Location</label>
+        </div>
+        <div class="col-md-10 ">
+            <label>Address</label><input type="text" asp-for="Address1" class="form-control" /><br />
+            <label>&nbsp;</label><input type="text" asp-for="Address2" class="form-control" /><br />
+            <label>Suburb</label><input type="text" asp-for="City" class="form-control" /><br />
+            <label>State</label><input type="text" asp-for="State" class="form-control" /><br />
+            <label>Post Code</label><input type="number" asp-for="PostCode" maxlength="4" class="form-control" />
+        </div>
+    </div>
+    <div class="row address">
+        <div class="col-md-2">
+            <label>Organiser</label>
+        </div>
+        <div class="col-md-10 ">
+            <label>Name</label><input type="text" asp-for="OrganiserName" class="form-control" /><br />
+            <label>Contact</label><input type="text" asp-for="OrganiserContact" class="form-control" /><br />
+            <label>Email</label><input type="email" asp-for="OrganiserEmail" class="form-control" /><br />
+        </div>
 
-        </textarea>
     </div>
-</div>
-<div class="row address">
-    <div class="col-md-2">
-        <label>Location</label>
-    </div>
-    <div class="col-md-10 ">
-        <label>Address</label><input type="text" asp-for="Address1" /><br/>
-        <label>&nbsp;</label><input type="text" asp-for="Address2" /><br />
-        <label>Suburb</label><input type="text" asp-for="City" /><br />
-        <label>State</label><input type="text" asp-for="State" /><br />
-        <label>Post Code</label><input type="text" asp-for="PostCode" />
-    </div>
-</div>
-<div class="row address">
-    <div class="col-md-2">
-        <label>Organiser</label>
-    </div>
-    <div class="col-md-10 ">
-        <label>Name</label><input type="text" asp-for="OrganiserName" /><br />
-        <label>Contact</label><input type="text" asp-for="OrganiserContact" /><br />
-        <label>Email</label><input type="email" asp-for="OrganiserEmail" /><br />
-    </div>
-    
 </div>
 @Html.HiddenFor(t => t.EntityId)
 
 
-   
+

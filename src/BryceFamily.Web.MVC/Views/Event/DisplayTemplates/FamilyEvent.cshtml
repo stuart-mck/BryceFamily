@@ -1,61 +1,67 @@
 ﻿@model FamilyEvent
 
-<div class="row">
-    <h2>
+
+<div>
+    <h1 class="centered">
         @Html.DisplayFor(t => t.Title)
-    </h2>
-</div>
-<div class="row">
-    <div class="col-md-2">
-        <label>Starts:</label>
+    </h1>
+
+    <div class="event-description">
+        @Html.Raw(Model.Details)
     </div>
-    <div class="col-md-3">
-        @Html.DisplayFor(t => t.FormattedStartDate)
-    </div>
-    <div class="col-md-2">
-        <label>Finishes:</label>
-    </div>
-    <div class="col-md-3 ">
-        @Html.DisplayFor(t => t.FormattedEndDate)
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-2">
-        <label>Type:</label>
-    </div>
-    <div class="col-md-3 ">
-        @Html.DisplayFor(t => t.EventType)
-    </div>
-</div>
-<div class="row">
-    @Html.DisplayTextFor(t => t.Details)
-</div>
-<div class="row">
-    <div class="col-md-2">
-        <label>Location</label>
-    </div>
-    <div class="col-md-10">
-        <address>
-            @Html.DisplayFor(t => t.Address1)<br />
-            @Html.DisplayFor(t => t.Address2)<br />
-            @Html.DisplayFor(t => t.City)<br />
-            @Html.DisplayFor(t => t.State)<br />
-            @Html.DisplayFor(t => t.PostCode)
-        </address>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-2">
-        <label>Organiser</label>
-    </div>
-    <div class="col-md-10">
-        <div class="col-md-10">
-            @Html.DisplayFor(t => t.OrganiserContact)<br />
-            @Html.DisplayFor(t => t.OrganiserContact)<br />
-            @Html.DisplayFor(t => t.OrganiserEmail)<br />
+
+    <div class="event-details">
+        <h4>Details</h4>
+        <div class="row">
+            <div class="col-md-2">
+                <label>Starts:</label>
+            </div>
+            <div class="col-md-3">
+                @Html.DisplayFor(t => t.FormattedStartDate)
+            </div>
+            <div class="col-md-2">
+                <label>Finishes:</label>
+            </div>
+            <div class="col-md-3 ">
+                @Html.DisplayFor(t => t.FormattedEndDate)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label>Type:</label>
+            </div>
+            <div class="col-md-3 ">
+                @Html.DisplayFor(t => t.EventType)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2">
+                <label>Location</label>
+            </div>
+            <div class="col-md-10">
+                <address>
+                    @Html.DisplayFor(t => t.Address1)<br />
+                    @Html.DisplayFor(t => t.Address2)<br />
+                    @Html.DisplayFor(t => t.City)<br />
+                    @if (!string.IsNullOrEmpty(Model.City))
+                    {
+                        @Html.DisplayFor(t => t.State)<br />
+                    }
+                    @Html.DisplayFor(t => t.PostCode)
+                </address>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10">
+                Organiser: @Html.DisplayFor(t => t.OrganiserContact)<br />
+                @Html.DisplayFor(t => t.OrganiserEmail)<br />
+            </div>
         </div>
     </div>
-</div>
-<div>
-@Html.ActionLink("Back", "Index", "Event")
+
+   
+    <div>
+        @Html.ActionLink("Back", "Index", "Event")
+    </div>
 </div>

@@ -48,7 +48,7 @@ namespace BryceFamily.Web.MVC.Controllers
         {
             var gallery = await _readModel.Load(id, CancellationToken.None);
 
-            return View(await Models.Gallery.Map(gallery,_familyEventReadRepository, _imageReferenceReadRepository, CancellationToken.None));
+            return View(await Models.Gallery.Map(gallery, _clanAndPeopleService, _familyEventReadRepository, _imageReferenceReadRepository, CancellationToken.None));
         }
 
         public async Task<IActionResult> Index()
@@ -56,7 +56,7 @@ namespace BryceFamily.Web.MVC.Controllers
             var galleries = await _readModel.LoadAll(CancellationToken.None);
 
             var readModel = galleries.Select(
-                g => Models.Gallery.Map(g, _familyEventReadRepository, _imageReferenceReadRepository, CancellationToken.None).Result);
+                g => Models.Gallery.Map(g, _clanAndPeopleService,_familyEventReadRepository, _imageReferenceReadRepository, CancellationToken.None).Result);
 
             return View(readModel);
             
@@ -117,7 +117,7 @@ namespace BryceFamily.Web.MVC.Controllers
         [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public IActionResult FamilyGallery()
         {
-            return View(new FamilyGalleryCreateModel(_clanAndPeopleService.Clans));
+            return View(new FamilyGalleryCreateModel(_clanAndPeopleService.Clans.ToList()));
         }
 
 
@@ -136,7 +136,7 @@ namespace BryceFamily.Web.MVC.Controllers
             };
 
             await _writeModel.Save(gallery, new CancellationToken());
-            return View(new FamilyGalleryCreateModel(_clanAndPeopleService.Clans));
+            return View(new FamilyGalleryCreateModel(_clanAndPeopleService.Clans.ToList()));
         }
 
 
@@ -153,13 +153,13 @@ namespace BryceFamily.Web.MVC.Controllers
         public async Task<IActionResult> EventGallery()
         {
             var events = (await _familyEventReadRepository.GetAllEvents(CancellationToken.None)).Select(Models.FamilyEvent.Map);
-            return View(new FamilyEventGalleryCreateModel(events));
+            return View(new EventGalleryCreateModel(events));
         }
 
 
         [HttpPost]
         [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
-        public async Task<IActionResult> EventGallery(FamilyEventGalleryCreateModel newGallery)
+        public async Task<IActionResult> EventGallery(EventGalleryCreateModel newGallery)
         {
             var gallery = new Repo.Core.Model.Gallery()
             {
@@ -172,7 +172,7 @@ namespace BryceFamily.Web.MVC.Controllers
             };
             await _writeModel.Save(gallery, new CancellationToken());
             var events = (await _familyEventReadRepository.GetAllEvents(CancellationToken.None)).Select(Models.FamilyEvent.Map);
-            return View(new FamilyEventGalleryCreateModel(events));
+            return View(new EventGalleryCreateModel(events));
         }
 
         [HttpGet]
@@ -182,7 +182,7 @@ namespace BryceFamily.Web.MVC.Controllers
 
             var cancellationToken = new CancellationToken();
 
-            var gallery =await  Models.Gallery.Map(await _readModel.Load(id, cancellationToken), _familyEventReadRepository, _imageReferenceReadRepository,  cancellationToken);
+            var gallery =await  Models.Gallery.Map(await _readModel.Load(id, cancellationToken), _clanAndPeopleService, _familyEventReadRepository, _imageReferenceReadRepository,  cancellationToken);
 
             return View(new FileUploadModel()
             {

@@ -12,8 +12,10 @@ namespace BryceFamily.Web.MVC.Models
             _clans = new List<FamilyClan>();
         }
 
-        public FamilyGalleryCreateModel(IReadOnlyList<FamilyClan> clans)
+        public FamilyGalleryCreateModel(List<FamilyClan> clans)
         {
+            IComparer<FamilyClan> myComparer = new FamilyComparer();
+            clans.Sort(myComparer);
             _clans = clans;
         }
 

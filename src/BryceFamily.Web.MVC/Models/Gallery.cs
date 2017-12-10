@@ -6,6 +6,7 @@ using BryceFamily.Repo.Core.Read.FamilyEvents;
 using System.Threading;
 using System.Threading.Tasks;
 using BryceFamily.Repo.Core.Read.ImageReference;
+using BryceFamily.Web.MVC.Infrastructure;
 
 namespace BryceFamily.Web.MVC.Models
 {
@@ -18,13 +19,18 @@ namespace BryceFamily.Web.MVC.Models
         public string Summary { get; set; }
         public Guid Id { get; set; }
         public DateTime DateCreated { get; set; }
-        
+
+        public string Family { get; set; }
+
 
         public List<ImageReferenceModel> ImageReferences { get; private set; }
 
-        public static async Task<Gallery> Map(Repo.Core.Model.Gallery sourceGallery, IFamilyEventReadRepository familyEventReadModel,  IImageReferenceReadRepository imageReferenceReadRepository, CancellationToken cancellationToken)
+        public static async Task<Gallery> Map(Repo.Core.Model.Gallery sourceGallery, ClanAndPeopleService clanAndFamilyService, IFamilyEventReadRepository familyEventReadModel,  IImageReferenceReadRepository imageReferenceReadRepository, CancellationToken cancellationToken)
         {
-            return await Task.FromResult(new Gallery(){
+            var familyName = sourceGallery.FamilyId.HasValue ?
+                                $"{clanAndFamilyService.Clans.FirstOrDefault(c => c.Id == sourceGallery.FamilyId)?.FamilyName}, {clanAndFamilyService.Clans.FirstOrDefault(c => c.Id == sourceGallery.FamilyId)?.Family}"
+                                : string.Empty;
+            return await Task.FromResult(new Gallery() {
                 Title = sourceGallery.Name,
                 FamilyEvent = FamilyEvent.Map(await familyEventReadModel.Load(sourceGallery.FamilyEvent, cancellationToken)),
                 Owner = sourceGallery.Owner.ToString(),
@@ -32,7 +38,8 @@ namespace BryceFamily.Web.MVC.Models
                 Summary = sourceGallery.Summary,
                 Id = sourceGallery.ID,
                 DateCreated = sourceGallery.DateCreated,
-                ImageReferences = MapImageReferences(await imageReferenceReadRepository.LoadByGallery(sourceGallery.ID, cancellationToken))
+                ImageReferences = MapImageReferences(await imageReferenceReadRepository.LoadByGallery(sourceGallery.ID, cancellationToken)),
+                Family = familyName
             }
             );
         }

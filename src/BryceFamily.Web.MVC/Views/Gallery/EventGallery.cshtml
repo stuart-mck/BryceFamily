@@ -1,4 +1,4 @@
-﻿@model FamilyEventGalleryCreateModel
+﻿@model EventGalleryCreateModel
 @{
     ViewData["Title"] = "NewGallery";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -34,7 +34,7 @@
             <label>Family Event:</label>
         </div>
         <div class="col-md-10">
-            <select asp-for="FamilyEventId" asp-items="familyEvents"></select>
+            <select asp-for="FamilyEventId" asp-items="familyEvents" class="form-control"></select>
         </div>
     </div>
     <button type="submit" class="btn btn-primary">Save</button>

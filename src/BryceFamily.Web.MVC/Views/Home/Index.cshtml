@@ -68,10 +68,10 @@
             <div class="col-md-2 btn-link" >
                 @if (!ContextService.IsLoggedIn)
                 {
-                    Html.ActionLink("Log In", "Login", "Account");
+                    @Html.ActionLink("Log In", "Login", "Account")
                 }
                 else {
-                    Html.ActionLink("Log Out", "LogOff", "Account");
+                    @Html.ActionLink("Log Out", "LogOff", "Account")
                 }
             </div>
         </div>

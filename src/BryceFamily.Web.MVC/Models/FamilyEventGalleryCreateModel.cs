@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace BryceFamily.Web.MVC.Models
 {
-    public class FamilyEventGalleryCreateModel
+    public class EventGalleryCreateModel
     {
         private IEnumerable<FamilyEvent> _events;
 
-        public FamilyEventGalleryCreateModel()
+        public EventGalleryCreateModel()
         {
             _events = new List<FamilyEvent>();
         }
 
-        public FamilyEventGalleryCreateModel(IEnumerable<FamilyEvent> events)
+        public EventGalleryCreateModel(IEnumerable<FamilyEvent> events)
         {
             _events = events;
         }

@@ -8,6 +8,8 @@ using System.Threading;
 using Microsoft.AspNetCore.Authorization;
 using BryceFamily.Web.MVC.Infrastructure.Authentication;
 using BryceFamily.Web.MVC.Models;
+using BryceFamily.Repo.Core.Read.Gallery;
+using BryceFamily.Repo.Core.Read.ImageReference;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
@@ -15,11 +17,13 @@ namespace BryceFamily.Web.MVC.Controllers
     {
         private readonly IFamilyEventReadRepository _readmodel;
         private readonly IWriteRepository<Repo.Core.Model.FamilyEvent, Guid> _writeModel;
+        private readonly IImageReferenceReadRepository _imageReferenceReadRepository;
 
-        public EventController(IFamilyEventReadRepository readmodel, IWriteRepository<Repo.Core.Model.FamilyEvent, Guid> writeModel):base("Family Events", "events")
+        public EventController(IFamilyEventReadRepository readmodel, IWriteRepository<Repo.Core.Model.FamilyEvent, Guid> writeModel, IImageReferenceReadRepository imageReferenceReadRepository) :base("Family Events", "events")
         {
             _readmodel = readmodel;
             _writeModel = writeModel;
+            _imageReferenceReadRepository = imageReferenceReadRepository;
         }
 
         [AllowAnonymous]
@@ -40,7 +44,7 @@ namespace BryceFamily.Web.MVC.Controllers
 
         [HttpGet]
         [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
-        public IActionResult NewEvent()
+        public async Task<IActionResult> NewEvent()
         {
             return View("EditEvent", new FamilyEvent()
             {
