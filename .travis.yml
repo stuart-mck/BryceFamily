@@ -21,7 +21,7 @@ after_success:
   - docker --version  # document the version travis is using
   - pip install --user awscli # install aws cli w/o sudo
   - export PATH=$PATH:$HOME/.local/bin # put aws in the path
-  - eval $(aws ecr get-login --region us-east-1) #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars
+  - eval $(aws ecr get-login --region ap-southeast-2) #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars
   - docker-compose build
   - docker tag $IMAGE_NAME:latest $REPO_URL/familyBryce:$TRAVIS_BUILD_NUMBER
   - docker push $REPO_URL/$service:$TRAVIS_BUILD_NUMBER
