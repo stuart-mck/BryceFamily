@@ -29,6 +29,7 @@ using Amazon.DynamoDBv2;
 using Amazon;
 using System.IO;
 using Microsoft.AspNetCore.DataProtection;
+using Serilog;
 
 namespace BryceFamily.Web.MVC
 {
@@ -38,6 +39,8 @@ namespace BryceFamily.Web.MVC
         {
             Configuration = configuration;
             HostingEnvironment = hostingEnvironment;
+
+            Log.Information("Configuration started");
         }
 
         public IConfiguration Configuration { get; }
@@ -47,6 +50,8 @@ namespace BryceFamily.Web.MVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Log.Information("Configuring Services");
+
             services.AddMvc();
 
             
@@ -81,8 +86,8 @@ namespace BryceFamily.Web.MVC
 
             services.AddScoped<ClanAndPeopleService>();
             services.AddScoped<ContextService>();
-            
 
+            Log.Information("Configuring Identity Management");
 
             // Identity Management
             services.Configure<DynamoDbSettings>(Configuration.GetSection("DynamoDB"));
