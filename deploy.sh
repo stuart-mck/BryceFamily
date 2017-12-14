@@ -40,7 +40,4 @@ push_image_to_dc()
 eval_aws_variables 
 push_image_to_dc 
 
-
-
-
 exit 0
