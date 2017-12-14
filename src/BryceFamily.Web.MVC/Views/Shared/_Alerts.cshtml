@@ -1,0 +1,18 @@
+﻿@using BryceFamily.Web.MVC.Infrastructure.Alerts
+
+@if (TempData.GetAlerts().Any())
+{
+    <script type="text/javascript">
+        $(function () {
+            @foreach (var alert in TempData.GetAlerts())
+			{
+			    <text>
+                window.alerts.showAlert({
+                    message: '@Html.Raw(Html.Encode(alert.Message.Replace("'", "\\'")).Replace(Environment.NewLine, "<br/>"))',
+                    alertClass: '@alert.AlertClass'
+                });
+			    </text>
+			}
+        });
+    </script>
+}

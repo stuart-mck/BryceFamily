@@ -5,11 +5,13 @@ using BryceFamily.Repo.Core.Read.Gallery;
 using BryceFamily.Repo.Core.Read.ImageReference;
 using BryceFamily.Repo.Core.Write;
 using BryceFamily.Web.MVC.Infrastructure;
+using BryceFamily.Web.MVC.Infrastructure.Alerts;
 using BryceFamily.Web.MVC.Infrastructure.Authentication;
 using BryceFamily.Web.MVC.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,6 +24,7 @@ namespace BryceFamily.Web.MVC.Controllers
 
     public class GalleryController : BaseController
     {
+        private readonly ILogger<GalleryController> _logger;
         private readonly IGalleryReadRepository _readModel;
         private readonly IFamilyEventReadRepository _familyEventReadRepository;
         private readonly IWriteRepository<Repo.Core.Model.Gallery, Guid> _writeModel;
@@ -31,8 +34,9 @@ namespace BryceFamily.Web.MVC.Controllers
         private readonly ClanAndPeopleService _clanAndPeopleService;
         private readonly ContextService _contextService;
 
-        public GalleryController(IGalleryReadRepository readModel, IFamilyEventReadRepository familyEventReadRepository, IWriteRepository<Repo.Core.Model.Gallery, Guid> galleryWriteModel, IWriteRepository<Repo.Core.Model.ImageReference, Guid> imageReferenceWriteModel, IImageReferenceReadRepository imageReferenceReadRepository, IFileService fileService, ClanAndPeopleService clanAndPeopleService, ContextService contextService):base("Galleries", "gallery")
+        public GalleryController(ILogger<GalleryController> logger, IGalleryReadRepository readModel, IFamilyEventReadRepository familyEventReadRepository, IWriteRepository<Repo.Core.Model.Gallery, Guid> galleryWriteModel, IWriteRepository<Repo.Core.Model.ImageReference, Guid> imageReferenceWriteModel, IImageReferenceReadRepository imageReferenceReadRepository, IFileService fileService, ClanAndPeopleService clanAndPeopleService, ContextService contextService):base("Galleries", "gallery")
         {
+            _logger = logger;
             _readModel = readModel;
             _familyEventReadRepository = familyEventReadRepository;
             _writeModel = galleryWriteModel;
@@ -136,7 +140,7 @@ namespace BryceFamily.Web.MVC.Controllers
             };
 
             await _writeModel.Save(gallery, new CancellationToken());
-            return View(new FamilyGalleryCreateModel(_clanAndPeopleService.Clans.ToList()));
+            return View(new FamilyGalleryCreateModel(_clanAndPeopleService.Clans.ToList())).WithSuccess("Gallery saved");
         }
 
 
@@ -172,7 +176,7 @@ namespace BryceFamily.Web.MVC.Controllers
             };
             await _writeModel.Save(gallery, new CancellationToken());
             var events = (await _familyEventReadRepository.GetAllEvents(CancellationToken.None)).Select(Models.FamilyEvent.Map);
-            return View(new EventGalleryCreateModel(events));
+            return View(new EventGalleryCreateModel(events)).WithSuccess("Gallery saved"); 
         }
 
         [HttpGet]
@@ -198,7 +202,7 @@ namespace BryceFamily.Web.MVC.Controllers
             if (!ModelState.IsValid) return BadRequest();
 
             _writeModel.Save(gallery.MapToEntity(), new CancellationToken());
-            return  RedirectToAction("Index");
+            return  RedirectToAction("Index").WithSuccess("Gallery saved"); ;
         }
 
         [HttpPost]
@@ -247,11 +251,12 @@ namespace BryceFamily.Web.MVC.Controllers
                         }
                     }
                 }
-                return await Task.FromResult(RedirectToAction("EditGalleryImages", new { id = gallery.ID}));
+                return await Task.FromResult(RedirectToAction("EditGalleryImages", new { id = gallery.ID}).WithSuccess("Image/s saved")); 
             }
             catch (Exception ex)
             {
-                return BadRequest($"Whoops - we had an error {ex.Message}");
+                _logger.LogError(ex, "Failed to upload the image/s");
+                return RedirectToAction("EditGalleryImages", new { id = galleryId }).WithError("Sorry - there has been an error saving the files. The error has been logged");
             }
             
         }

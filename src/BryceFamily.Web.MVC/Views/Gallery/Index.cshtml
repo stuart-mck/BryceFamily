@@ -15,18 +15,18 @@
             <ul class="event-summary">
                 @foreach(var evt in Model.Where(g => !string.IsNullOrEmpty(g.Family)))
                 {
-                        <li class="event">
-                            <h3>@Html.ActionLink(evt.Title, "View", "Gallery", new { id = evt.Id }, new { @class = "detail-link" })</h3>
-                            <div class="row">
-                                <div class="col-md-2">Summary: @Html.DisplayFor(t => evt.Summary)</div>
-                                <div class="col-md-2">[@Html.DisplayFor(t => evt.Family)]</div>
-                                @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
-                                {
-                                    @Html.ActionLink("Edit Images", "EditGalleryImages", "Gallery", new { id = evt.Id }, new { @class = "btn btn-sml" })
-                                }
-                            </div>
-                        </li>
-                    }
+                    <li class="event">
+                        <h3>@Html.ActionLink(evt.Title, "View", "Gallery", new { id = evt.Id }, new { @class = "detail-link" })</h3>
+                        <div>
+                            @Html.DisplayFor(t => evt.Summary)
+                        </div>
+                            
+                        @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
+                        {
+                            <div>@Html.ActionLink("Edit Images", "EditGalleryImages", "Gallery", new { id = evt.Id }, new { @class = "btn btn-sml" })</div>
+                        }
+                    </li>
+                }
             </ul>
         </div>
         <div class="col-md-6">
@@ -35,15 +35,12 @@
                 @foreach (var evt in Model.Where(g => g.FamilyEvent != null))
                 {
                     <li class="event">
-                        <h3>@Html.ActionLink(evt.Title, "View", "Gallery", new { id = evt.Id }, new { @class = "detail-link" })</h3>
-                        <div class="row">
-                            <div class="col-md-2">Summary: @Html.DisplayFor(t => evt.Summary)</div>
-                            <div class="col-md-2">Event: @Html.DisplayFor(t => evt.FamilyEvent.Title)</div>
-                            @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
-                            {
-                                @Html.ActionLink("Edit Images", "EditGalleryImages", "Gallery", new { id = evt.Id }, new { @class = "btn btn-sml" })
-                            }
-                        </div>
+                        <h3>@Html.ActionLink(evt.FamilyEvent.Title, "View", "Gallery", new { id = evt.Id }, new { @class = "detail-link" })</h3>
+                        <div>@Html.DisplayFor(t => evt.Summary)</div>
+                        @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
+                        {
+                        <div>@Html.ActionLink("Edit Images", "EditGalleryImages", "Gallery", new { id = evt.Id }, new { @class = "btn btn-sml" })</div>
+                        }
                     </li>
                 }
             </ul>

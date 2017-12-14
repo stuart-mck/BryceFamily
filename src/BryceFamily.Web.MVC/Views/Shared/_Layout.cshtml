@@ -32,11 +32,15 @@
                 }
             </div>
             <div class="col-md-10 col-lg-10">
+                <div id="alert-container" class="container alert-container"></div>
                   @RenderBody()  
             </div>
         </div>
     </div>
 
     @RenderSection("scripts", required: false)
+    <div>
+        @Html.Partial("_Alerts")
+    </div>
 </body>
 </html>
