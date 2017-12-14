@@ -3,12 +3,16 @@ dotnet: 2.0.0
 mono: none
 services:
 - docker
+
 env:
   global:
   - secure: Ut9g99YGmyRo8jxNqRujGAfI6rBvSIs47aT8nj72kagqcmhf3jroERbV77UEBPIxV1IgdP5nnKoRcE0c7B15L4NNsOGvUd2l67bkWX0izTtnHB3bF2R9nxYYI1eCDKDGktmibD0ZGjR92d9HbCQBqCNYG0wU1N4o29ZivxA1uy60SB+a+12zI1CfAn5DdVW5V+dphBOeQwwoao3F2QNH1+PoQefjkMoS7rKjrGXyZV0gliXInvcJV+YUeGapue40Jvx5ObxA/z8C2u0/xS9qJazgtK2jNI1lAY8sTRqQLkOw/tHJhM7pj4kj6N/g5z9eGRf8g7aJ/Q141pxZ69BduKnOT/gu+0nhwQhhj7y1N9JJdL/oj58Cg11IRgmIbw0suQpQsDULGOPVdQhr19QAW1BMYkhv+Z5bWgTeADO5UgmWlR9PpbZTZR/NMeYR2BbPTnbWUvJeSzXKNsmA4jqBiXj9SNr+VWAyStr+u/G84P2yoysJItmpyJ5QEiQJ/qVIE5fXsfYBg0dLetgrZz5ejhQq04PXsj4tcdqcuQquEiYUC64Wnm0aoXYK1SS1sTGO01opA0HYoA2cP/2IiouV83BloZk/1gC3Zrug5zpFuWtYIO5rG06f0xGZkIMzwIz4L2x7J/rdILLGIo4zM14BjX52ugKvhu5s1kJseGCoP/c=
   - secure: ELBylWrSDxG98PMfGAUOKYM03qnst3WNmvkvUbRTsaYDGxxPDf0JiBPA1Wh8w/+viEvh/sYT+fMCbTxjHJ7tJNsELTz2d8byrt/GaXg7RQSAGfolh9eCPdqfl3fX+tkRwWv8i2k6jFu7wcq5R3RINhj1xbjF6z4lXghTSXvWrISAQ/hbR33A8hMegfo/HbjLG20Gk6Djl7FGAwD27ytvbcQKExlCPWRXDQHkP9zW13vmPgBvN24yFANGRQVao6/Oq2p8F0/y3mZZv2uvcp7ZlxsMxd4zTwprTAHVtqRZYlK0pi+7Wvo9w96gGJbSbi6c//cdPrzU3dAn2+p9rjiD+gJHtY1gcsvU+brWgg/Yf+xlTSS3WEnyjuH0PkuPvv5qWAWWSdoRwP/e+v7JoicXJoe2YhNEhdCFe0CB5GJUN3rXVKe33KcvErG7QAZ2p/1to6FD/CRHTjxpodqtjVkpHCGwRbNwJMVn1MUowgjZMJgS1J97Xq6F5wWoDGx6Mmu7NXXIV+kfbSiKqTZPYk+kgrfexwCcX7e+CIphJuZf6dmFhHGkVxcIOf9aY8x0rDZB9JOU2kZ7UIg9RSSfL3D6OZ4J19IpKdUxCH1fhRwAb5ZbyPPg3Yl9/E5uTuNBikEMp1xHVMBdN8WDxGR43Bt3/SSo0DtplfZaHva/oXyU+9I=
 
 before_install:
+  - docker --version  # document the version travis is using
+  - pip install --user awscli # install aws cli w/o sudo
+  - export PATH=$PATH:$HOME/.local/bin # put aws in the path
 
 install:
 - docker-compose build
@@ -17,15 +21,11 @@ script:
 - "./test.sh"
 
 after_success:
-  - docker --version  # document the version travis is using
-  - pip install --user awscli # install aws cli w/o sudo
-  - export PATH=$PATH:$HOME/.local/bin # put aws in the path
   - eval $(aws ecr get-login --region ap-southeast-2) #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars
   - docker-compose build
   - docker tag brycefamily:latest 896879620219.dkr.ecr.ap-southeast-2.amazonaws.com/personal.brycefamily:latest
   - docker push 896879620219.dkr.ecr.ap-southeast-2.amazonaws.com/personal.brycefamily:latest
   
-
 branches:
   only:
   - master
