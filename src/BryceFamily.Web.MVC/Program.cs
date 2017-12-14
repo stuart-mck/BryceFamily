@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore;
+﻿using System.IO;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
 namespace BryceFamily.Web.MVC
@@ -13,6 +14,8 @@ namespace BryceFamily.Web.MVC
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseUrls("http://*:3000")
                 .Build();
     }
 }
