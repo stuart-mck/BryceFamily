@@ -3,29 +3,23 @@ dotnet: 2.0.0
 mono: none
 services:
 - docker
-
 env:
   global:
-  - secure: Ut9g99YGmyRo8jxNqRujGAfI6rBvSIs47aT8nj72kagqcmhf3jroERbV77UEBPIxV1IgdP5nnKoRcE0c7B15L4NNsOGvUd2l67bkWX0izTtnHB3bF2R9nxYYI1eCDKDGktmibD0ZGjR92d9HbCQBqCNYG0wU1N4o29ZivxA1uy60SB+a+12zI1CfAn5DdVW5V+dphBOeQwwoao3F2QNH1+PoQefjkMoS7rKjrGXyZV0gliXInvcJV+YUeGapue40Jvx5ObxA/z8C2u0/xS9qJazgtK2jNI1lAY8sTRqQLkOw/tHJhM7pj4kj6N/g5z9eGRf8g7aJ/Q141pxZ69BduKnOT/gu+0nhwQhhj7y1N9JJdL/oj58Cg11IRgmIbw0suQpQsDULGOPVdQhr19QAW1BMYkhv+Z5bWgTeADO5UgmWlR9PpbZTZR/NMeYR2BbPTnbWUvJeSzXKNsmA4jqBiXj9SNr+VWAyStr+u/G84P2yoysJItmpyJ5QEiQJ/qVIE5fXsfYBg0dLetgrZz5ejhQq04PXsj4tcdqcuQquEiYUC64Wnm0aoXYK1SS1sTGO01opA0HYoA2cP/2IiouV83BloZk/1gC3Zrug5zpFuWtYIO5rG06f0xGZkIMzwIz4L2x7J/rdILLGIo4zM14BjX52ugKvhu5s1kJseGCoP/c=
-  - secure: ELBylWrSDxG98PMfGAUOKYM03qnst3WNmvkvUbRTsaYDGxxPDf0JiBPA1Wh8w/+viEvh/sYT+fMCbTxjHJ7tJNsELTz2d8byrt/GaXg7RQSAGfolh9eCPdqfl3fX+tkRwWv8i2k6jFu7wcq5R3RINhj1xbjF6z4lXghTSXvWrISAQ/hbR33A8hMegfo/HbjLG20Gk6Djl7FGAwD27ytvbcQKExlCPWRXDQHkP9zW13vmPgBvN24yFANGRQVao6/Oq2p8F0/y3mZZv2uvcp7ZlxsMxd4zTwprTAHVtqRZYlK0pi+7Wvo9w96gGJbSbi6c//cdPrzU3dAn2+p9rjiD+gJHtY1gcsvU+brWgg/Yf+xlTSS3WEnyjuH0PkuPvv5qWAWWSdoRwP/e+v7JoicXJoe2YhNEhdCFe0CB5GJUN3rXVKe33KcvErG7QAZ2p/1to6FD/CRHTjxpodqtjVkpHCGwRbNwJMVn1MUowgjZMJgS1J97Xq6F5wWoDGx6Mmu7NXXIV+kfbSiKqTZPYk+kgrfexwCcX7e+CIphJuZf6dmFhHGkVxcIOf9aY8x0rDZB9JOU2kZ7UIg9RSSfL3D6OZ4J19IpKdUxCH1fhRwAb5ZbyPPg3Yl9/E5uTuNBikEMp1xHVMBdN8WDxGR43Bt3/SSo0DtplfZaHva/oXyU+9I=
-
+  - secure: PBbQGZZQTKsn2lC6X3ormZEO2XEEKwyuXkQX7+6WFUAnYpSwKzfelfZkYqxuW70xfwcEab67AqLpTLvRnXsA0+elQR9n5mYpcUHY5AkrRKEGjyiRUuYlJClGD1M/T1h+rEgbZEVlXR0BM7ssyARmIbUAkcAl0KYR+ZTJ50tlcQqFmF43cGxswyWreYvXACJEqE7e8ZuRP+xKds8ECznuv7MyXKf73jQXSKEJ+rtWMP7kSiGsjEPXW6x5WnrHCY/udtNuS45zDGJ+s0KoPtyX6lGS7u+98vo35YSJgsGjpZ1qTybG7PHAo52+v9Vyi5tntOTfIcitnf19Rcw9ve3lB8h3MLdH0soPrNtJkonNxEvrNtI8YWFxrFN2L57Id6zfUmXB+/+UyW8g33KagQo95PTHFsu80vV2ZwjtT8LD29CgVHPW9g7HOlPiaQDAGOrxB1GJIXSpMj7oMZ0vOoHu7b+NQ+dAg+/73FAwUXR/my0uTsQGUFIacMuHCyNwTzZAdZgSXh45juKyN0Ntp9xzq6OyLcJaJ+dDPwn6+UVQiM9P70cJQQwGcFUtk8kl5QTqzHLGHLFFDMmNq4mRae6/ai3fkAe4yfBv0VUr/GamdHC0xEh9stNASsbg/Y94dQLhdV2aOMbLFyMI3MbPYh67wWCJ5m1clFOjk7fBIT1VY7M=
+  - secure: roSiJd+eKgKD9DqNikKXx3Cz8010Wi+hsFHR84lIr4e1GLfmYLx42Vlad9LeH/uvI0QU4/f9VWXCH+Iri+g/9rrqRfHD28uJ6ARQugYt/0nt5TvlejVjvNx9KWOpYTT0/g195AbEG4qZGBYBc1Lh0LM6LtQlNCRbE3PLYnqzH/HJwdgyuMet0CdYF9D1Ko3rjVACcRCtnsOBRhNvTGgDa8pmIe9vMHuS4j82Fj49OeTXzCW3OEYOzWsRy6sTQaYJH3xrTu46XIRB81geFj7/ORHdYJQGdRg7jzqdDx4L9LYObnZj9t403QwFzvadTDawOO5o7YSRoCyQYgcrUSotY4Z+WNL7PuceoS/zh6FX7mhI/TNsRewK8R28ImgwwXc3NCxJZdWjwxAm87osYb+g/VA7SxdxfKJ3axUY8z+cGdqIAubryou1G8bk8Ti3nR551tDo76VfCd65RNP3qlw5rQbA0H3ThiS6+np4qtALDRMKE6kzdDfiteCKyYymZvOt9O7frgQAuV/cvP8yrg6HZ9AUzkS8ogmjQXFUcyl2gvJuaDzZXAmvJBnVlkAUui34QupRDS7ChD7b9tCpydpEBRuDa/8jrI8lKOOiF034hCHGo79T0ODpgAOd6o/2nPEao9tSLKH+bcGZGb4LaxXNUrPsX8nTPjEZMYGNGOukinU=
 before_install:
-  - docker --version  # document the version travis is using
-  - pip install --user awscli # install aws cli w/o sudo
-  - export PATH=$PATH:$HOME/.local/bin # put aws in the path
-
+- docker --version
+- pip install --user awscli
+- export PATH=$PATH:$HOME/.local/bin
 install:
 - docker-compose build
-
 script:
 - "./test.sh"
-
 after_success:
-  - eval $(aws ecr get-login --region ap-southeast-2) #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars
-  - docker-compose build
-  - docker tag brycefamily:latest 896879620219.dkr.ecr.ap-southeast-2.amazonaws.com/personal.brycefamily:latest
-  - docker push 896879620219.dkr.ecr.ap-southeast-2.amazonaws.com/personal.brycefamily:latest
-  
+- eval $(aws ecr get-login --region ap-southeast-2)
+- docker-compose build
+- docker tag brycefamily:latest 896879620219.dkr.ecr.ap-southeast-2.amazonaws.com/personal.brycefamily:latest
+- docker push 896879620219.dkr.ecr.ap-southeast-2.amazonaws.com/personal.brycefamily:latest
 branches:
   only:
   - master
