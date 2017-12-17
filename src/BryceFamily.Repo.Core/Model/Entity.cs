@@ -4,11 +4,11 @@ using System;
 namespace BryceFamily.Repo.Core.Model
 {
     
-    public class Entity
+    public class Entity<TId>
     {
 
         [DynamoDBHashKey]   
-        public Guid ID { get; set; }
+        public TId ID { get; set; }
 
     }
 }

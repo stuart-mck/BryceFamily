@@ -5,7 +5,7 @@ using System;
 namespace BryceFamily.Repo.Core.Model
 {
     [DynamoDBTable("familyEvent")]
-    public class FamilyEvent : Entity
+    public class FamilyEvent : Entity<Guid>
     {
         
         public string Title { get; set; }

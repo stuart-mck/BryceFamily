@@ -4,7 +4,7 @@ using System;
 namespace BryceFamily.Repo.Core.Model
 {
     [DynamoDBTable("union")]
-    public class Union : Entity
+    public class Union : Entity<Guid>
     {
         public int PartnerID { get; set; }
 

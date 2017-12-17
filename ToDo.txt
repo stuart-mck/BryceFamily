@@ -29,8 +29,6 @@ contact
 - home page
 	- login
 	- add new user
-	- password retrieval
-	- password reset
 	- email subscription / unsubscription
 
 - menu
@@ -56,9 +54,6 @@ contact
 	- filter by type?
 	- add intro text
 
-- gallery
-	- list by family
-	- list by event
 	- 
 - people
 	- facebook link

@@ -38,31 +38,38 @@ namespace BryceFamily.Repo.Core.Read.People
                 TableNamePrefix = "familybryce."
             };
 
-            dynamoOperationContext.IndexName = "ParentKey-index";
-            var queryResult = await dbContext.QueryAsync<Person>($"{fatherId}_{motherId}", dynamoOperationContext).GetRemainingAsync(cancellationToken);
-            return queryResult;
+            try
+            {
+                dynamoOperationContext.IndexName = "ParentKey-index";
+                var queryResult = await dbContext.QueryAsync<Person>($"{fatherId}_{motherId}", dynamoOperationContext).GetRemainingAsync(cancellationToken);
+                return queryResult;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
-        public Task<Person> Load(Guid id, CancellationToken cancellationToken)
+        public Task<Person> Load(int id, CancellationToken cancellationToken)
         {
             var dbContext = _awsClientFactory.GetDynamoDBContext();
             return dbContext.LoadAsync<Person>(id, _operationConfig);
         }
 
-        public async Task<Person> Load(int personId, CancellationToken cancellationToken)
-        {
-            var dbContext = _awsClientFactory.GetDynamoDBContext();
+        //public async Task<Person> Load(int personId, CancellationToken cancellationToken)
+        //{
+        //    var dbContext = _awsClientFactory.GetDynamoDBContext();
 
-            var dynamoOperationContext = new DynamoDBOperationConfig()
-            {
-                ConditionalOperator = ConditionalOperatorValues.And,
-                TableNamePrefix = "familybryce."
-            };
+        //    var dynamoOperationContext = new DynamoDBOperationConfig()
+        //    {
+        //        ConditionalOperator = ConditionalOperatorValues.And,
+        //        TableNamePrefix = "familybryce."
+        //    };
 
-            dynamoOperationContext.IndexName = "PersonID-index";
-            var queryResult = await dbContext.QueryAsync<Person>(personId, dynamoOperationContext).GetRemainingAsync(cancellationToken);
-            return queryResult.FirstOrDefault();
-        }
+        //    dynamoOperationContext.IndexName = "PersonID-index";
+        //    var queryResult = await dbContext.QueryAsync<Person>(personId, dynamoOperationContext).GetRemainingAsync(cancellationToken);
+        //    return queryResult.FirstOrDefault();
+        //}
 
         public async Task<List<Person>> SearchByName(string clan, string firstName, string lastName, string emailAddress, string occupation, CancellationToken cancellationToken)
         {

@@ -15,7 +15,7 @@ namespace BryceFamily.Web.MVC.Models
         public string Title { get; set; }
         public FamilyEvent FamilyEvent { get; set; }
         public string Owner { get; set; }
-        public Guid? OwnerId { get; set; }
+        public int OwnerId { get; set; }
         public string Summary { get; set; }
         public Guid Id { get; set; }
         public DateTime DateCreated { get; set; }
@@ -34,7 +34,7 @@ namespace BryceFamily.Web.MVC.Models
                 Title = sourceGallery.Name,
                 FamilyEvent = FamilyEvent.Map(await familyEventReadModel.Load(sourceGallery.FamilyEvent, cancellationToken)),
                 Owner = sourceGallery.Owner.ToString(),
-                OwnerId = sourceGallery?.Owner,
+                OwnerId = sourceGallery.Owner,
                 Summary = sourceGallery.Summary,
                 Id = sourceGallery.ID,
                 DateCreated = sourceGallery.DateCreated,

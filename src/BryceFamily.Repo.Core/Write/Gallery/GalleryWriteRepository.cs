@@ -10,7 +10,8 @@ using Amazon.DynamoDBv2.DataModel;
 
 namespace BryceFamily.Repo.Core.Write.Gallery
 {
-    public class GalleryWriteRepository<TEntity, TId> : IWriteRepository<Model.Gallery, Guid>
+    public class GalleryWriteRepository<TEntity, TId> : IWriteRepository<TEntity, TId>
+        where TEntity : Entity<TId>
     {
         private readonly IAWSClientFactory _clientFactory;
         private readonly DynamoDBOperationConfig _dynamoDBOperationConfig;
@@ -20,23 +21,23 @@ namespace BryceFamily.Repo.Core.Write.Gallery
             _dynamoDBOperationConfig = dynamoDBOperationConfig;
         }
 
-        public void Delete(Guid entityId)
+        public void Delete(TId entityId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Model.Gallery> FindByQuery(IQueryParameter repository, CancellationToken cancellationToken)
+        public Task<TEntity> FindByQuery(IQueryParameter repository, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
 
 
-        public async Task Save(Model.Gallery entity, CancellationToken cancellationToken)
+        public async Task Save(TEntity entity, CancellationToken cancellationToken)
         {
             var dynamoContext = _clientFactory.GetDynamoDBContext();
-            if (entity.ID == Guid.Empty)
-                entity.ID = Guid.NewGuid();
+            //if (entity.ID == Guid.Empty)
+            //    entity.ID = Guid.NewGuid();
             await dynamoContext.SaveAsync(entity, _dynamoDBOperationConfig, cancellationToken);
         }
     }

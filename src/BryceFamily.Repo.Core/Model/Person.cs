@@ -1,19 +1,15 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
 using System;
-using System.Collections.Generic;
 
 namespace BryceFamily.Repo.Core.Model
 {
     [DynamoDBTable("person")]
-    public class Person : Entity
+    public class Person : Entity<int>
     {
         public Person()
         {
             
-            //Descendants = new List<Descendant>();
         }
-
-        public int PersonID { get; set; }
 
         public string Clan { get; set; }
 
@@ -45,20 +41,18 @@ namespace BryceFamily.Repo.Core.Model
 
         public DateTime? DateOfDeath { get; set; }
 
-        //public List<Union> Relationships { get; set; }
-
-        //public List<Descendant> Descendants { get; set; }
-
         public string PostCode { get; set; }
 
         public string EmailAddress { get; set; }
 
-        public string SortKey { get; set; }
         public bool SubscribeToEmail { get; set; }
 
         public string Occupation { get; set; }
+
         public string Gender { get; set; }
+
         public string ParentKey { get; internal set; }
+
         public bool IsSpouse { get; set; }
     }
 }

@@ -5,11 +5,11 @@ using System.Collections.Generic;
 namespace BryceFamily.Repo.Core.Model
 {
     [DynamoDBTable("gallery")]
-    public class Gallery : Entity
+    public class Gallery : Entity<Guid>
     {
         public string Name { get; set; }
 
-        public Guid Owner { get; set; }
+        public int Owner { get; set; }
 
         public string Summary { get; set; }
 

@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace BryceFamily.Repo.Core.Write
 {
-    public interface IWriteRepository<TEntity, TId> where TEntity : Entity
+    public interface IWriteRepository<TEntity, TId> 
+        where TEntity : Entity<TId>
     {
         Task Save(TEntity entity, CancellationToken cancellationToken);
 

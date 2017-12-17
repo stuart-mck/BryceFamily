@@ -4,11 +4,11 @@ using System;
 namespace BryceFamily.Repo.Core.Model
 {
     [DynamoDBTable("story")]
-    public class StoryContent : Entity
+    public class StoryContent : Entity<Guid>
     {
-        public Guid? PersonID { get; set; }
+        public int? PersonID { get; set; }
 
-        public Guid AuthorID { get; set; }
+        public int AuthorID { get; set; }
 
         public string StoryContents { get; set; }
 

@@ -4,10 +4,12 @@ using System.Threading.Tasks;
 using BryceFamily.Repo.Core.Write.Query;
 using BryceFamily.Repo.Core.AWS;
 using Amazon.DynamoDBv2.DataModel;
+using BryceFamily.Repo.Core.Model;
 
 namespace BryceFamily.Repo.Core.Write.ImageReference
 {
-    public class ImageReferenceWriteRepository<TEntity, TId> : IWriteRepository<Model.ImageReference, Guid>
+    public class ImageReferenceWriteRepository<TEntity, TId> : IWriteRepository<TEntity, TId>
+        where TEntity : Entity<TId>
     {
         private readonly IAWSClientFactory _clientFactory;
         private DynamoDBOperationConfig _dynamoDBOperationConfig;
@@ -19,21 +21,21 @@ namespace BryceFamily.Repo.Core.Write.ImageReference
         }
 
 
-        public void Delete(Guid entityId)
+        public void Delete(TId entityId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Model.ImageReference> FindByQuery(IQueryParameter repository, CancellationToken cancellationToken)
+        public Task<TEntity> FindByQuery(IQueryParameter repository, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public async Task Save(Model.ImageReference entity, CancellationToken cancellationToken)
+        public async Task Save(TEntity entity, CancellationToken cancellationToken)
         {
             var dynamoContext = _clientFactory.GetDynamoDBContext();
-            if (entity.ImageID == Guid.Empty)
-                entity.ImageID = Guid.NewGuid();
+            //if (entity.ImageID == Guid.Empty)
+            //    entity.ImageID = Guid.NewGuid();
 
             await dynamoContext.SaveAsync(entity, _dynamoDBOperationConfig, cancellationToken);
         }

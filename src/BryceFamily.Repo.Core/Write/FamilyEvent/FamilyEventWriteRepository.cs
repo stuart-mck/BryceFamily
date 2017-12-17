@@ -9,7 +9,8 @@ using System.Threading;
 
 namespace BryceFamily.Repo.Core.FamilyEvents
 {
-    public class FamilyEventWriteRepository<TEntity, TId> : IWriteRepository<FamilyEvent, Guid>
+    public class FamilyEventWriteRepository<TEntity, TId> : IWriteRepository<TEntity, TId>
+        where TEntity : Entity<TId>
     {
         private readonly IAWSClientFactory _awsClientFactory;
         private readonly DynamoDBOperationConfig _dynamoDBOperationConfig;
@@ -20,25 +21,22 @@ namespace BryceFamily.Repo.Core.FamilyEvents
             _dynamoDBOperationConfig = dynamoDBOperationConfig;
         }
 
-        public void Delete(Guid entityId)
+        public void Delete(TId entityId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<FamilyEvent> FindByQuery(IQueryParameter repository, CancellationToken cancellationToken)
+        public Task<TEntity> FindByQuery(IQueryParameter repository, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
        
-
-        public async Task Save(FamilyEvent familyEvent, CancellationToken cancellationToken)
+        public async Task Save(TEntity entity, CancellationToken cancellationToken)
         {
             var context = _awsClientFactory.GetDynamoDBContext();
-            if (familyEvent.ID == Guid.Empty)
-                familyEvent.ID = Guid.NewGuid();
 
-            await context.SaveAsync(familyEvent, _dynamoDBOperationConfig , cancellationToken);
+            await context.SaveAsync(entity, _dynamoDBOperationConfig , cancellationToken);
         }
     }
 }

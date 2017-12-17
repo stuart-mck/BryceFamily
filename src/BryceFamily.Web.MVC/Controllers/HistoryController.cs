@@ -67,10 +67,10 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [Route("History/Tree/{id}")]
-        public IActionResult Tree (Guid id)
+        public IActionResult Tree (int id)
         {
             Models.Person startNode;
-            if (id == Guid.Empty)
+            if (id < 1)
                 startNode = _clanService.People.First(p => p.IsSpouse == false && p.Mother == null & p.Father == null);
             else
                 startNode = _clanService.People.FirstOrDefault(p => p.Id == id);
@@ -82,7 +82,7 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [Route("History/Stories/{id}")]
-        public IActionResult StoriesForPerson(Guid id)
+        public IActionResult StoriesForPerson(int id)
         {
             var person = _clanService.People.First(t => t.Id == id);
             

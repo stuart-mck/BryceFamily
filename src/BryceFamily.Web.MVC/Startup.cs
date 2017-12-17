@@ -68,7 +68,7 @@ namespace BryceFamily.Web.MVC
 
             services.AddScoped<IPersonReadRepository, PeopleReadRepository>();
             services.AddScoped<IUnionReadRepository, UnionReadRepository>();
-            services.AddScoped<IWriteRepository<Person, Guid>, PeopleWriteRepository<Person, Guid>>();
+            services.AddScoped<IWriteRepository<Person, int>, PeopleWriteRepository<Person, int>>();
             services.AddScoped<IWriteRepository<Union, Guid>, UnionWriteRepository<Union, Guid>>();
 
             services.AddScoped<IStoryReadRepository, StoryReadRepository>();

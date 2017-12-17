@@ -2,6 +2,7 @@
 using BryceFamily.Repo.Core.Read.Story;
 using BryceFamily.Web.MVC.Models;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +12,15 @@ namespace BryceFamily.Web.MVC.Infrastructure
 {
     public class ClanAndPeopleService
     {
+        private readonly ILogger<ClanAndPeopleService> _logger;
         private readonly IPersonReadRepository _peopleReadRepository;
         private readonly IMemoryCache _memoryCache;
         private readonly IUnionReadRepository _unionReadRepository;
         private readonly IStoryReadRepository _storyReadRepository;
 
-        public ClanAndPeopleService(IPersonReadRepository peopleReadRepository, IMemoryCache memoryCache, IUnionReadRepository unionReadRepository, IStoryReadRepository storyReadRepository)
+        public ClanAndPeopleService(ILogger<ClanAndPeopleService> logger, IPersonReadRepository peopleReadRepository, IMemoryCache memoryCache, IUnionReadRepository unionReadRepository, IStoryReadRepository storyReadRepository)
         {
+            this._logger = logger;
             _peopleReadRepository = peopleReadRepository;
             _memoryCache = memoryCache;
             _unionReadRepository = unionReadRepository;
@@ -37,7 +40,8 @@ namespace BryceFamily.Web.MVC.Infrastructure
             new FamilyClan(9, "Bryce", "Roy"),
             new FamilyClan(10, "Shield", "William"),
             new FamilyClan(11, "Hose", "Harold"),
-            new FamilyClan(12, "Barmby", "George")
+            new FamilyClan(12, "Barmby", "George"),
+            new FamilyClan(13, "Bryce", "David")
         };
 
         public IReadOnlyList<FamilyClan> Clans => _clans;
@@ -91,11 +95,12 @@ namespace BryceFamily.Web.MVC.Infrastructure
                     }
                     catch (AggregateException ex)
                     {
-
+                        _logger.LogError("Failed when building people list", ex);
+                        throw;
                     }
                     catch (Exception ex)
                     {
-
+                        _logger.LogError("Failed when building people list", ex);
                         throw;
                     }
 
@@ -112,8 +117,8 @@ namespace BryceFamily.Web.MVC.Infrastructure
         private void MapParents(Repo.Core.Model.Person dbPerson,  List<Person> peopleList)
         {
             var person = peopleList.First(p => p.Id == dbPerson.ID);
-            person.Father = peopleList.FirstOrDefault(f => f.PersonId == dbPerson.FatherID);
-            person.Mother = peopleList.FirstOrDefault(f => f.PersonId == dbPerson.MotherID);
+            person.Father = peopleList.FirstOrDefault(f => f.Id == dbPerson.FatherID);
+            person.Mother = peopleList.FirstOrDefault(f => f.Id == dbPerson.MotherID);
         }
 
         private void ProcessUnionDescendants(List<Repo.Core.Model.Union> unions, Repo.Core.Model.Union union, List<Repo.Core.Model.Person> peopleLookup, List<Person> peopleList, List<Guid> processedUnions)
@@ -122,8 +127,8 @@ namespace BryceFamily.Web.MVC.Infrastructure
             if (processedUnions.Any(u => u == union.ID))
                 return;
 
-            var partner1 = peopleList.First(p => p.PersonId == union.PartnerID);
-            var partner2 = peopleList.First(p => p.PersonId == union.Partner2ID);
+            var partner1 = peopleList.First(p => p.Id == union.PartnerID);
+            var partner2 = peopleList.First(p => p.Id == union.Partner2ID);
             var children = peopleList.Where(c => c.ParentRelationship == union.ID);
             //var children = peopleLookup.Where(f => f?.ParentRelationship == union.ID);
             //make the union

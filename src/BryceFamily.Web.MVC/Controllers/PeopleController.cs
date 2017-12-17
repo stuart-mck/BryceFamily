@@ -20,13 +20,13 @@ namespace BryceFamily.Web.MVC.Controllers
 {
     public class PeopleController : BaseController
     {
-        private readonly IWriteRepository<Repo.Core.Model.Person, Guid> _writeModel;
+        private readonly IWriteRepository<Repo.Core.Model.Person, int> _writeModel;
         private readonly IPersonReadRepository _readModel;
         private readonly ClanAndPeopleService _clanAndPeopleService;
         private readonly IUnionReadRepository _unionReadRepository;
         private readonly IWriteRepository<Repo.Core.Model.Union, Guid> _unionWriteRepository;
 
-        public PeopleController(IPersonReadRepository readModel, IWriteRepository<Repo.Core.Model.Person, Guid> writeModel, ClanAndPeopleService clanAndPeopleService, IUnionReadRepository unionReadRepository, IWriteRepository<Repo.Core.Model.Union, Guid> unionWriteRepository):base("People", "people")
+        public PeopleController(IPersonReadRepository readModel, IWriteRepository<Repo.Core.Model.Person, int> writeModel, ClanAndPeopleService clanAndPeopleService, IUnionReadRepository unionReadRepository, IWriteRepository<Repo.Core.Model.Union, Guid> unionWriteRepository):base("People", "people")
         {
             _readModel = readModel;
             _writeModel = writeModel;
@@ -118,7 +118,7 @@ namespace BryceFamily.Web.MVC.Controllers
 
         [HttpGet]
         [Authorize(Roles = RoleNameConstants.AllRoles)]
-        public IActionResult Person(Guid id)
+        public IActionResult Person(int id)
         {
             return View(_clanAndPeopleService.People.FirstOrDefault(p => p.Id == id));
         }
@@ -165,8 +165,7 @@ namespace BryceFamily.Web.MVC.Controllers
                                 {
                                     person = new Repo.Core.Model.Person()
                                     {
-                                        PersonID = ReadIntCell(sheet, rowId, PersonImport.ID),
-                                        ID = Guid.NewGuid()
+                                        ID = ReadIntCell(sheet, rowId, PersonImport.ID)
                                     };
                                 }
 
@@ -190,7 +189,14 @@ namespace BryceFamily.Web.MVC.Controllers
                                 person.DateOfDeath = ReadNullableDate(sheet, rowId, PersonImport.DOD);
                                 person.Gender = ReadStringCell(sheet, rowId, PersonImport.Gender);
 
-                                await _writeModel.Save(person, cancellationToken);
+                                try
+                                {
+                                    await _writeModel.Save(person, cancellationToken);
+                                }
+                                catch (Exception ex)
+                                {
+
+                                }
 
                                 rowId++;
 

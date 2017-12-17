@@ -11,7 +11,8 @@ using System.Linq;
 
 namespace BryceFamily.Repo.Core.FamilyEvents
 {
-    public class FamilyEventReadModel<TEntity, TId> : IReadModel<FamilyEvent, Guid>
+    public class FamilyEventReadModel<TEntity, TId> : IReadModel<TEntity, TId>
+        where TEntity : Entity<TId>
     {
         private readonly IAWSClientFactory _awsContext;
         private const string _TABLENAME = "familybryce.familyevent";
@@ -21,13 +22,13 @@ namespace BryceFamily.Repo.Core.FamilyEvents
             _awsContext = awsContext;
         }
 
-        public async Task<FamilyEvent> Load(Guid id, CancellationToken cancellationToken)
+        public async Task<TEntity> Load(TId id, CancellationToken cancellationToken)
         {
             var context = _awsContext.GetDynamoDBContext();
-            return await context.LoadAsync<FamilyEvent>(id);
+            return await context.LoadAsync<TEntity>(id);
         }
 
-        public async Task<List<FamilyEvent>> GetByQuery(DateTime startDate, DateTime endDate)
+        public async Task<List<TEntity>> GetByQuery(DateTime startDate, DateTime endDate)
         {
             var context = _awsContext.GetDynamoDBContext();
             var startDateString = startDate.ToString(AWSSDKUtils.ISO8601DateFormat);
@@ -44,11 +45,11 @@ namespace BryceFamily.Repo.Core.FamilyEvents
                 },
             };
 
-            return await context.QueryAsync<FamilyEvent>(queryRequest).GetRemainingAsync();
+            return await context.QueryAsync<TEntity>(queryRequest).GetRemainingAsync();
             
         }
 
-        public Task<IQueryable<FamilyEvent>> AsQueryable()
+        public Task<IQueryable<TEntity>> AsQueryable()
         {
             throw new NotImplementedException();
         }

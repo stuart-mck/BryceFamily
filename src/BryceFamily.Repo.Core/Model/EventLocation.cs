@@ -1,6 +1,8 @@
-﻿namespace BryceFamily.Repo.Core.Model
+﻿using System;
+
+namespace BryceFamily.Repo.Core.Model
 {
-    public class EventLocation : Entity
+    public class EventLocation : Entity<Guid>
     {
         public string Title { get; set; }
         public string Address1 { get; set; }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BryceFamily.Repo.Core.Repository
 {
-    public interface IReadModel<TEntity, TId> where TEntity : Entity
+    public interface IReadModel<TEntity, TId> where TEntity : Entity<TId>
     {
         Task<TEntity> Load(TId id, CancellationToken cancellationToken);
 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace BryceFamily.Repo.Core.Model
 {
     [DynamoDBTable("imageReference")]
-    public class ImageReference : Entity
+    public class ImageReference : Entity<Guid>
     {
         public string Title { get; set; }
 

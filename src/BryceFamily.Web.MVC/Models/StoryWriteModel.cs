@@ -4,7 +4,7 @@ namespace BryceFamily.Web.MVC.Models
 {
     public class StoryWriteModel
     {
-        public Guid PersonID { get; set; }
+        public int PersonID { get; set; }
 
         public Guid StoryID { get; set; }
 

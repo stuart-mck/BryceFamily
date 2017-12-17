@@ -10,7 +10,7 @@ namespace BryceFamily.Web.MVC.Models
     {
         public Guid ID { get; set; }
         public string StoryTitle { get; set; }
-        public Guid? StoryObject { get; set; }
+        public int? StoryObject { get; set; }
         public string StoryContent { get; set; }
 
 

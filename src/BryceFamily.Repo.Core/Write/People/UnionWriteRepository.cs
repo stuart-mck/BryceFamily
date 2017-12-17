@@ -10,7 +10,8 @@ using System.Linq;
 
 namespace BryceFamily.Repo.Core.Write.People
 {
-    public class UnionWriteRepository<TEntity, TId> : IWriteRepository<Union, Guid>
+    public class UnionWriteRepository<TEntity, TId> : IWriteRepository<TEntity, TId>
+        where TEntity : Entity<TId>
     {
         private readonly IAWSClientFactory _clientFactory;
         private readonly DynamoDBOperationConfig _dynamoDBOperationConfig;
@@ -20,12 +21,12 @@ namespace BryceFamily.Repo.Core.Write.People
             _dynamoDBOperationConfig = dynamoDBOperationConfig;
         }
 
-        public void Delete(Guid entityId)
+        public void Delete(TId entityId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Union> FindByQuery(IQueryParameter query, CancellationToken cancellationToken)
+        public async Task<TEntity> FindByQuery(IQueryParameter query, CancellationToken cancellationToken)
         {
             var personQuery = (UnionQuery)query;
             var dynamoContext = _clientFactory.GetDynamoDBContext();
@@ -39,18 +40,19 @@ namespace BryceFamily.Repo.Core.Write.People
                 
             };
 
-            var queryResult = await dynamoContext.QueryAsync<Union>(BuildIndex(personQuery.Partner1Id, personQuery.Partner2Id), dynamoOperationContext).GetRemainingAsync(cancellationToken);
+            var queryResult = await dynamoContext.QueryAsync<TEntity>(BuildIndex(personQuery.Partner1Id, personQuery.Partner2Id), dynamoOperationContext).GetRemainingAsync(cancellationToken);
             return queryResult.FirstOrDefault();
             
         }
 
-        public async Task Save(Union entity, CancellationToken cancellationToken)
+        public async Task Save(TEntity entity, CancellationToken cancellationToken)
         {
             var dynamoContext = _clientFactory.GetDynamoDBContext();
-            if (entity.ID == Guid.Empty)
-                entity.ID = Guid.NewGuid();
-            entity.Members = BuildIndex(entity.PartnerID, entity.Partner2ID);
-            await dynamoContext.SaveAsync(entity, _dynamoDBOperationConfig, cancellationToken);
+            var union = entity as Union;
+            if (union.ID == Guid.Empty)
+                union.ID = Guid.NewGuid();
+            union.Members = BuildIndex(union.PartnerID, union.Partner2ID);
+            await dynamoContext.SaveAsync(union, _dynamoDBOperationConfig, cancellationToken);
 
         }
 

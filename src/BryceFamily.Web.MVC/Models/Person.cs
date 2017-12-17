@@ -12,9 +12,8 @@ namespace BryceFamily.Web.MVC.Models
             Galleries = new List<Gallery>();
         }
 
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         
-        public int PersonId { get; set; }
         public string Clan { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -63,8 +62,7 @@ namespace BryceFamily.Web.MVC.Models
                 DateOfDeath = DateOfDeath,
                 IsSpouse = IsSpouse,
                 Gender = Gender,
-                ID = Id,
-                PersonID = PersonId
+                ID = Id
             };
         }
 
@@ -91,7 +89,6 @@ namespace BryceFamily.Web.MVC.Models
                 Clan = person.Clan,
                 Id = person.ID,
                 IsSpouse = person.IsSpouse,
-                PersonId = person.PersonID,
                 DateOfBirth = person.DateOfBirth,
                 DateOfDeath = person.DateOfDeath,
                 Gender = person.Gender,

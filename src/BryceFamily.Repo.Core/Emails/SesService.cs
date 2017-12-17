@@ -29,7 +29,11 @@ namespace BryceFamily.Repo.Core.Emails
                 await emailClient.SendEmailAsync(new SendEmailRequest()
                 {
                     Destination = new Destination(new List<string>() { emailaddress }),
-                    Message = new Message(new Content(subject), new Body(new Content(message))),
+                    Message = new Message(new Content(subject), new Body()
+                    {
+                        Html = new Content(message),
+                        Text = new Content(message)
+                    }),
                     ReplyToAddresses = new List<string> { "info@brycefamily.net" },
                     Source = "info@brycefamily.net",
                     ReturnPath = "admin@brycefamily.net"
