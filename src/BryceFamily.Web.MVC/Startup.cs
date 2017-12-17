@@ -30,6 +30,8 @@ using Amazon;
 using System.IO;
 using Microsoft.AspNetCore.DataProtection;
 using Serilog;
+using Microsoft.AspNetCore.Authentication;
+using BryceFamily.Web.MVC.Infrastructure.Authentication;
 
 namespace BryceFamily.Web.MVC
 {
@@ -119,6 +121,7 @@ namespace BryceFamily.Web.MVC
 
             services.AddAuthentication(options => {
                 options.DefaultScheme = IdentityConstants.ApplicationScheme;
+               options.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
             } ).AddCookie(IdentityConstants.ApplicationScheme);
                 
 
@@ -137,7 +140,7 @@ namespace BryceFamily.Web.MVC
                 .TryAddSingleton<IUserClaimsPrincipalFactory<DynamoIdentityUser>, Infrastructure.Authentication.UserClaimsPrincipalFactory<DynamoIdentityUser>>();
             services.TryAddSingleton<UserManager<DynamoIdentityUser>, UserManager<DynamoIdentityUser>>();
             services.TryAddScoped<SignInManager<DynamoIdentityUser>, SignInManager<DynamoIdentityUser>>();
-                
+
 
             AddDefaultTokenProviders(services);
 

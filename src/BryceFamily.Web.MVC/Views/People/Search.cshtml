@@ -9,17 +9,17 @@
 
     var clansSelectItems = ClanService.Clans.Select(c => new SelectListItem()
     {
-        Text = c,
-        Value = c
-    }).Union(new List<SelectListItem>()
-    {
-        new SelectListItem()
+        Text = $"{c.Family}, {c.FamilyName}",
+        Value = c.Id.ToString()
+    }).OrderBy(t => t.Text)
+    .ToList();
+
+    clansSelectItems.Insert(0, new SelectListItem()
     {
         Text = "Select ...",
         Value = "",
         Selected = true
-    }
-    }).OrderBy(t => t.Value);
+    });
 
 
 }

@@ -120,7 +120,8 @@ namespace BryceFamily.Web.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> LogOff()
         {
-            await _signInManager.SignOutAsync();
+            await HttpContext.Authentication.SignOutAsync(IdentityConstants.ApplicationScheme);
+            //await _signInManager.SignOutAsync();
             _logger.LogInformation(4, "User logged out.");
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }

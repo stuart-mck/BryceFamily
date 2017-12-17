@@ -13,14 +13,18 @@ namespace BryceFamily.Web.MVC.Infrastructure
             _clanAndPeopleService = clanAndPeopleService;
         }
 
-        public Models.Person LoggedInPerson { get {
+        public Models.Person LoggedInPerson
+        {
+            get
+            {
                 if (_context.HttpContext.User != null)
                 {
                     var userEmail = _context.HttpContext.User.Identity.Name;
-                    return _clanAndPeopleService.People.FirstOrDefault(p => p.EmailAddress == userEmail);
+                    return userEmail == null ? null : _clanAndPeopleService.People.FirstOrDefault(p => p.EmailAddress == userEmail);
                 }
                 return null;
-            } }
+            }
+        }
 
         public bool IsLoggedIn
         {

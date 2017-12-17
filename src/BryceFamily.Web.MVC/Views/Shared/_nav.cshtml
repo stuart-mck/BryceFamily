@@ -12,6 +12,9 @@
     <li>
         @Html.ActionLink("Gallery", "Index", "Gallery")
     </li>
+    <li>
+        @Html.ActionLink("People", "Index", "People")
+    </li>
     
     @if (!ContextService.IsLoggedIn)
     {
@@ -19,10 +22,5 @@
             @Html.ActionLink("Log In", "LogIn", "Account")
         </li>
     }
-    else
-    {
-        <li>
-            @Html.ActionLink("Log Out", "LogOff", "Account")
-        </li>
-    }
+
 </ul>

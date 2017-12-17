@@ -16,7 +16,7 @@
                 @foreach(var evt in Model.Where(g => !string.IsNullOrEmpty(g.Family)))
                 {
                     <li class="event">
-                        <h3>@Html.ActionLink(evt.Title, "View", "Gallery", new { id = evt.Id }, new { @class = "detail-link" })</h3>
+                        <h3>@Html.ActionLink(evt.Title, "Detail", "Gallery", new { id = evt.Id }, new { @class = "detail-link" })</h3>
                         <div>
                             @Html.DisplayFor(t => evt.Summary)
                         </div>
@@ -35,7 +35,7 @@
                 @foreach (var evt in Model.Where(g => g.FamilyEvent != null))
                 {
                     <li class="event">
-                        <h3>@Html.ActionLink(evt.FamilyEvent.Title, "View", "Gallery", new { id = evt.Id }, new { @class = "detail-link" })</h3>
+                        <h3>@Html.ActionLink(evt.FamilyEvent.Title, "Detail", "Gallery", new { id = evt.Id }, new { @class = "detail-link" })</h3>
                         <div>@Html.DisplayFor(t => evt.Summary)</div>
                         @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
                         {
