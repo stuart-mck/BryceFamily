@@ -8,6 +8,8 @@ using AspNetCore.Identity.DynamoDB;
 using System;
 using BryceFamily.Web.MVC.Infrastructure.Authentication;
 using BryceFamily.Web.MVC.Infrastructure;
+using BryceFamily.Repo.Core.Emails;
+using System.Threading;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
@@ -15,6 +17,7 @@ namespace BryceFamily.Web.MVC.Controllers
     {
         private readonly SignInManager<DynamoIdentityUser> _signInManager;
         private readonly ContextService _contextService;
+        private readonly ISesService _sesService;
         private readonly ILogger<AccountController> _logger;
         private readonly UserManager<DynamoIdentityUser> _userManager;
 
@@ -22,11 +25,13 @@ namespace BryceFamily.Web.MVC.Controllers
             UserManager<DynamoIdentityUser> userManager,
             SignInManager<DynamoIdentityUser> signInManager,
             ContextService contextService,
+            ISesService sesService,
             ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _contextService = contextService;
+            _sesService = sesService;
             _logger = logger;
         }
 
@@ -88,6 +93,17 @@ namespace BryceFamily.Web.MVC.Controllers
             return View(model);
         }
 
+        //
+        // GET: /Account/Register
+        [HttpGet]
+        [Authorize(Roles = RoleNameConstants.SuperAdminRole)]
+        public IActionResult Register(string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
+
+
         [HttpPost]
         [Authorize(Roles = RoleNameConstants.SuperAdminRole)]
         [ValidateAntiForgeryToken]
@@ -120,8 +136,7 @@ namespace BryceFamily.Web.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> LogOff()
         {
-            await HttpContext.Authentication.SignOutAsync(IdentityConstants.ApplicationScheme);
-            //await _signInManager.SignOutAsync();
+            await Microsoft.AspNetCore.Authentication.AuthenticationHttpContextExtensions.SignOutAsync(HttpContext, IdentityConstants.ApplicationScheme);
             _logger.LogInformation(4, "User logged out.");
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
@@ -144,7 +159,7 @@ namespace BryceFamily.Web.MVC.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByNameAsync(model.Email);
-                if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
+                if (user == null)
                 {
                     // Don't reveal that the user does not exist or is not confirmed
                     return View("ForgotPasswordConfirmation");
@@ -152,11 +167,13 @@ namespace BryceFamily.Web.MVC.Controllers
 
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
                 // Send an email with this link
-                //var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                //var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                //await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-                //   "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
-                //return View("ForgotPasswordConfirmation");
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                await _sesService.SendEmail(model.Email, 
+                                            "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>",
+                                            "Email Reset",
+                                            CancellationToken.None);
+                return View("ForgotPasswordConfirmation");
             }
 
             // If we got this far, something failed, redisplay form

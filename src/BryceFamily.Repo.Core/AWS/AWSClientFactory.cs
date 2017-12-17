@@ -2,6 +2,7 @@
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.S3;
+using Amazon.SimpleEmail;
 
 namespace BryceFamily.Repo.Core.AWS
 {
@@ -22,6 +23,11 @@ namespace BryceFamily.Repo.Core.AWS
         public IAmazonS3 GetS3Context()
         {
             return new AmazonS3Client(RegionEndpoint.APSoutheast2);
+        }
+
+        public IAmazonSimpleEmailService GetSesClient()
+        {
+            return new AmazonSimpleEmailServiceClient(RegionEndpoint.USEast1);
         }
 
     }

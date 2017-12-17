@@ -17,7 +17,6 @@ using BryceFamily.Repo.Core.Write.Gallery;
 using BryceFamily.Repo.Core.Read.Gallery;
 using BryceFamily.Repo.Core.Write.ImageReference;
 using BryceFamily.Repo.Core.Read.ImageReference;
-using System.Linq;
 using BryceFamily.Repo.Core.Read.Story;
 using BryceFamily.Repo.Core.Write.Story;
 using AspNetCore.Identity.DynamoDB;
@@ -30,8 +29,7 @@ using Amazon;
 using System.IO;
 using Microsoft.AspNetCore.DataProtection;
 using Serilog;
-using Microsoft.AspNetCore.Authentication;
-using BryceFamily.Web.MVC.Infrastructure.Authentication;
+using BryceFamily.Repo.Core.Emails;
 
 namespace BryceFamily.Web.MVC
 {
@@ -76,6 +74,7 @@ namespace BryceFamily.Web.MVC
             services.AddScoped<IStoryReadRepository, StoryReadRepository>();
             services.AddScoped<IWriteRepository<StoryContent, Guid>, StoryWriteRepository<StoryContent, Guid>>();
 
+            services.AddSingleton<ISesService,SesService>();
 
             services.AddSingleton<IAWSClientFactory, AWSClientFactory>();
 

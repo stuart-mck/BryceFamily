@@ -44,7 +44,7 @@ namespace BryceFamily.Web.MVC.Controllers
 
         [HttpGet]
         [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
-        public async Task<IActionResult> NewEvent()
+        public IActionResult NewEvent()
         {
             return View("EditEvent", new FamilyEvent()
             {
