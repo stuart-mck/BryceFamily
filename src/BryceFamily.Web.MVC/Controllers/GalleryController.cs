@@ -174,8 +174,13 @@ namespace BryceFamily.Web.MVC.Controllers
                 FamilyEvent = newGallery.FamilyEventId,
                 Owner = _contextService.LoggedInPerson.Id 
             };
-            await _writeModel.Save(gallery, new CancellationToken());
-            var events = (await _familyEventReadRepository.GetAllEvents(CancellationToken.None)).Select(Models.FamilyEvent.Map);
+
+            var cancellationToken = CancellationToken.None;
+
+           
+
+            await _writeModel.Save(gallery, cancellationToken);
+            var events = (await _familyEventReadRepository.GetAllEvents(cancellationToken)).Select(Models.FamilyEvent.Map);
             return View(new EventGalleryCreateModel(events)).WithSuccess("Gallery saved"); 
         }
 

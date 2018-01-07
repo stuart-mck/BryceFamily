@@ -6,6 +6,11 @@ namespace BryceFamily.Web.MVC.Models
 {
     public class FamilyEvent
     {
+        public FamilyEvent()
+        {
+            EntityId = Guid.NewGuid();
+        }
+
         public Guid EntityId { get; set; }
         public string Title { get; set; }
         public DateTime StartDate { get; set; }
