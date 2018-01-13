@@ -6,10 +6,7 @@ namespace BryceFamily.Web.MVC.Models
 {
     public class FamilyEvent
     {
-        public FamilyEvent()
-        {
-            EntityId = Guid.NewGuid();
-        }
+    
 
         public Guid EntityId { get; set; }
         public string Title { get; set; }
@@ -28,6 +25,7 @@ namespace BryceFamily.Web.MVC.Models
         public string OrganiserName { get; set; }
         public string OrganiserContact { get; set; }
         public string OrganiserEmail { get; set; }
+        public Guid GalleryId { get; set; }
 
         public Guid ImageReference { get; set; }
 

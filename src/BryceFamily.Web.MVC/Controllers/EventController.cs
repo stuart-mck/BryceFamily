@@ -58,7 +58,8 @@ namespace BryceFamily.Web.MVC.Controllers
                 EntityId = Guid.NewGuid(),
                 EventStatus = eventStatus.Pending,
                 StartDate = DateTime.Today,
-                EndDate = DateTime.Today.AddDays(1)
+                EndDate = DateTime.Today.AddDays(1),
+                GalleryId = Guid.NewGuid()
             });
         }
 
@@ -76,13 +77,13 @@ namespace BryceFamily.Web.MVC.Controllers
                 {
                     await _galleryWriteRepository.Save(new Repo.Core.Model.Gallery
                     {
+                        ID = familyEventPost.GalleryId,
                         DateCreated = DateTime.Now,
                         DefaultFamilyEventGallery = true,
                         FamilyEvent = familyEventPost.EntityId,
                         Owner = _contextService.LoggedInPerson.Id,
                         Name = familyEventPost.Title
                     }, cancellationToken);
-                    
                 }
 
                 await _writeModel.Save(familyEventPost.MapToEntity(), cancellationToken);
