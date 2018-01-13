@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Threading;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
@@ -23,6 +24,11 @@ namespace BryceFamily.Web.MVC.Controllers
             ViewBag.PageName = pageName;
             ViewBag.PageClass = className;
             base.OnActionExecuted(context);
+        }
+
+        protected CancellationToken GetCancellationToken()
+        {
+            return CancellationToken.None;
         }
     }
 }

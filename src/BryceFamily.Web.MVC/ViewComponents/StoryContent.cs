@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BryceFamily.Web.MVC.ViewComponent
+namespace BryceFamily.Web.MVC.ViewComponents
 {
     
     //public class StoryContent : ViewComponent
