@@ -22,6 +22,8 @@ namespace BryceFamily.Web.MVC.Models
 
         public string Family { get; set; }
 
+        public bool DefaultFamilyEventGallery { get; set; }
+
 
         public List<ImageReferenceModel> ImageReferences { get; private set; }
 
@@ -39,7 +41,8 @@ namespace BryceFamily.Web.MVC.Models
                 Id = sourceGallery.ID,
                 DateCreated = sourceGallery.DateCreated,
                 ImageReferences = MapImageReferences(await imageReferenceReadRepository.LoadByGallery(sourceGallery.ID, cancellationToken)),
-                Family = familyName
+                Family = familyName,
+                DefaultFamilyEventGallery = sourceGallery.DefaultFamilyEventGallery
             }
             );
         }
@@ -61,7 +64,8 @@ namespace BryceFamily.Web.MVC.Models
                 ID = this.Id,
                 DateCreated = this.DateCreated,
                 Name = this.Title,
-                Summary = this.Summary
+                Summary = this.Summary,
+                DefaultFamilyEventGallery = this.DefaultFamilyEventGallery
                
             };
         }

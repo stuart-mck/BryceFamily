@@ -1,4 +1,5 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel;
 using BryceFamily.Repo.Core.AWS;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,21 @@ namespace BryceFamily.Repo.Core.Read.Gallery
         {
             _awsClientFactory = awsClientFactory;
             _operationConfig = operationConfig;
+        }
+
+        public async Task<IEnumerable<Model.Gallery>> FindAllByFamilyEvent(Guid familyEventId, CancellationToken cancellationToken)
+        {
+            var dbContext = _awsClientFactory.GetDynamoDBContext();
+
+            var dynamoOperationContext = new DynamoDBOperationConfig()
+            {
+                ConditionalOperator = ConditionalOperatorValues.And,
+                TableNamePrefix = "familybryce.",
+                IndexName = "FamilyEvent-DefaultFamilyEventGallery-index"
+            };
+
+            return await dbContext.QueryAsync<Model.Gallery>(familyEventId, QueryOperator.Equal, new[] { (object)1 }, dynamoOperationContext).GetRemainingAsync(cancellationToken);
+            
         }
 
         public async Task<List<Model.Gallery>> LoadAll(CancellationToken cancellationToken)

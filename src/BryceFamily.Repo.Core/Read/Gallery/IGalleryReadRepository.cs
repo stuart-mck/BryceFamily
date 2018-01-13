@@ -11,5 +11,7 @@ namespace BryceFamily.Repo.Core.Read.Gallery
         Task<List<Model.Gallery>> LoadAll(CancellationToken cancellationToken);
 
         Task<Model.Gallery> Load(Guid id, CancellationToken cancellationToken);
+
+        Task<IEnumerable<Model.Gallery>> FindAllByFamilyEvent(Guid familyEventId, CancellationToken cancellationToken);
     }
 }
