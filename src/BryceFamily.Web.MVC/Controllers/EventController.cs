@@ -6,8 +6,10 @@ using BryceFamily.Web.MVC.Infrastructure;
 using BryceFamily.Web.MVC.Infrastructure.Authentication;
 using BryceFamily.Web.MVC.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -91,6 +93,35 @@ namespace BryceFamily.Web.MVC.Controllers
             }
             return BadRequest();
             
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EventImage(Guid eventId)
+        {
+            var @event = await _readmodel.Load(eventId, GetCancellationToken());
+            return View("EditorTemplates/EventImage", new EventImage(@event.ID));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EventImage(Guid eventId, Guid galleryId, List<IFormFile> files)
+        {
+            var @event = await _galleryReadRepository.FindAllByFamilyEvent(eventId, GetCancellationToken());
+
+            if (@event != null)
+            {
+                // is there an imagegallery for this event?
+                // if so - is there a primary image set for this event?
+                // if so, update it,
+                // if not, then set it (and create a gallery if needed
+            }
+            //otherwise
+            {
+                //create the gallery if needed
+                // save the image
+            }
+
+            //return the id of the image
+            return Json(new { id = Guid.NewGuid() });
         }
 
     }
