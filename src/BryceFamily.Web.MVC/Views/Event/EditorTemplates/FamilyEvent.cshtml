@@ -1,88 +1,127 @@
 ﻿@model FamilyEvent
 
+@{
+    var imgClass = "";
+ }
 
-<div class="row">
-    <div class="col-md-2">
-        <label>Title:</label>
+<form asp-controller="Event" sp-action="NewEvent" method="post">
+    <div class="row">
+        <div class="col-md-2">
+            <label>Title:</label>
+        </div>
+        <div class="col-md-10">
+            <input type="text" asp-for="Title" class="form-control" />
+        </div>
     </div>
-    <div class="col-md-10">
-        <input type="text" asp-for="Title" class="form-control" />
+    <div class="row">
+        <div class="col-md-2">
+            <label>Event Image:</label>
+        </div>
+        <div class="col-md-2">
+            <input type="hidden" asp-for="ImageReference" />
+            @if (Model.ImageReference != Guid.Empty)
+            {
+                <button type="button" id="addImage" class="btn btn-sm" data-toggle="modal" data-target="#eventImage">Edit Image</button>
+            }
+            else
+            {
+                imgClass = "hidden";
+                <button type="button" id="addImage" class="btn btn-sm" data-toggle="modal" data-target="#eventImage">Add Image</button>
+            }
+        </div>
+        <div class="col-md-8">
+            <img src="@Url.Content($"{Model.ImageReference}")" id="imageDisplay" class="@imgClass" />
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-2">
-        <label>Main Image:</label>
-    </div>
-    <div class="col-md-10">
-        <input type="file" asp-for="Title" class="form-control" />
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-2">
-        <label>Description:</label>
-    </div>
-    <div class=" col-md-10">
+    <div class="row">
+        <div class="col-md-2">
+            <label>Description:</label>
+        </div>
+        <div class=" col-md-10">
             @Html.TextAreaFor(m => m.Details, new
-           {
-               rows = "20",
-               style = "resize:none;width:400px;",
-               placeholder = Html.DisplayNameFor(m => m.Details),
-               @class = "form-control input-lg textarea-editor"
-           })
-    </div>
-</div>
-<div>
-    <h4>Event Details</h4>
-    <div class="row">
-        @Html.HiddenFor(t => t.EventStatus)
-        <div class="col-md-2">
-            <label>Type:</label>
-        </div>
-        <div class="col-md-3 ">
-            <select asp-for="EventType" asp-items="Html.GetEnumSelectList<eventType>()" class="form-control">
-                <option selected="selected" value="">Please select</option>
-            </select>
+       {
+           rows = "20",
+           style = "resize:none;width:400px;",
+           placeholder = Html.DisplayNameFor(m => m.Details),
+           @class = "form-control input-lg textarea-editor"
+       })
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-2">
-            <label>Starts:</label>
+    <div>
+        <h4>Event Details</h4>
+        <div class="row">
+            @Html.HiddenFor(t => t.EventStatus)
+            <div class="col-md-2">
+                <label>Type:</label>
+            </div>
+            <div class="col-md-3 ">
+                <select asp-for="EventType" asp-items="Html.GetEnumSelectList<eventType>()" class="form-control">
+                    <option selected="selected" value="">Please select</option>
+                </select>
+            </div>
         </div>
-        <div class="col-md-3">
-            <input type="date" asp-for="StartDate" class="form-control" />
+        <div class="row">
+            <div class="col-md-2">
+                <label>Starts:</label>
+            </div>
+            <div class="col-md-3">
+                <input type="date" asp-for="StartDate" class="form-control" />
+            </div>
+            <div class="col-md-1">
+                <label>Ends:</label>
+            </div>
+            <div class="col-md-3 ">
+                <input type="date" asp-for="EndDate" class="form-control" />
+            </div>
         </div>
-        <div class="col-md-1">
-            <label>Ends:</label>
+        <div class="row address">
+            <div class="col-md-2">
+                <label>Location</label>
+            </div>
+            <div class="col-md-10 ">
+                <label>Address</label><input type="text" asp-for="Address1" class="form-control" /><br />
+                <label>&nbsp;</label><input type="text" asp-for="Address2" class="form-control" /><br />
+                <label>Suburb</label><input type="text" asp-for="City" class="form-control" /><br />
+                <label>State</label><input type="text" asp-for="State" class="form-control" /><br />
+                <label>Post Code</label><input type="number" asp-for="PostCode" maxlength="4" class="form-control" />
+            </div>
         </div>
-        <div class="col-md-3 ">
-            <input type="date" asp-for="EndDate" class="form-control" />
-        </div>
-    </div>
-    <div class="row address">
-        <div class="col-md-2">
-            <label>Location</label>
-        </div>
-        <div class="col-md-10 ">
-            <label>Address</label><input type="text" asp-for="Address1" class="form-control" /><br />
-            <label>&nbsp;</label><input type="text" asp-for="Address2" class="form-control" /><br />
-            <label>Suburb</label><input type="text" asp-for="City" class="form-control" /><br />
-            <label>State</label><input type="text" asp-for="State" class="form-control" /><br />
-            <label>Post Code</label><input type="number" asp-for="PostCode" maxlength="4" class="form-control" />
-        </div>
-    </div>
-    <div class="row address">
-        <div class="col-md-2">
-            <label>Organiser</label>
-        </div>
-        <div class="col-md-10 ">
-            <label>Name</label><input type="text" asp-for="OrganiserName" class="form-control" /><br />
-            <label>Contact</label><input type="text" asp-for="OrganiserContact" class="form-control" /><br />
-            <label>Email</label><input type="email" asp-for="OrganiserEmail" class="form-control" /><br />
-        </div>
+        <div class="row address">
+            <div class="col-md-2">
+                <label>Organiser</label>
+            </div>
+            <div class="col-md-10 ">
+                <label>Name</label><input type="text" asp-for="OrganiserName" class="form-control" /><br />
+                <label>Contact</label><input type="text" asp-for="OrganiserContact" class="form-control" /><br />
+                <label>Email</label><input type="email" asp-for="OrganiserEmail" class="form-control" /><br />
+            </div>
 
+        </div>
     </div>
-</div>
-@Html.HiddenFor(t => t.EntityId)
+    @Html.HiddenFor(t => t.EntityId)
+</form>
 
+    <div class="modal fade" id="eventImage" tabindex="-1" role="dialog" aria-labelledby="eventImageModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form asp-action="EventImage" asp-controller="Event" data-ajax="true" data-ajax-method="POST" data-ajax-success="onSuccess">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="eventImageModalLabel">Set Event Image</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" asp-for="EntityId" />
+                        <input type="file" name="files" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 

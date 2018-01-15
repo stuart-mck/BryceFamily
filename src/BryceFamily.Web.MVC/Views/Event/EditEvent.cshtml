@@ -1,14 +1,13 @@
 ﻿@model FamilyEvent
 
 <h2>New Event</h2>
- <form asp-controller="Event" sp-action="NewEvent" method="post">
+
      <div class="row">
         @Html.EditorForModel()
      </div>
      <div class="row">
          <button type="submit" class="btn btn-primary">Save Changes</button>
      </div>
-</form>
 
 @section Scripts{
     <script language="javascript">
@@ -18,6 +17,12 @@
             maxHeight: null, // set maximum height of editor
             focus: true // set focus to editable area after initializing summernote
         });
+
+        var onSuccess = function (context) {
+            $('#ImageReference').val(context.id);
+            $('#imageDisplay').attr("src", context.id)
+            $('#imageDisplay').removeClass("hidden");
+        };
     </script>
 
 }
