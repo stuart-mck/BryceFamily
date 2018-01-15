@@ -21,7 +21,7 @@
             <input type="hidden" asp-for="ImageReference" />
             @if (Model.ImageReference != Guid.Empty)
             {
-                <button type="button" id="addImage" class="btn btn-sm" data-toggle="modal" data-target="#eventImage">Edit Image</button>
+                <button type="button" id="addImage" class="btn btn-sm" data-toggle="modal" data-target="#eventImage">Change Image</button>
             }
             else
             {
@@ -101,27 +101,7 @@
     @Html.HiddenFor(t => t.EntityId)
 </form>
 
-    <div class="modal fade" id="eventImage" tabindex="-1" role="dialog" aria-labelledby="eventImageModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <form asp-action="EventImage" asp-controller="Event" data-ajax="true" data-ajax-method="POST" data-ajax-success="onSuccess">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="eventImageModalLabel">Set Event Image</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="hidden" asp-for="EntityId" />
-                        <input type="file" name="files" />
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
+@{ 
+    Html.RenderPartial("EditorTemplates/EventImage", new FamilyEventImage { FamilyEventGalleryId = Model.GalleryId, FamilyEventId = Model.EntityId });
+}
 

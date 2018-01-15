@@ -31,7 +31,7 @@ namespace BryceFamily.Repo.Core.Read.Gallery
                 IndexName = "FamilyEvent-DefaultFamilyEventGallery-index"
             };
 
-            return await dbContext.QueryAsync<Model.Gallery>(familyEventId, QueryOperator.Equal, new[] { (object)1 }, dynamoOperationContext).GetRemainingAsync(cancellationToken);
+            return await dbContext.QueryAsync<Model.Gallery>(familyEventId, QueryOperator.Equal, new[] { (object)true }, dynamoOperationContext).GetRemainingAsync(cancellationToken);
             
         }
 

@@ -1,4 +1,5 @@
-﻿using BryceFamily.Repo.Core.Read.FamilyEvents;
+﻿using BryceFamily.Repo.Core.Files;
+using BryceFamily.Repo.Core.Read.FamilyEvents;
 using BryceFamily.Repo.Core.Read.Gallery;
 using BryceFamily.Repo.Core.Read.ImageReference;
 using BryceFamily.Repo.Core.Write;
@@ -6,10 +7,9 @@ using BryceFamily.Web.MVC.Infrastructure;
 using BryceFamily.Web.MVC.Infrastructure.Authentication;
 using BryceFamily.Web.MVC.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,8 +24,10 @@ namespace BryceFamily.Web.MVC.Controllers
         private readonly IGalleryReadRepository _galleryReadRepository;
         private readonly ContextService _contextService;
         private readonly IWriteRepository<Repo.Core.Model.Gallery, Guid> _galleryWriteRepository;
+        private readonly IFileService _fileService;
+        private readonly IWriteRepository<Repo.Core.Model.ImageReference, Guid> _imageReferenceWriteModel;
 
-        public EventController(IFamilyEventReadRepository readmodel, IWriteRepository<Repo.Core.Model.FamilyEvent, Guid> writeModel, IImageReferenceReadRepository imageReferenceReadRepository, IGalleryReadRepository galleryReadRepository, ContextService contextService, IWriteRepository<Repo.Core.Model.Gallery, Guid> galleryWriteRepository) :base("Family Events", "events")
+        public EventController(IFamilyEventReadRepository readmodel, IWriteRepository<Repo.Core.Model.FamilyEvent, Guid> writeModel, IImageReferenceReadRepository imageReferenceReadRepository, IGalleryReadRepository galleryReadRepository, ContextService contextService, IWriteRepository<Repo.Core.Model.Gallery, Guid> galleryWriteRepository, IFileService fileService, IWriteRepository<Repo.Core.Model.ImageReference, Guid> imageReferenceWriteModel) :base("Family Events", "events")
         {
             _readmodel = readmodel;
             _writeModel = writeModel;
@@ -33,6 +35,8 @@ namespace BryceFamily.Web.MVC.Controllers
             _galleryReadRepository = galleryReadRepository;
             _contextService = contextService;
             _galleryWriteRepository = galleryWriteRepository;
+            _fileService = fileService;
+            _imageReferenceWriteModel = imageReferenceWriteModel;
         }
 
         [AllowAnonymous]
@@ -103,27 +107,67 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EventImage(Guid eventId, Guid galleryId, List<IFormFile> files)
+        public async Task<IActionResult> EventImage(FamilyEventImage imageWriteModel)
         {
-            var @event = await _galleryReadRepository.FindAllByFamilyEvent(eventId, GetCancellationToken());
+            var cancellationToken = GetCancellationToken();
+            var gallery = await _galleryReadRepository.FindAllByFamilyEvent(imageWriteModel.FamilyEventId, GetCancellationToken());
 
-            if (@event != null)
+            if (!(gallery.Any() || gallery.Any(t => t.DefaultFamilyEventGallery)))
             {
                 // is there an imagegallery for this event?
-                // if so - is there a primary image set for this event?
-                // if so, update it,
-                // if not, then set it (and create a gallery if needed
+                var eventGallery = new Repo.Core.Model.Gallery()
+                    {
+                        ID = imageWriteModel.FamilyEventGalleryId,
+                        DateCreated = DateTime.Now,
+                        FamilyEvent = imageWriteModel.FamilyEventId,
+                        DefaultFamilyEventGallery = true,
+                        Name  = string.Empty,
+                        Owner = _contextService.LoggedInPerson.Id
+                    };
+                await _galleryWriteRepository.Save(eventGallery, cancellationToken);
             }
-            //otherwise
+            else  
             {
-                //create the gallery if needed
-                // save the image
+                var imageReferences = await _imageReferenceReadRepository.LoadByGallery(imageWriteModel.FamilyEventGalleryId, cancellationToken);
+                var currentDefaultImage = imageReferences.FirstOrDefault(t => t.DefaultGalleryImage);
+                if (currentDefaultImage != null)
+                {
+                    currentDefaultImage.DefaultGalleryImage = false;
+                    await _imageReferenceWriteModel.Save(currentDefaultImage, cancellationToken);
+                }
             }
 
-            //return the id of the image
-            return Json(new { id = Guid.NewGuid() });
-        }
+            var allowedExtensions = new[] { ".png", ".gif", ".jpg" };
 
+            var checkextension = Path.GetExtension(imageWriteModel.DefaultImage.FileName).ToLower();
+
+            if (!allowedExtensions.Contains(checkextension))
+                return BadRequest($"Invalid file format {checkextension} on file {imageWriteModel.DefaultImage.FileName}");
+
+            var img = new ImageReferenceModel()
+            {
+                MimeType = imageWriteModel.DefaultImage.ContentType,
+                Title = imageWriteModel.DefaultImage.FileName,
+                Id = Guid.NewGuid(),
+                GalleryReference = imageWriteModel.FamilyEventGalleryId
+            };
+
+            if (imageWriteModel.DefaultImage.Length > 0)
+            {
+                using (var stream = new MemoryStream())
+                {
+                    await imageWriteModel.DefaultImage.CopyToAsync(stream);
+                    img.Reference = await _fileService.SaveFile(img.Id, imageWriteModel.FamilyEventGalleryId.ToString(), stream, imageWriteModel.DefaultImage.FileName, imageWriteModel.DefaultImage.ContentType, cancellationToken);
+                    stream.Position = 0;
+                    var resized = FileResizer.GetFileResized(ReadFully(stream), 150);
+                    await _fileService.SaveFile(img.Id, $"{imageWriteModel.FamilyEventGalleryId}/thumbnail", resized, imageWriteModel.DefaultImage.FileName, imageWriteModel.DefaultImage.ContentType, cancellationToken);
+
+                    await _imageReferenceWriteModel.Save(img.MapToEntity(), cancellationToken);
+                }
+            }
+            
+            return Json(new { path = img.Reference, id = img.Id });
+        }
     }
 }
         

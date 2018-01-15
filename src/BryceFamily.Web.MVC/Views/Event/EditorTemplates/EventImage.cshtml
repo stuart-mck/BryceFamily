@@ -1,37 +1,59 @@
-﻿@model EventImage
+﻿@model FamilyEventImage
+@inject BryceFamily.Web.MVC.Infrastructure.CDNServiceRoot serviceRoot
 
-<div>
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title" id="myModalLabel">FriendsInfo</h4>
-    </div>
-
-    <form asp-action="EventImage" >
-        <input type="hidden" asp-for="EventId" />
-        <input type="file" name="files"  />
-    </form>
-    
-</div>  
-
-<div class="modal" tabindex="-1" role="dialog">
+<div class="modal fade" id="eventImage" tabindex="-1" role="dialog" aria-labelledby="eventImageModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
+                <h5 class="modal-title" id="eventImageModalLabel">Set Event Image</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-            <form asp-action="EventImage" asp-controller="Event">
-                <input type="hidden" asp-for="EventId" />
-                <input type="file" name="files" />
-            </form>
+            <div class="modal-body" id="imageUpload">
+                <form id="imageUpload">
+                    <input type="hidden" asp-for="FamilyEventId" />
+                    <input type="hidden" asp-for="FamilyEventGalleryId" />
+                    <input type="file" asp-for="DefaultImage" />
+                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary" onclick="uploadData()">Save changes</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+
+
+    function uploadData() {
+
+        var formData = new FormData();
+        formData.append('DefaultImage', $('#DefaultImage')[0].files[0]); // myFile is the input type="file" control
+        formData.append('FamilyEventId', $('#FamilyEventId').val());
+        formData.append('FamilyEventGalleryId', $('#FamilyEventGalleryId').val());
+
+        var _url = '@Url.Action("EventImage", "Event")';
+
+        $.ajax({
+            url: _url,
+            type: 'POST',
+            data: formData,
+            processData: false,  // tell jQuery not to process the data
+            contentType: false,  // tell jQuery not to set contentType
+            success: function (result) {
+                $('#ImageReference').val(result.id);
+                $('#imageDisplay').attr("src", '@serviceRoot.ServiceRoot/' + result.path)
+                $('#imageDisplay').show();
+            },
+            error: function (jqXHR) {
+                alert(jqXHR.responseText);
+            },
+            complete: function (jqXHR, status) {
+                $("#eventImage").hide();
+            }
+        });
+    }
+</script>

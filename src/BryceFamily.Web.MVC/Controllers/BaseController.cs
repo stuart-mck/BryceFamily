@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Threading;
+using System.IO;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
@@ -29,6 +30,20 @@ namespace BryceFamily.Web.MVC.Controllers
         protected CancellationToken GetCancellationToken()
         {
             return CancellationToken.None;
+        }
+
+        protected static byte[] ReadFully(Stream input)
+        {
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
+            }
         }
     }
 }
