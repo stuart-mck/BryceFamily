@@ -46,13 +46,14 @@
             success: function (result) {
                 $('#ImageReference').val(result.id);
                 $('#imageDisplay').attr("src", '@serviceRoot.ServiceRoot/' + result.path)
-                $('#imageDisplay').show();
+                $('#imageDisplay').removeClass("hidden");
             },
             error: function (jqXHR) {
                 alert(jqXHR.responseText);
             },
             complete: function (jqXHR, status) {
-                $("#eventImage").hide();
+                $("#eventImage").modal("hide");
+                $(".modal-backdrop").remove();
             }
         });
     }

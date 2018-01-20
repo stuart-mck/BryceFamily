@@ -93,11 +93,27 @@ namespace BryceFamily.Web.MVC.Controllers
                 }
 
                 await _writeModel.Save(familyEventPost.MapToEntity(), cancellationToken);
-                return RedirectToAction("Index");
+                return RedirectToAction("SendEmail", new { id = familyEventPost.EntityId});
             }
             return BadRequest();
             
         }
+
+        [HttpGet]
+        public async Task<IActionResult> SendEmail(Guid id)
+        {
+            var @event = await _readmodel.Load(id, GetCancellationToken());
+            return View(FamilyEvent.Map(@event));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendEmail(Guid eventId, string emailSubject, string from)
+        {
+            var @event = await _readmodel.Load(id, GetCancellationToken());
+            return View(FamilyEvent.Map(@event));
+        }
+
+
 
         [HttpGet]
         public async Task<IActionResult> EventImage(Guid eventId)
@@ -147,9 +163,10 @@ namespace BryceFamily.Web.MVC.Controllers
             var img = new ImageReferenceModel()
             {
                 MimeType = imageWriteModel.DefaultImage.ContentType,
-                Title = imageWriteModel.DefaultImage.FileName,
+                Title = imageWriteModel.DefaultImage.FileName ,
                 Id = Guid.NewGuid(),
-                GalleryReference = imageWriteModel.FamilyEventGalleryId
+                GalleryReference = imageWriteModel.FamilyEventGalleryId,
+                DefaultGalleryImage = true
             };
 
             if (imageWriteModel.DefaultImage.Length > 0)
@@ -166,7 +183,7 @@ namespace BryceFamily.Web.MVC.Controllers
                 }
             }
             
-            return Json(new { path = img.Reference, id = img.Id });
+            return Json(new { path = img.Reference + "/thumbnail/" + img.Title, id = img.Id });
         }
     }
 }
