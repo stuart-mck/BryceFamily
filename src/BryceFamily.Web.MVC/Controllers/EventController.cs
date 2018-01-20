@@ -109,7 +109,7 @@ namespace BryceFamily.Web.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> SendEmail(Guid eventId, string emailSubject, string from)
         {
-            var @event = await _readmodel.Load(id, GetCancellationToken());
+            
             return View(FamilyEvent.Map(@event));
         }
 
