@@ -56,7 +56,6 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [AllowAnonymous]
-        [Route("")]
         [Route("Event")]
         [Route("Event/Index")]
         // GET: /<controller>/

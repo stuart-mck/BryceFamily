@@ -8,7 +8,7 @@
 
 <div class="row">
     @if (Model.ParentRelationship != Guid.Empty) {
-        var targetId = Guid.Empty;
+        var targetId = -1;
 
         if (!(Model.Father?.IsSpouse).Value)
         {

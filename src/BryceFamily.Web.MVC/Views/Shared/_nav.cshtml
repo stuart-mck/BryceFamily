@@ -1,10 +1,17 @@
 ﻿@inject BryceFamily.Web.MVC.Infrastructure.ContextService ContextService
-<ul class='nav navbar-nav'>
+<ul class="nav nav-list">
     <li>
         @Html.ActionLink("Home", "Index", "Home")
     </li>
     <li>
-        @Html.ActionLink("History", "Index", "History")
+    @Html.ActionLink("History", "Index", "History")
+    @*@Html.ActionLink("History", "Index", "History", null, new { data_toggle = "dropdown" })
+        <b class="caret"></b>
+        <ul class="dropdown-menu">
+            <li>@Html.ActionLink("Stories", "Stories", "History")</li>
+            <li>@Html.ActionLink("Videos", "Video", "History")</li>
+            <li>@Html.ActionLink("Family Tree", "Tree", "History")</li>
+        </ul>*@
     </li>
     <li>
         @Html.ActionLink("Events", "Index", "Event")
