@@ -14,20 +14,20 @@ namespace BryceFamily.Web.MVC.Controllers.Api
 {
     [Produces("application/json")]
     [Route("api/FamilyEvent")]
-    public class FamilyEventController : Controller
+    public class FamilyEventControllerz : Controller
     {
-        private readonly IFamilyEventReadRepository _familyEventReadModel;
+        //private readonly IFamilyEventReadRepository _familyEventReadModel;
 
-        public FamilyEventController(IFamilyEventReadRepository familyEventReadModel)
-        {
-            _familyEventReadModel = familyEventReadModel;
-        }
+        //public FamilyEventController(IFamilyEventReadRepository familyEventReadModel)
+        //{
+        //    _familyEventReadModel = familyEventReadModel;
+        //}
 
-        [HttpGet]
-        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
-        public async Task<IEnumerable<FamilyEvent>> Get()
-        {
-            return (await _familyEventReadModel.GetAllEvents(CancellationToken.None)).Select(FamilyEvent.Map);
-        }
+        //[HttpGet]
+        //[Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        //public async Task<IEnumerable<FamilyEvent>> Get()
+        //{
+        //    return (await _familyEventReadModel.GetAllEvents(CancellationToken.None)).Select(FamilyEvent.Map);
+        //}
     }
 }

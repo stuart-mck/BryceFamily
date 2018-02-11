@@ -1,25 +1,26 @@
-﻿@model BryceFamily.Web.MVC.Models.FamilyEvent
+﻿@model BryceFamily.Web.MVC.Models.SendEventEmailModel
 
 @{
     ViewData["Title"] = "SendEmail";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>@Model.Title</h2>
+<h2>Send Email for event [@Model.EventTitle]</h2>
 
 <div>
     <p>This event has been successfully created!</p>
-    <p>Do you want to send an email to all subscribers to let them know it exists?</p>
+    <p>Do you want to send an email to all email subscribers to let them know about it?</p>
 </div>
 <div class="row">
     <div class="col-md-3">
-        <form>
-                
+        <form asp-action="SendEmail" asp-controller="Event" >
+            <label asp-for="Subject">Email Subject:</label>&nbsp;<input type="text" asp-for="Subject" />
+            <input type="hidden" asp-for="EventId"/>
             <button class="btn" type="submit">Yes</button>
         </form>
     </div>
     <div class="col-md-3">
-        @Html.ActionLink("No / Review", "Detail", "Event", new { @class="btn" },  new { eventId = Model.EntityId})
+        @Html.ActionLink("No / Review", "Detail", "Event", new { @class="btn" },  new { eventId = Model.EventId})
     </div>
 </div>
 

@@ -48,6 +48,8 @@ namespace BryceFamily.Web.MVC.Models
             }
         }
 
+        public string ImagePath { get; private set; }
+
         public Repo.Core.Model.FamilyEvent MapToEntity()
         {
             return new Repo.Core.Model.FamilyEvent()
@@ -81,6 +83,11 @@ namespace BryceFamily.Web.MVC.Models
 
         public static FamilyEvent Map(Repo.Core.Model.FamilyEvent sourceFamilyEvent)
         {
+            return MapWithImageReference(sourceFamilyEvent, Guid.Empty, string.Empty);
+        }
+
+        public static FamilyEvent MapWithImageReference(Repo.Core.Model.FamilyEvent sourceFamilyEvent, Guid imageReference, string imageTitle)
+        {
             if (sourceFamilyEvent == null)
                 return null;
             return new FamilyEvent()
@@ -99,7 +106,9 @@ namespace BryceFamily.Web.MVC.Models
                 EndDate = sourceFamilyEvent.EndDate,
                 OrganiserName = sourceFamilyEvent.OrganiserName,
                 OrganiserEmail = sourceFamilyEvent.OrganiserEmail,
-                OrganiserContact = sourceFamilyEvent.OrganiserEmail
+                OrganiserContact = sourceFamilyEvent.OrganiserEmail,
+                ImageReference = imageReference,
+                ImagePath = $"{imageReference}/{imageTitle}"
 
             };
         }

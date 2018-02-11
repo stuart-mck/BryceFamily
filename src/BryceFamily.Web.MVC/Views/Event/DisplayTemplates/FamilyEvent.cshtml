@@ -1,10 +1,15 @@
 ﻿@model FamilyEvent
-
+@inject BryceFamily.Web.MVC.Infrastructure.CDNServiceRoot serviceRoot
 
 <div>
     <h1 class="centered">
         @Html.DisplayFor(t => t.Title)
     </h1>
+
+
+    <div class="event-image">
+        <img src="@Url.Content($"{serviceRoot.ServiceRoot}/familybryce.gallery/{Model.ImagePath}")" alt="image for @Model.Title"/>
+    </div>
 
     <div class="event-description">
         @Html.Raw(Model.Details)

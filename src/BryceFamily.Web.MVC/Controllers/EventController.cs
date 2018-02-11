@@ -1,4 +1,5 @@
-﻿using BryceFamily.Repo.Core.Files;
+﻿using BryceFamily.Repo.Core.Emails;
+using BryceFamily.Repo.Core.Files;
 using BryceFamily.Repo.Core.Read.FamilyEvents;
 using BryceFamily.Repo.Core.Read.Gallery;
 using BryceFamily.Repo.Core.Read.ImageReference;
@@ -13,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
@@ -26,8 +28,20 @@ namespace BryceFamily.Web.MVC.Controllers
         private readonly IWriteRepository<Repo.Core.Model.Gallery, Guid> _galleryWriteRepository;
         private readonly IFileService _fileService;
         private readonly IWriteRepository<Repo.Core.Model.ImageReference, Guid> _imageReferenceWriteModel;
+        private readonly ISesService _sesServive;
+        private readonly ClanAndPeopleService _clanAndPeopleService;
 
-        public EventController(IFamilyEventReadRepository readmodel, IWriteRepository<Repo.Core.Model.FamilyEvent, Guid> writeModel, IImageReferenceReadRepository imageReferenceReadRepository, IGalleryReadRepository galleryReadRepository, ContextService contextService, IWriteRepository<Repo.Core.Model.Gallery, Guid> galleryWriteRepository, IFileService fileService, IWriteRepository<Repo.Core.Model.ImageReference, Guid> imageReferenceWriteModel) :base("Family Events", "events")
+        public EventController(IFamilyEventReadRepository readmodel,
+                               IWriteRepository<Repo.Core.Model.FamilyEvent, Guid> writeModel,
+                               IImageReferenceReadRepository imageReferenceReadRepository,
+                               IGalleryReadRepository galleryReadRepository,
+                               ContextService contextService,
+                               IWriteRepository<Repo.Core.Model.Gallery, Guid> galleryWriteRepository,
+                               IFileService fileService,
+                               IWriteRepository<Repo.Core.Model.ImageReference, Guid> imageReferenceWriteModel,
+                               ISesService sesServive,
+                               ClanAndPeopleService clanAndPeopleService)
+            : base("Family Events", "events")
         {
             _readmodel = readmodel;
             _writeModel = writeModel;
@@ -37,21 +51,29 @@ namespace BryceFamily.Web.MVC.Controllers
             _galleryWriteRepository = galleryWriteRepository;
             _fileService = fileService;
             _imageReferenceWriteModel = imageReferenceWriteModel;
+            _sesServive = sesServive;
+            _clanAndPeopleService = clanAndPeopleService;
         }
 
         [AllowAnonymous]
+        [Route("")]
+        [Route("Event")]
+        [Route("Event/Index")]
         // GET: /<controller>/
         public async Task<IActionResult> Index()
         {
-            var events = (await _readmodel.GetAllEvents( new CancellationToken())).ToList();
-            
-            return View(events.Select(FamilyEvent.Map));
+            var events = (await _readmodel.GetAllEvents(new CancellationToken())).ToList();
+            return View(events.Select(e => Models.FamilyEvent.Map(e)));
         }
 
+        [Route("Event/{eventId}")]
         public async Task<IActionResult> Detail(Guid eventId)
         {
-            var familyEvent = await _readmodel.Load(eventId, new CancellationToken());
-            return View(FamilyEvent.Map(familyEvent));
+            var cancellationToken = GetCancellationToken();
+            var familyEvent = await _readmodel.Load(eventId, cancellationToken);
+            var gallery = await _galleryReadRepository.FindAllByFamilyEvent(familyEvent.ID, cancellationToken);
+            var imageReference = (await _imageReferenceReadRepository.LoadByGallery(gallery.FirstOrDefault(g => g.DefaultFamilyEventGallery).ID, cancellationToken)).FirstOrDefault(ir => ir.DefaultGalleryImage);
+            return View(Models.FamilyEvent.MapWithImageReference(familyEvent, imageReference.ID, imageReference.Title));
 
         }
 
@@ -59,7 +81,7 @@ namespace BryceFamily.Web.MVC.Controllers
         [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public IActionResult NewEvent()
         {
-            return View("EditEvent", new FamilyEvent()
+            return View("EditEvent", new Models.FamilyEvent()
             {
                 EntityId = Guid.NewGuid(),
                 EventStatus = eventStatus.Pending,
@@ -71,7 +93,7 @@ namespace BryceFamily.Web.MVC.Controllers
 
         [HttpPost]
         [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
-        public async Task<IActionResult> NewEvent(FamilyEvent familyEventPost)
+        public async Task<IActionResult> NewEvent(Models.FamilyEvent familyEventPost)
         {
             if (ModelState.IsValid)
             {
@@ -103,17 +125,45 @@ namespace BryceFamily.Web.MVC.Controllers
         public async Task<IActionResult> SendEmail(Guid id)
         {
             var @event = await _readmodel.Load(id, GetCancellationToken());
-            return View(FamilyEvent.Map(@event));
+            return View(new SendEventEmailModel { EventId = @event.ID, EventTitle = @event.Title });
         }
 
         [HttpPost]
-        public async Task<IActionResult> SendEmail(Guid eventId, string emailSubject, string from)
+        public async Task<IActionResult> SendEmail(SendEventEmailModel sendEventEmailModel)
         {
-            
-            return View(FamilyEvent.Map(@event));
+            var cancellationToken = GetCancellationToken();
+            var @event = await _readmodel.Load(sendEventEmailModel.EventId, cancellationToken);
+
+            foreach(var subscriber in _clanAndPeopleService.People.Where(s => s.SubscribeToEmail))
+            {
+                await _sesServive.SendEmail(subscriber.EmailAddress, BuildEmailContent(@event), sendEventEmailModel.Subject, cancellationToken);
+            }
+
+            return View(new SendEventEmailModel { EventId = @event.ID, EventTitle = @event.Title });
         }
 
+        private string BuildEmailContent(Repo.Core.Model.FamilyEvent @event)
+        {
+            var sb = new StringBuilder();
 
+            sb.Append("<table border=\"0\" valign=\"top\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\"><thead><tr><th>A new event has been added to the Bryce Family Web Site</th></tr></thead>");
+            sb.Append($"<tr><tbody><td colspan=\"2\"><h2>{@event.Title}</h2></td></tr>");
+            sb.Append($"<tr><td colspan=\"2\">{@event.Details}</td></tr>");
+            sb.Append($"<tr><td colspan=\"2\"><table border=\"0\" valign=\"top\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">");
+            sb.Append($"<tr><td>Location:</td><td></td>{@event.Location?.Address1}</tr>");
+            if (!string.IsNullOrEmpty(@event?.Location?.Address2))
+            {
+                sb.Append($"<tr><td>&nbsp;</td><td></td>{@event.Location?.Address2}</tr>");
+            }
+            sb.Append($"<tr><td>&nbsp;</td><td></td>{@event.Location?.City}</tr>");
+            sb.Append($"<tr><td>&nbsp;</td><td></td>{@event.Location?.State} {@event.Location?.PostCode}</tr>");
+            sb.Append($"</table></td></tr>");
+            sb.Append($"<tr><td>Start Date:{@event.StartDate:dd-MMM-yyyy}</td><td>End Date: {@event.EndDate:dd-MMM-yyyy}</td></tr>");
+            sb.Append($"<tr><td>Organiser:{@event.OrganiserName}</td><td>Email: {@event.OrganiserEmail}</td></tr>");
+            sb.Append($"<tr><td>For more details head to <a href=\"http://www.brycefamily.net/event/{@event.ID}\">here<a></td></tr>");
+            sb.Append($"</table>");
+            return sb.ToString();
+        }
 
         [HttpGet]
         public async Task<IActionResult> EventImage(Guid eventId)
