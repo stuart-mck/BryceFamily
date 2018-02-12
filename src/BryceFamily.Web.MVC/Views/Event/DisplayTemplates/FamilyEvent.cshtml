@@ -1,7 +1,15 @@
 ﻿@model FamilyEvent
 @inject BryceFamily.Web.MVC.Infrastructure.CDNServiceRoot serviceRoot
+@inject BryceFamily.Web.MVC.Infrastructure.ContextService contextService
 
-<div>
+<div >
+    @if(contextService.IsLoggedIn)
+    { 
+        <div class="row">
+            @Html.ActionLink("Edit Event", "Edit", "Event", new { eventId = Model.EntityId })
+        </div>
+    }
+
     <h1 class="centered">
         @Html.DisplayFor(t => t.Title)
     </h1>

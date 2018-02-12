@@ -5,9 +5,9 @@ namespace BryceFamily.Web.MVC.Models
     public class EventImage
     {
 
-        public EventImage(Guid iD)
+        public EventImage(Guid eventId)
         {
-            EventId = iD;
+            EventId = eventId;
         }
 
         public Guid EventId { get; set; }

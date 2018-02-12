@@ -17,6 +17,8 @@ namespace BryceFamily.Repo.Core.Model
 
         public bool DefaultGalleryImage { get; set; }
 
+        public Guid GalleryId { get; set; }
+
         public IEnumerable<ImageAssociation> ImageAssociations { get; set; }
 
         [DynamoDBRangeKey]

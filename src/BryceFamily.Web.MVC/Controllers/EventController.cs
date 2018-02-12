@@ -65,15 +65,26 @@ namespace BryceFamily.Web.MVC.Controllers
             return View(events.Select(e => Models.FamilyEvent.Map(e)));
         }
 
-        [Route("Event/{eventId}")]
+        [HttpGet("Event/{eventId}")]
         public async Task<IActionResult> Detail(Guid eventId)
         {
             var cancellationToken = GetCancellationToken();
             var familyEvent = await _readmodel.Load(eventId, cancellationToken);
             var gallery = await _galleryReadRepository.FindAllByFamilyEvent(familyEvent.ID, cancellationToken);
             var imageReference = (await _imageReferenceReadRepository.LoadByGallery(gallery.FirstOrDefault(g => g.DefaultFamilyEventGallery).ID, cancellationToken)).FirstOrDefault(ir => ir.DefaultGalleryImage);
-            return View(Models.FamilyEvent.MapWithImageReference(familyEvent, imageReference.ID, imageReference.Title));
+            return View(Models.FamilyEvent.MapWithImageReference(familyEvent, imageReference.ID, gallery.FirstOrDefault(g => g.DefaultFamilyEventGallery).ID,  imageReference.Title));
 
+        }
+
+        [HttpGet("Event/Edit/{eventId}")]
+        public async Task<IActionResult> Edit(Guid eventId)
+        {
+            var cancellationToken = GetCancellationToken();
+            var familyEvent = await _readmodel.Load(eventId, cancellationToken);
+            var gallery = await _galleryReadRepository.FindAllByFamilyEvent(familyEvent.ID, cancellationToken);
+            var imageReference = (await _imageReferenceReadRepository.LoadByGallery(gallery.FirstOrDefault(g => g.DefaultFamilyEventGallery).ID, cancellationToken)).FirstOrDefault(ir => ir.DefaultGalleryImage);
+            var fe = imageReference == null ? FamilyEvent.Map(familyEvent) : FamilyEvent.MapWithImageReference(familyEvent, imageReference.ID, gallery.FirstOrDefault(g => g.DefaultFamilyEventGallery).ID, imageReference.Title);
+            return View("EditEvent", fe);
         }
 
         [HttpGet]
@@ -164,14 +175,14 @@ namespace BryceFamily.Web.MVC.Controllers
             return sb.ToString();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> EventImage(Guid eventId)
-        {
-            var @event = await _readmodel.Load(eventId, GetCancellationToken());
-            return View("EditorTemplates/EventImage", new EventImage(@event.ID));
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> EventImage(Guid eventId)
+        //{
+        //    var @event = await _readmodel.Load(eventId, GetCancellationToken());
+        //    return View("EditorTemplates/EventImage", new EventImage(@event.ID));
+        //}
 
-        [HttpPost]
+        [HttpPost("Event/EventImage")]
         public async Task<IActionResult> EventImage(FamilyEventImage imageWriteModel)
         {
             var cancellationToken = GetCancellationToken();
@@ -190,9 +201,11 @@ namespace BryceFamily.Web.MVC.Controllers
                         Owner = _contextService.LoggedInPerson.Id
                     };
                 await _galleryWriteRepository.Save(eventGallery, cancellationToken);
+                imageWriteModel.FamilyEventGalleryId = eventGallery.ID;
             }
             else  
             {
+                imageWriteModel.FamilyEventGalleryId = gallery.First(g => g.DefaultFamilyEventGallery).ID;
                 var imageReferences = await _imageReferenceReadRepository.LoadByGallery(imageWriteModel.FamilyEventGalleryId, cancellationToken);
                 var currentDefaultImage = imageReferences.FirstOrDefault(t => t.DefaultGalleryImage);
                 if (currentDefaultImage != null)

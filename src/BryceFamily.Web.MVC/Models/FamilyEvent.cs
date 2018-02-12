@@ -7,7 +7,6 @@ namespace BryceFamily.Web.MVC.Models
     public class FamilyEvent
     {
     
-
         public Guid EntityId { get; set; }
         public string Title { get; set; }
         public DateTime StartDate { get; set; }
@@ -83,10 +82,10 @@ namespace BryceFamily.Web.MVC.Models
 
         public static FamilyEvent Map(Repo.Core.Model.FamilyEvent sourceFamilyEvent)
         {
-            return MapWithImageReference(sourceFamilyEvent, Guid.Empty, string.Empty);
+            return MapWithImageReference(sourceFamilyEvent, Guid.Empty, Guid.Empty, string.Empty);
         }
 
-        public static FamilyEvent MapWithImageReference(Repo.Core.Model.FamilyEvent sourceFamilyEvent, Guid imageReference, string imageTitle)
+        public static FamilyEvent MapWithImageReference(Repo.Core.Model.FamilyEvent sourceFamilyEvent, Guid imageReference, Guid  galleryId, string imageTitle)
         {
             if (sourceFamilyEvent == null)
                 return null;
@@ -108,7 +107,9 @@ namespace BryceFamily.Web.MVC.Models
                 OrganiserEmail = sourceFamilyEvent.OrganiserEmail,
                 OrganiserContact = sourceFamilyEvent.OrganiserEmail,
                 ImageReference = imageReference,
-                ImagePath = $"{imageReference}/{imageTitle}"
+                ImagePath = $"{imageReference}/{imageTitle}",
+                GalleryId = galleryId
+                
 
             };
         }

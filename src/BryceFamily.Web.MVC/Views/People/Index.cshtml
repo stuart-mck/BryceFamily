@@ -1,4 +1,6 @@
 ﻿@using BryceFamily.Web.MVC.Infrastructure.Authentication
+@inject BryceFamily.Web.MVC.Infrastructure.ContextService contextService
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -13,11 +15,21 @@
         {
             @Html.ActionLink("Edit People", "List", "People", null, new { @class = "btn btn-sm" })
             @Html.ActionLink("Add New Person", "Person", "People", null, new { @class = "btn btn-sm" })
+            @Html.ActionLink("Find People", "Search", "People", null, new { @class = "btn btn-sm" })
+        }
+        @if (User.IsInRole(RoleNameConstants.SuperAdminRole))
+        {
             @Html.ActionLink("Import People File", "Import", "People", null, new { @class = "btn btn-sm" })
         }
+        else
+        {
+            @Html.ActionLink("Log in to search for family contact details", "Login", "Account")
 
-        @Html.ActionLink("Find People", "Search", "People", null, new { @class = "btn btn-sm" })
-        
+        }
+
+    </div>
+    <div>
+        <a href="https://www.facebook.com/groups/78127174594/" target="_blank">Bryce Family Facebook Page</a>
     </div>
 </div>
 

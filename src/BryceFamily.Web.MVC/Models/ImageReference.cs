@@ -32,7 +32,8 @@ namespace BryceFamily.Web.MVC.Models
                 Description = Description,
                 MimeType = MimeType,
                 ImageID = Id,
-                DefaultGalleryImage = DefaultGalleryImage
+                DefaultGalleryImage = DefaultGalleryImage,
+                GalleryId = GalleryReference
             };
         }
 

@@ -6,7 +6,7 @@ namespace BryceFamily.Web.MVC.Models
     {
 
 
-        [DisplayName("Clan")]
+        [DisplayName("Family")]
         public string Clan { get; set; }
 
         [DisplayName("First Name")]

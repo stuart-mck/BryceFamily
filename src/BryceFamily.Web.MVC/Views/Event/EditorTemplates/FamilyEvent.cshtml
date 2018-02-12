@@ -1,4 +1,7 @@
 ﻿@model FamilyEvent
+@inject BryceFamily.Web.MVC.Infrastructure.CDNServiceRoot serviceRoot
+
+
 
 @{
     var imgClass = "";
@@ -30,7 +33,7 @@
             }
         </div>
         <div class="col-md-8">
-            <img src="@Url.Content($"{Model.ImageReference}")" id="imageDisplay" class="@imgClass" />
+            <img src="@Url.Content($"{@serviceRoot.ServiceRoot}/familybryce.gallery/{Model.ImagePath}")" id="imageDisplay" class="@imgClass" />
             <input type="hidden" asp-for="GalleryId" />
         </div>
     </div>
