@@ -9,17 +9,36 @@
 <h2>People</h2>
 
 <div class="row">
-    <div class="btn-group">
+    <p>Here is some text about the people in the family - maybe something about how many there are in the clan at the moment, the 12 families etc.</p>
+    <p>Also, some info about the facebook page could go in here. The link to the family facebook page is <a href="https://www.facebook.com/groups/78127174594/" target="_blank">Bryce Family Facebook Page</a></p>
+</div>
 
+<div class="row">
+    
         @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
         {
-            @Html.ActionLink("Edit People", "List", "People", null, new { @class = "btn btn-sm" })
-            @Html.ActionLink("Add New Person", "Person", "People", null, new { @class = "btn btn-sm" })
-            @Html.ActionLink("Find People", "Search", "People", null, new { @class = "btn btn-sm" })
+        <div class="col-md-3">
+            <h3>@Html.ActionLink("Find People", "Search", "People")</h3>
+            <p>Click here to search for family members. If you are a family owner, you can also update details here.</p>
+        </div>
+        <div class="col-md-3">
+            <h3>@Html.ActionLink("Dowload Bluebook", "Bluebook", "People")</h3>
+            <p>Download a full list of all the family members and their contact details from here.</p>
+        </div>
+        <div class="col-md-3">
+            <h3>@Html.ActionLink("Family Reports", "Reports", "People")</h3>
+            <p>A list of reports is available on this page.</p>
+        </div>
         }
+</div>
+
         @if (User.IsInRole(RoleNameConstants.SuperAdminRole))
         {
-            @Html.ActionLink("Import People File", "Import", "People", null, new { @class = "btn btn-sm" })
+            <div class="row">
+                <div class="col-md-3">
+                    <h3>@Html.ActionLink("Import People File", "Import", "People")</h3>
+</div>
+            </div>
         }
         else
         {
@@ -27,9 +46,8 @@
 
         }
 
-    </div>
-    <div>
-        <a href="https://www.facebook.com/groups/78127174594/" target="_blank">Bryce Family Facebook Page</a>
-    </div>
-</div>
+
+
+
+
 

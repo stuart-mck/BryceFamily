@@ -1,16 +1,26 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AspNetCore.Identity.DynamoDB;
+using BryceFamily.Web.MVC.Infrastructure.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace BryceFamily.Web.MVC.Infrastructure
 {
     public class ContextService
     {
         private readonly IHttpContextAccessor _context;
         private readonly ClanAndPeopleService _clanAndPeopleService;
+        private readonly DynamoRoleUsersStore<DynamoIdentityRole, DynamoIdentityUser> _roleStore;
+        private readonly UserManager<DynamoIdentityUser> _userStore;
 
-        public ContextService(IHttpContextAccessor  context, ClanAndPeopleService clanAndPeopleService)
+        public ContextService(IHttpContextAccessor  context, ClanAndPeopleService clanAndPeopleService, DynamoRoleUsersStore<DynamoIdentityRole, DynamoIdentityUser> roleStore, UserManager<DynamoIdentityUser> userStore)
         {
             _context = context;
             _clanAndPeopleService = clanAndPeopleService;
+            _roleStore = roleStore;
+            _userStore = userStore;
         }
 
         public Models.Person LoggedInPerson
@@ -34,12 +44,28 @@ namespace BryceFamily.Web.MVC.Infrastructure
             }
         }
 
-        public bool EditMode { get; set; }
         
 
-        public bool IsClanManager { get; set; }
+        public bool IsClanManager {
+            get
+            {
+                var person = LoggedInPerson;
+                return person.IsClanManager;
+            }
+        }
 
-        public bool IsSuperUser { get; set; }
+        public bool IsSuperUser()
+        {
+            
+            var person = LoggedInPerson;
+            var user = _userStore.FindByEmailAsync(person.EmailAddress).Result;
+            var roles = _roleStore.GetRolesAsync(user, CancellationToken.None).Result;
+            if (roles.Any(t => t == RoleNameConstants.SuperAdminRole))
+                return true;
+            return false;
+
+            
+        }
 
     }
 }

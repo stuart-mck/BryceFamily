@@ -70,7 +70,7 @@ namespace BryceFamily.Web.MVC.Infrastructure
 
                     //hydrate the master list of people
 
-                    peopleList.AddRange(temp.Select(p => Person.FlatMap(p)));
+                    peopleList.AddRange(temp.Select(p => Person.FlatMap(p, this)));
 
                     foreach(var person in temp)
                     {

@@ -12,5 +12,7 @@
         public int Id { get; }
         public string Family { get; }
         public string FamilyName { get; }
+
+        public string FormattedName => $"{Family}, {FamilyName}";
     }
 }

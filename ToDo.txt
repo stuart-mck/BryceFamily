@@ -1,15 +1,10 @@
-gallery management
-	- associate with family event
-	- (image ref editing)
 contacts
 	- emails editor
 	- message filters?
 	- subcription / unsubscription
 	- send email
-style tidy
-google maps integration
-  - events
-  - people ?
+
+
 contact
 - captcha
  lookups
@@ -19,12 +14,10 @@ contact
  search
  - event by date / clan
 
-- rename clan - family
 - rowes into family tree
 - program for reunion
 - email unsubscriptions
 - pin march event to the front page
-- remove lorum ipsum from history and replace with links to stories
 
 - home page
 	- login
@@ -35,9 +28,6 @@ contact
 	- fix styling
 
 - history
-	- remove lorum ipsom
-	- links to stories
-	- links to video?
 	- family tree to 2 levels only
 
 - story edit
@@ -46,13 +36,9 @@ contact
 
 - events
 	- list styling
-	- add RTE to editor
 	- cancel button
 	- styling
-	- generate email?
-	- past v upcoming?
 	- filter by type?
-	- add intro text
 
 	- 
 - people

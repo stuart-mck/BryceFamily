@@ -51,16 +51,14 @@ namespace BryceFamily.Repo.Core.Write.People
                 var person = await dynamoContext.QueryAsync<TEntity>(dynamoOperationContext).GetRemainingAsync();
                 return person.FirstOrDefault();
             }
-            
         }
 
         public async Task Save(TEntity entity, CancellationToken cancellationToken)
         {
             var dynamoContext = _clientFactory.GetDynamoDBContext();
             var person = entity as Person;
-            //if (entity.ID == Guid.Empty)
-            //    entity.ID = Guid.NewGuid();
             person.ParentKey = $"{person.FatherID}_{person.MotherID}";
+            person.LastUpdated = DateTime.Now;
             await dynamoContext.SaveAsync(person, _dynamoDBOperationConfig, cancellationToken);
         }
 

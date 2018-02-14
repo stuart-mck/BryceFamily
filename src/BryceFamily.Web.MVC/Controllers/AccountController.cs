@@ -10,6 +10,7 @@ using BryceFamily.Web.MVC.Infrastructure.Authentication;
 using BryceFamily.Web.MVC.Infrastructure;
 using BryceFamily.Repo.Core.Emails;
 using System.Threading;
+using System.Linq;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
@@ -18,6 +19,7 @@ namespace BryceFamily.Web.MVC.Controllers
         private readonly SignInManager<DynamoIdentityUser> _signInManager;
         private readonly ContextService _contextService;
         private readonly ISesService _sesService;
+        private readonly ClanAndPeopleService _clanAndPeopleService;
         private readonly ILogger<AccountController> _logger;
         private readonly UserManager<DynamoIdentityUser> _userManager;
 
@@ -26,12 +28,14 @@ namespace BryceFamily.Web.MVC.Controllers
             SignInManager<DynamoIdentityUser> signInManager,
             ContextService contextService,
             ISesService sesService,
+            ClanAndPeopleService clanAndPeopleService,
             ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _contextService = contextService;
             _sesService = sesService;
+            _clanAndPeopleService = clanAndPeopleService;
             _logger = logger;
         }
 
@@ -68,7 +72,7 @@ namespace BryceFamily.Web.MVC.Controllers
                     if (result.Succeeded)
                     {
                         _logger.LogInformation(1, "User logged in.");
-                        
+
                         return RedirectToLocal(returnUrl);
                     }
 

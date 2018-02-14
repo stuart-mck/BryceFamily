@@ -66,11 +66,14 @@ namespace BryceFamily.Web.MVC.Controllers
         [Authorize(Roles = RoleNameConstants.AllRoles)]
         public IActionResult Search(SearchPersonModel searchPersonModel)
         {
-            var results = _clanAndPeopleService.People.Where(p => (string.IsNullOrWhiteSpace(searchPersonModel.Clan) || p.Clan.Equals(searchPersonModel.Clan, StringComparison.CurrentCultureIgnoreCase))
-                                                                            && (string.IsNullOrWhiteSpace(searchPersonModel.FirstName) || p.FirstName.Equals(searchPersonModel.FirstName, StringComparison.CurrentCultureIgnoreCase))
-                                                                            && (string.IsNullOrWhiteSpace(searchPersonModel.LastName) || p.LastName.Equals(searchPersonModel.LastName, StringComparison.CurrentCultureIgnoreCase))
-                                                                            && (string.IsNullOrWhiteSpace(searchPersonModel.EmailAddress) || p.EmailAddress.Equals(searchPersonModel.EmailAddress, StringComparison.CurrentCultureIgnoreCase))
-                                                                            && (string.IsNullOrWhiteSpace(searchPersonModel.Occupation) || p.Occupation.Equals(searchPersonModel.Occupation, StringComparison.CurrentCultureIgnoreCase)));
+            var clan = searchPersonModel.Clan == 0 ? null : _clanAndPeopleService.Clans.First(c => c.Id == searchPersonModel.Clan);
+            var clanSearch = clan == null ? string.Empty : $"{clan.Family}, {clan.FamilyName}";
+            
+            var results = _clanAndPeopleService.People.Where(p => (string.IsNullOrWhiteSpace(clanSearch) || p.Clan.Equals(clanSearch))
+                                                                            && (string.IsNullOrWhiteSpace(searchPersonModel.FirstName) || (p.FirstName != null &&  p.FirstName.Equals(searchPersonModel.FirstName, StringComparison.CurrentCultureIgnoreCase)))
+                                                                            && (string.IsNullOrWhiteSpace(searchPersonModel.LastName) || (p.LastName != null && p.LastName.Equals(searchPersonModel.LastName, StringComparison.CurrentCultureIgnoreCase)))
+                                                                            && (string.IsNullOrWhiteSpace(searchPersonModel.EmailAddress) || (p.EmailAddress != null && p.EmailAddress.Equals(searchPersonModel.EmailAddress, StringComparison.CurrentCultureIgnoreCase)))
+                                                                            && (string.IsNullOrWhiteSpace(searchPersonModel.Occupation) || p.Occupation != null && (p.Occupation.Equals(searchPersonModel.Occupation, StringComparison.CurrentCultureIgnoreCase))));
 
 
             return View("List", results);
@@ -90,7 +93,8 @@ namespace BryceFamily.Web.MVC.Controllers
         public async Task<IActionResult> Person(Models.Person person)
         {
 
-            await _writeModel.Save(person.MapToEntity(), new CancellationToken());
+            await _writeModel.Save(person.MapToEntity(_clanAndPeopleService), new CancellationToken());
+            _clanAndPeopleService.ClearPeople();
             return RedirectToAction("Index");
         }
 
@@ -188,6 +192,7 @@ namespace BryceFamily.Web.MVC.Controllers
                                 person.DateOfBirth = ReadNullableDate(sheet, rowId, PersonImport.DOB);
                                 person.DateOfDeath = ReadNullableDate(sheet, rowId, PersonImport.DOD);
                                 person.Gender = ReadStringCell(sheet, rowId, PersonImport.Gender);
+                                person.IsClanManager = false;
 
                                 try
                                 {
