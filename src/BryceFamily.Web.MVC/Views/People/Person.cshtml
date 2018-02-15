@@ -45,6 +45,21 @@
                 <input asp-for="Phone" class="form-control" />
                 <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="DateOfBirth" class="control-label"></label>
+                <input type="date" asp-for="DateOfBirth" class="form-control" />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOfDeath" class="control-label"></label>
+                <input type="date" asp-for="DateOfDeath" class="form-control" />
+                <span asp-validation-for="DateOfDeath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+                <input type="date" asp-for="Gender" class="form-control" />
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
             
             <div class="form-group">
                 <label asp-for="Address" class="control-label"></label>
@@ -82,6 +97,8 @@
                 <input asp-for="Occupation" class="form-control" />
                 <span asp-validation-for="Occupation" class="text-danger"></span>
             </div>
+            <input type="hidden" asp-for="Mother.Id" />
+            <input type="hidden" asp-for="Father.Id" />
             <div class="form-group">
                 <div class="checkbox">
                     <label>
@@ -98,6 +115,44 @@
         </div>
 
     </div>
+    @if (Model.Unions.Any())
+    {
+        <div class="col-md-4">
+            <h4>Family Relationships</h4>
+            @foreach(var union in Model.Unions)
+            {
+                var partnerId = 0;
+                <div class="row">
+                    <div class="col-md-4">
+                        @if (union.Partner1.Id == Model.Id)
+                        {
+                            partnerId = union.Partner2.Id;
+                            @Html.ActionLink($"{union.Partner2.FirstName} {union.Partner2.LastName}", "Person", "People", new { id = union.Partner2.Id })
+                        }
+                        else
+                        {
+                            partnerId = union.Partner1.Id;
+                            @Html.ActionLink($"{union.Partner1.FirstName} {union.Partner1.LastName}", "Person", "People", new { id = union.Partner1.Id })
+                        }
+                    </div>
+                    @if (union.Descendents.Any())
+                    {
+                        <div class="col-md-4">
+                            @foreach (var child in union.Descendents.OrderBy(d => d.DateOfBirth))
+                            {
+                                <div class="row">
+                                    @Html.ActionLink($"{child.FirstName} {child.LastName}", "Person", "People", new { id = child.Id })
+                                </div>
+                            }
+                        </div>
+                    }
+                    <div class="col=md-4">
+                        @Html.ActionLink(linkText: "Add Child", actionName: "AddChild", controllerName: "People", routeValues: new { parent1Id = Model.Id, parent2Id = partnerId }, htmlAttributes: null)
+                    </div>
+                </div>
+            }
+        </div>
+    }
 </div>
     }
     else

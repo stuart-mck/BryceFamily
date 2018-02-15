@@ -15,9 +15,11 @@ using BryceFamily.Repo.Core.Model;
 using BryceFamily.Web.MVC.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using BryceFamily.Web.MVC.Infrastructure.Authentication;
+using System.Text;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
+
     public class PeopleController : BaseController
     {
         private readonly IWriteRepository<Repo.Core.Model.Person, int> _writeModel;
@@ -35,6 +37,7 @@ namespace BryceFamily.Web.MVC.Controllers
             _unionWriteRepository = unionWriteRepository;
         }
 
+        
         public IActionResult Index()
         {
             return View();
@@ -42,20 +45,20 @@ namespace BryceFamily.Web.MVC.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult EmailUnsubscribe([FromQuery] Guid personId)
+        public IActionResult EmailUnsubscribe([FromQuery] int personId)
         {
             return Ok();
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult EmailSubscribe([FromQuery] Guid personId)
+        public IActionResult EmailSubscribe([FromQuery] int personId)
         {
             return Ok();
         }
 
 
-        [HttpGet]
+        
         [Authorize(Roles = RoleNameConstants.AllRoles)]
         public IActionResult Search()
         {
@@ -92,7 +95,6 @@ namespace BryceFamily.Web.MVC.Controllers
         [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public async Task<IActionResult> Person(Models.Person person)
         {
-
             await _writeModel.Save(person.MapToEntity(_clanAndPeopleService), new CancellationToken());
             _clanAndPeopleService.ClearPeople();
             return RedirectToAction("Index");
@@ -112,6 +114,45 @@ namespace BryceFamily.Web.MVC.Controllers
             return View();
         }
 
+        [HttpGet]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        public IActionResult Bluebook()
+        {
+            var output = new StringBuilder();
+
+            output.AppendLine("ID,First Name,Last Name,Middle Name,Gender,Birth,Mother,Father,Death,Phone,Address1,Address2,City,State,PostCode,Email");
+            foreach (var person in _clanAndPeopleService.People)
+            {
+                output.AppendLine($"{person.Id}," +
+                    $"{person.FirstName}," +
+                    $"{person.LastName}," +
+                    $"{person.MiddleName}," +
+                    $"{person.Gender}," +
+                    $"{person.DateOfBirth:dd-MMM-yyyy}," +
+                    $"{person.Mother?.FirstName} {person.Mother?.LastName}," +
+                    $"{person.Father?.FirstName} {person.Father?.LastName}," +
+                    $"{person?.DateOfDeath:dd-MMM-yyyy}," +
+                    $"{person.Phone}," +
+                    $"{person.Address}," +
+                    $"{person.Address1}," +
+                    $"{person.Suburb}," +
+                    $"{person.State}," +
+                    $"{person.PostCode}," +
+                    $"{person.EmailAddress}");
+            }
+
+            byte[] buffer = Encoding.Default.GetBytes(output.ToString());
+
+            //HttpContext.urrent.Response.Clear();
+            //HttpContext.Current.Response.ClearHeaders();
+            //HttpContext.Current.Response.ClearContent();
+            //HttpContext.Current.Response.AddHeader("content-disposition", attachment);
+            //HttpContext.Current.Response.ContentType = "text/csv";
+            //HttpContext.Current.Response.AddHeader("Pragma", "public");
+
+            return File(buffer, "text/csv", "bluebook.csv");
+        }
+
         [HttpPut, Route("{personId}")]
         [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public IActionResult Person([FromRoute]Guid personId, [FromBody]PersonWriteModel person)
@@ -119,6 +160,19 @@ namespace BryceFamily.Web.MVC.Controllers
             return Ok();
         }
 
+        [HttpGet, Route("AddChild/{parent1Id}/{parent2Id}")]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        public IActionResult AddChild([FromRoute]int parent1Id, [FromRoute]int parent2Id)
+        {
+            var parents = _clanAndPeopleService.People.Where(p => p.Id == parent1Id || p.Id == parent2Id);
+
+            var model = new Models.Person()
+            {
+                Mother = parents.FirstOrDefault(t =>  t.Gender.Equals("f", StringComparison.CurrentCultureIgnoreCase)),
+                Father = parents.FirstOrDefault(t => t.Gender.Equals("m", StringComparison.CurrentCultureIgnoreCase)),
+            };
+            return View("Person", model);
+        }
 
         [HttpGet]
         [Authorize(Roles = RoleNameConstants.AllRoles)]
