@@ -1,0 +1,38 @@
+﻿@model IEnumerable<BryceFamily.Web.MVC.Models.FamilyUpdateSummary>
+
+@{
+    ViewData["Title"] = "Family Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Vale</h2>
+
+<div class="row">
+    <p>Here is some text about the latest family updates</p>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FamilyName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastUpdate)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FamilyName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastUpdate)
+                </td>
+                </tr>
+        }
+        </tbody>
+    </table>

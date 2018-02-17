@@ -43,18 +43,45 @@ namespace BryceFamily.Web.MVC.Controllers
             return View();
         }
 
-        [HttpGet]
+        [HttpGet, Route("EmailUnsubscribe/{personId}")]
         [AllowAnonymous]
-        public IActionResult EmailUnsubscribe([FromQuery] int personId)
+        public async Task<IActionResult> EmailUnsubscribe([FromQuery] int personId)
         {
-            return Ok();
+            var cancellationToken = GetCancellationToken();
+            var person = _clanAndPeopleService.People.FirstOrDefault(t => t.Id == personId);
+            var msg = string.Empty;
+            if (person != null)
+            {
+                person.SubscribeToEmail = false;
+                await _writeModel.Save(person.MapToEntity(_clanAndPeopleService), cancellationToken);
+                msg = "Thank you, you have successfully unsubscribed and will no longer receive emails from the site.";
+            }
+            else
+            {
+                msg = "Hmm - we couldn't find a person with that email.";
+            }
+            ViewData["response"] = msg;
+            return View("EmailSubscribe");
         }
 
-        [HttpGet]
+        [HttpGet, Route("EmailSubscribe/{personId}")]
         [AllowAnonymous]
-        public IActionResult EmailSubscribe([FromQuery] int personId)
+        public async Task<IActionResult> EmailSubscribe([FromQuery] int personId)
         {
-            return Ok();
+            var cancellationToken = GetCancellationToken();
+            var person = _clanAndPeopleService.People.FirstOrDefault(t => t.Id == personId);
+            var msg = string.Empty;
+            if (person != null) {
+                person.SubscribeToEmail = true;
+                await _writeModel.Save(person.MapToEntity(_clanAndPeopleService), cancellationToken);
+                msg = "Thank you, you have successfully subscribed and will now receive emails from the site.";
+            }
+            else
+            {
+                msg = "Hmm - we couldn't find a person with that email.";
+            }
+            ViewData["response"] = msg;
+            return View();
         }
 
 
@@ -72,7 +99,7 @@ namespace BryceFamily.Web.MVC.Controllers
             var clan = searchPersonModel.Clan == 0 ? null : _clanAndPeopleService.Clans.First(c => c.Id == searchPersonModel.Clan);
             var clanSearch = clan == null ? string.Empty : $"{clan.Family}, {clan.FamilyName}";
             
-            var results = _clanAndPeopleService.People.Where(p => (string.IsNullOrWhiteSpace(clanSearch) || p.Clan.Equals(clanSearch))
+            var results = _clanAndPeopleService.People.Where(p => (searchPersonModel.Clan == 0 || p.ClanId == searchPersonModel.Clan)
                                                                             && (string.IsNullOrWhiteSpace(searchPersonModel.FirstName) || (p.FirstName != null &&  p.FirstName.Equals(searchPersonModel.FirstName, StringComparison.CurrentCultureIgnoreCase)))
                                                                             && (string.IsNullOrWhiteSpace(searchPersonModel.LastName) || (p.LastName != null && p.LastName.Equals(searchPersonModel.LastName, StringComparison.CurrentCultureIgnoreCase)))
                                                                             && (string.IsNullOrWhiteSpace(searchPersonModel.EmailAddress) || (p.EmailAddress != null && p.EmailAddress.Equals(searchPersonModel.EmailAddress, StringComparison.CurrentCultureIgnoreCase)))
@@ -120,10 +147,11 @@ namespace BryceFamily.Web.MVC.Controllers
         {
             var output = new StringBuilder();
 
-            output.AppendLine("ID,First Name,Last Name,Middle Name,Gender,Birth,Mother,Father,Death,Phone,Address1,Address2,City,State,PostCode,Email");
+            output.AppendLine("Id,Family,First Name,Last Name,Middle Name,Gender,Birth,Mother,Father,Death,Phone,Address1,Address2,City,State,PostCode,Email");
             foreach (var person in _clanAndPeopleService.People)
             {
                 output.AppendLine($"{person.Id}," +
+                    $"{person.ClanName}," +
                     $"{person.FirstName}," +
                     $"{person.LastName}," +
                     $"{person.MiddleName}," +
@@ -142,14 +170,6 @@ namespace BryceFamily.Web.MVC.Controllers
             }
 
             byte[] buffer = Encoding.Default.GetBytes(output.ToString());
-
-            //HttpContext.urrent.Response.Clear();
-            //HttpContext.Current.Response.ClearHeaders();
-            //HttpContext.Current.Response.ClearContent();
-            //HttpContext.Current.Response.AddHeader("content-disposition", attachment);
-            //HttpContext.Current.Response.ContentType = "text/csv";
-            //HttpContext.Current.Response.AddHeader("Pragma", "public");
-
             return File(buffer, "text/csv", "bluebook.csv");
         }
 
@@ -166,12 +186,99 @@ namespace BryceFamily.Web.MVC.Controllers
         {
             var parents = _clanAndPeopleService.People.Where(p => p.Id == parent1Id || p.Id == parent2Id);
 
-            var model = new Models.Person()
+            var model = new NewChildModel(
+                parents.First(t => t.Gender.Equals("f", StringComparison.CurrentCultureIgnoreCase)),
+                parents.First(t => t.Gender.Equals("m", StringComparison.CurrentCultureIgnoreCase))); 
+            return View("NewChild", model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        public async Task<IActionResult> NewChild(NewChildModel model)
+        {
+            var cancellationToken = GetCancellationToken();
+            var parent1 = _clanAndPeopleService.People.FirstOrDefault(t => t.Id == model.Parent1);
+            var parent2 = _clanAndPeopleService.People.FirstOrDefault(t => t.Id == model.Parent2);
+            var newId = _clanAndPeopleService.People.Max(t => t.Id) + 1;
+
+            var union = (await _unionReadRepository.GetAllUnions(cancellationToken)).FirstOrDefault(t => (t.PartnerID == model.Parent1 && t.Partner2ID == model.Parent2) || (t.PartnerID == model.Parent2 && t.Partner2ID == model.Parent1));
+
+            await _writeModel.Save(new Repo.Core.Model.Person()
             {
-                Mother = parents.FirstOrDefault(t =>  t.Gender.Equals("f", StringComparison.CurrentCultureIgnoreCase)),
-                Father = parents.FirstOrDefault(t => t.Gender.Equals("m", StringComparison.CurrentCultureIgnoreCase)),
-            };
-            return View("Person", model);
+                ID = newId,
+                ClandId = parent1.ClanId,
+                DateOfBirth = model.DateOfBirth,
+                FatherID = model.Parent1,
+                FirstName = model.FirstName,
+                MiddleName = model.MiddleName,
+                LastName = model.LastName.ToUpper(),
+                Gender = model.Gender,
+                IsClanManager = false,
+                IsSpouse = false,
+                MotherID = model.Parent2,
+                ParentRelationship = union.ID,
+                SubscribeToEmail = false
+            }, cancellationToken);
+
+            _clanAndPeopleService.ClearPeople();
+            return RedirectToAction("Person", new { id = parent1.Id });
+        }
+
+
+        [HttpGet, Route("Relationship/{partner1}/{partner2}")]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        public IActionResult Relationship([FromRoute]int partner1, [FromRoute]int partner2)
+        {
+            var person = _clanAndPeopleService.People.First(t => t.Id == partner1);
+            var relationship = person.Unions.FirstOrDefault(t => t.Partner1.Id == partner2 || t.Partner2.Id == partner2);
+            return View(relationship);
+        }
+
+        [HttpGet, Route("NewRelationship/{id}")]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        public IActionResult NewRelationship(int id)
+        {
+            var person = _clanAndPeopleService.People.FirstOrDefault(t => t.Id == id);
+            return View(new NewUnionPersonModel(person));
+        }
+
+        [HttpPost, Route("NewRelationship/{id}")]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        public async Task<IActionResult> NewRelationship(NewUnionPersonModel model)
+        {
+            var cancellationToken = GetCancellationToken();
+            var person = _clanAndPeopleService.People.FirstOrDefault(t => t.Id == model.PartnerId);
+            var newId = _clanAndPeopleService.People.Max(t => t.Id) + 1;
+
+            await _writeModel.Save(new Repo.Core.Model.Person()
+            {
+                ID = newId,
+                ClandId = person.ClanId,
+                DateOfBirth = model.DateOfBirth,
+                EmailAddress = model.EmailAddress,
+                FirstName = model.FirstName,
+                MiddleName = model.MiddleName,
+                LastName = model.LastName,
+                Gender = model.Gender,
+                IsClanManager = false,
+                IsSpouse = true,
+                MaidenName = model.MaidenName,
+                Occupation = model.Occupation,
+                Phone = model.PhoneNumber
+            }, cancellationToken);
+
+
+            await _unionWriteRepository.Save(new Repo.Core.Model.Union()
+            {
+                MarriageDate = model.DateOfUnion,
+                PartnerID = model.PartnerId,
+                Partner2ID = newId
+            }, cancellationToken);
+
+            _clanAndPeopleService.ClearPeople();
+
+            return RedirectToAction("Person", model.PartnerId);
+
         }
 
         [HttpGet]
@@ -233,7 +340,7 @@ namespace BryceFamily.Web.MVC.Controllers
                                 person.MiddleName = ReadStringCell(sheet, rowId, PersonImport.MiddleName).ToTitleCase();
                                 person.MaidenName = ReadStringCell(sheet, rowId, PersonImport.MaindenName).ToUpper();
                                 person.Phone = ReadStringCell(sheet, rowId, PersonImport.PhoneNumber);
-                                person.Clan = _clanAndPeopleService.Clans.First(c => c.Id == ReadIntCell(sheet, rowId, PersonImport.Clan)).Family;
+                                person.ClandId = ReadIntCell(sheet, rowId, PersonImport.Clan);
                                 person.IsSpouse = ReadStringCell(sheet, rowId, PersonImport.IsSpouse).Equals("y", StringComparison.CurrentCultureIgnoreCase);
                                 person.MotherID = GetNullableInt(sheet, PersonImport.MotherId, rowId);
                                 person.FatherID = GetNullableInt(sheet, PersonImport.FatherId, rowId);
@@ -247,6 +354,8 @@ namespace BryceFamily.Web.MVC.Controllers
                                 person.DateOfDeath = ReadNullableDate(sheet, rowId, PersonImport.DOD);
                                 person.Gender = ReadStringCell(sheet, rowId, PersonImport.Gender);
                                 person.IsClanManager = false;
+                                person.LastUpdated = DateTime.Now;
+                                person.SubscribeToEmail = !string.IsNullOrEmpty(person.EmailAddress);
 
                                 try
                                 {

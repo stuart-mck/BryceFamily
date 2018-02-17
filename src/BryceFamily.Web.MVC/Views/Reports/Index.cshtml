@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Family Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Family Summaries</h2>
+
+<div class="row">
+    <p>Here is some text about the people in the family - maybe something about how many there are in the clan at the moment, the 12 families etc.</p>
+    <p>Also, some info about the facebook page could go in here. The link to the family facebook page is <a href="https://www.facebook.com/groups/78127174594/" target="_blank">Bryce Family Facebook Page</a></p>
+</div>
+
+<div class="row">
+       <div class="col-md-4">
+           <h4>List of Deceased</h4>
+           <p>This report lists all family members for whom a date of death has been entered</p>
+           @Html.ActionLink("Display Report", "Vale", "Reports")
+       </div>
+    <div class="col-md-4">
+        <h4>Last Updated by Family</h4>
+        <p>This report lists the date of the most recent update for each family</p>
+        @Html.ActionLink("Display Report", "FamilyUpdates", "Reports")
+    </div>
+    <div class="col-md-4">
+        <h4>Updates Since</h4>
+        <p>This report lists all family members that have been updated since the entered date</p>
+        <form asp-action="UpdatesByDate" asp-controller="Reports">
+            <input type="date" name="fromDate" />
+            <button type="submit">Display Report</button>
+        </form>
+        
+    </div>
+</div>

@@ -14,5 +14,6 @@ namespace BryceFamily.Repo.Core.Read.People
         Task<List<Person>> GetChildrenByParents(int fatherId, int motherId, CancellationToken cancellationToken);
 
         Task<List<Person>> GetAllPeople(CancellationToken cancellationToken);
+
     }
 }

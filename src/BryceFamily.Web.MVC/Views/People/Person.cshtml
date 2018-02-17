@@ -8,7 +8,7 @@
 
     var clansSelect = ClanService.Clans.Select(c => new SelectListItem()
     {
-        Selected = Model.Clan == c.Id,
+        Selected = Model.ClanId == c.Id,
         Text = $"{c.Family}, {c.FamilyName}",
         Value = c.Id.ToString()
     });
@@ -26,14 +26,19 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @Html.HiddenFor(m => m.Id)
             <div class="form-group">
-                <label asp-for="Clan" class="control-label"></label>
-                <select asp-for="Clan" asp-items="clansSelect" class="form-control" ></select>
-                <span asp-validation-for="Clan" class="text-danger"></span>
+                <label asp-for="ClanId" class="control-label"></label>
+                <select asp-for="ClanId" asp-items="clansSelect" class="form-control" ></select>
+                <span asp-validation-for="ClanId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
                 <input asp-for="FirstName" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MiddleName" class="control-label"></label>
+                <input asp-for="MiddleName" class="form-control" />
+                <span asp-validation-for="MiddleName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LastName" class="control-label"></label>
@@ -57,7 +62,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Gender" class="control-label"></label>
-                <input type="date" asp-for="Gender" class="form-control" />
+                <input type="text" asp-for="Gender" class="form-control" />
                 <span asp-validation-for="Gender" class="text-danger"></span>
             </div>
             
@@ -97,6 +102,9 @@
                 <input asp-for="Occupation" class="form-control" />
                 <span asp-validation-for="Occupation" class="text-danger"></span>
             </div>
+            <input type="hidden" asp-for="IsClanManager" />
+            <input type="hidden" asp-for="IsSpouse" />
+            <input type="hidden" asp-for="ParentRelationship" />
             <input type="hidden" asp-for="Mother.Id" />
             <input type="hidden" asp-for="Father.Id" />
             <div class="form-group">
@@ -122,18 +130,20 @@
             @foreach(var union in Model.Unions)
             {
                 var partnerId = 0;
+                var partnerName = string.Empty;
                 <div class="row">
                     <div class="col-md-4">
                         @if (union.Partner1.Id == Model.Id)
                         {
                             partnerId = union.Partner2.Id;
-                            @Html.ActionLink($"{union.Partner2.FirstName} {union.Partner2.LastName}", "Person", "People", new { id = union.Partner2.Id })
+                            partnerName = union.Partner2.FullName;
                         }
                         else
                         {
                             partnerId = union.Partner1.Id;
-                            @Html.ActionLink($"{union.Partner1.FirstName} {union.Partner1.LastName}", "Person", "People", new { id = union.Partner1.Id })
+                            partnerName = union.Partner1.FullName;
                         }
+                        @Html.ActionLink(partnerName, "Relationship", "People", new { partner1 = Model.Id, partner2 = partnerId })
                     </div>
                     @if (union.Descendents.Any())
                     {
@@ -153,14 +163,17 @@
             }
         </div>
     }
+    <div class="col-md-4">
+        @Html.ActionLink("New Relationship", "NewRelationship", "People", new { id = Model.Id })
+    </div>
 </div>
     }
     else
     {
 
     <div class="form-group">
-        <label asp-for="Clan" class="control-label"></label>
-        @Model.Clan
+        <label asp-for="ClanId" class="control-label"></label>
+        @Model.ClanId
     </div>
         <div class="form-group">
             <label asp-for="FirstName" class="control-label"></label>

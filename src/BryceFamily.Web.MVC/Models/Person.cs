@@ -1,6 +1,7 @@
 ﻿using BryceFamily.Web.MVC.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace BryceFamily.Web.MVC.Models
@@ -15,12 +16,19 @@ namespace BryceFamily.Web.MVC.Models
         }
 
         public int Id { get; set; }
-        
-        public int Clan { get; set; }
 
+        [DisplayName("Family")]
+        public int ClanId { get; set; }
+
+        [DisplayName("Family")]
         public string ClanName { get; set; }
+
+        [DisplayName("First Name")]
         public string FirstName { get; set; }
+        [DisplayName("Last Name")]
         public string LastName { get; set; }
+        [DisplayName("Middle Name")]
+        public string MiddleName { get; private set; }
         public string Phone { get; set; }
         public string Address { get; set; }
         public string Address1 { get; set; }
@@ -30,22 +38,35 @@ namespace BryceFamily.Web.MVC.Models
         public string EmailAddress { get; set; }
         public string Occupation { get; set; }
         public bool SubscribeToEmail { get; set; }
-        public string MiddleName { get; private set; }
+        
         public List<Union> Unions { get; set; }
         public Person Mother { get; set; }
         public Person Father { get; set; }
+
+        [DisplayName("Birth Date")]
         public DateTime? DateOfBirth { get; set; }
 
+        [DisplayName("Passed")]
         public DateTime? DateOfDeath { get; set; }
-        public string Gender { get; private set; }
-        public bool IsSpouse { get; internal set; }
-        public Guid ParentRelationship { get; private set; }
+        public string Gender { get; set; }
+        public bool IsSpouse { get; set; }
+        public Guid ParentRelationship { get; set; }
 
         public List<Story> Stories { get; set; }
 
         public List<Gallery> Galleries { get; set; }
 
         public bool IsClanManager { get; set; }
+
+        public DateTime LastUpdated { get; set; }
+
+        public string FullName
+        {
+            get
+            {
+                return $"{FirstName} {LastName}";
+            }
+        }
 
         public Repo.Core.Model.Person MapToEntity(ClanAndPeopleService clanAndPeopleService)
         {
@@ -54,10 +75,10 @@ namespace BryceFamily.Web.MVC.Models
                 Address1 = Address,
                 Address2 = Address1,
                 EmailAddress = EmailAddress,
-                FatherID = clanAndPeopleService.People.FirstOrDefault(t => t.Id == Father.Id).Id,
+                FatherID = clanAndPeopleService.People.FirstOrDefault(t => t.Id == Father.Id)?.Id,
                 FirstName = FirstName,
                 MiddleName = MiddleName,
-                MotherID = clanAndPeopleService.People.FirstOrDefault(t => t.Id == Mother.Id).Id,
+                MotherID = clanAndPeopleService.People.FirstOrDefault(t => t.Id == Mother.Id)?.Id,
                 Phone = Phone,
                 LastName = LastName,
                 PostCode = PostCode,
@@ -65,12 +86,14 @@ namespace BryceFamily.Web.MVC.Models
                 SubscribeToEmail = SubscribeToEmail,
                 Suburb = Suburb,
                 Occupation = Occupation,
-                Clan = clanAndPeopleService.Clans.First(t => t.Id == Clan).FormattedName,
+                ClandId = ClanId,
                 DateOfBirth = DateOfBirth,
                 DateOfDeath = DateOfDeath,
                 IsSpouse = IsSpouse,
+                IsClanManager = IsClanManager,
                 Gender = Gender,
-                ID = Id
+                ID = Id,
+                ParentRelationship = ParentRelationship
             };
         }
 
@@ -78,8 +101,6 @@ namespace BryceFamily.Web.MVC.Models
 
         public static Person FlatMap(Repo.Core.Model.Person person, ClanAndPeopleService clanAndPeopleService)
         {
-            var clan = clanAndPeopleService.Clans.FirstOrDefault(t => t.FormattedName == person.Clan);
-
             if (person == null)
                 return null;
             return new Person()
@@ -96,17 +117,16 @@ namespace BryceFamily.Web.MVC.Models
                 SubscribeToEmail = person.SubscribeToEmail,
                 Suburb = person.Suburb,
                 Occupation = person.Occupation,
-                ClanName = clan == null ? string.Empty : clan.FormattedName,
-                Clan = clan == null ? 0 : clan.Id,
+                ClanName = clanAndPeopleService.Clans.First(t => t.Id == person.ClandId).FormattedName,
+                ClanId = person.ClandId,
                 Id = person.ID,
                 IsSpouse = person.IsSpouse,
                 DateOfBirth = person.DateOfBirth,
                 DateOfDeath = person.DateOfDeath,
                 Gender = person.Gender,
-                //Mother = Map(peopleLookup.FirstOrDefault(m => person.MotherID == m.PersonID), peopleLookup),
-                //Father = peopleLookup.FirstOrDefault(m => person.FatherID == m.PersonId),
                 ParentRelationship = person.ParentRelationship,
-                IsClanManager  = person.IsClanManager
+                IsClanManager  = person.IsClanManager,
+                LastUpdated = person.LastUpdated
             };
         }
 

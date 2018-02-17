@@ -1,0 +1,40 @@
+﻿@model BryceFamily.Web.MVC.Models.Union
+@inject BryceFamily.Web.MVC.Infrastructure.ClanAndPeopleService ClanService
+@inject BryceFamily.Web.MVC.Infrastructure.ContextService ContextService
+
+@{
+    ViewData["Title"] = "Relationship";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Html.ActionLink(Model.Partner1.FullName, "Person", "People", new { id = Model.Partner1.Id} ) - @Html.ActionLink(@Model.Partner2.FullName, "Person", "People", new { id = Model.Partner2.Id })</h2>
+
+@if (ContextService.IsLoggedIn && (ContextService.IsClanManager || ContextService.IsSuperUser()))
+{
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Person">
+                <label asp-for="DateOfUnion" class="control-label"></label>
+                <input type="date" asp-for="DateOfUnion" class="form-control" />
+                <span asp-validation-for="DateOfUnion" class="text-danger"></span>
+                <label asp-for="DateOfDissolution" class="control-label"></label>
+                <input type="date" asp-for="DateOfDissolution" class="form-control" />
+                <span asp-validation-for="DateOfDissolution" class="text-danger"></span>
+                <button type="submit" >Save</button>
+            </form>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <label asp-for="DateOfUnion" class="control-label"></label>
+            @Html.DisplayTextFor(t => t.DateOfUnion)
+            <label asp-for="DateOfDissolution" class="control-label"></label>
+            @Html.DisplayTextFor(t => t.DateOfDissolution)
+        </div>
+    </div>
+
+}
+

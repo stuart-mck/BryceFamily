@@ -47,23 +47,5 @@
             }
         </ul>
     </div>
-    @if (Model.Unions.Any()){
-        var union = Model.Unions.First();
-        if (union.Descendents.Any())
-        {
-    <div class="childHeader"></div>
-    <div class="children">
-        <ul>
-            @foreach (var child in union.Descendents)
-            {
-                <li class="childPanel">
-                    @{
-                        Html.RenderPartial("DescendantFamilyTreeNode", child);
-                    }
-                </li>
-             }
-        </ul>
-    </div>
-        }
-    }
+    
 </div>

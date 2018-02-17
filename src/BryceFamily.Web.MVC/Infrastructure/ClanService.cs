@@ -29,19 +29,40 @@ namespace BryceFamily.Web.MVC.Infrastructure
 
         private readonly IReadOnlyList<FamilyClan> _clans = new List<FamilyClan>
         {
-            new FamilyClan(1,"Smith", "Marty"),
-            new FamilyClan(2, "Thomas", "Frank"),
-            new FamilyClan(3, "Robson", "Ivan"),
-            new FamilyClan(4, "Moore", "Thomas"),
-            new FamilyClan(5, "Bryce", "George (Lindsay)"),
-            new FamilyClan(6, "Bryce", "Cecil"),
-            new FamilyClan(7, "Bryce", "Desmond"),
-            new FamilyClan(8, "Bryce", "Harold"),
-            new FamilyClan(9, "Bryce", "Roy"),
-            new FamilyClan(10, "Shield", "William"),
-            new FamilyClan(11, "Hose", "Harold"),
-            new FamilyClan(12, "Barmby", "George"),
-            new FamilyClan(13, "Bryce", "David")
+            new FamilyClan(1,"Bryce", "David and Maria"),
+            new FamilyClan(2, "Bryce", "George (Lindsay) and Dorothy"),
+            new FamilyClan(3, "Barmby", "Ethyl (Sissy) and George"),
+            new FamilyClan(4, "Bryce", "Harold and Phyllis"),
+            new FamilyClan(5, "Hose", "Thelma and Harold"),
+            new FamilyClan(6, "Moore", "Eveleyn and Thomas"),
+            new FamilyClan(7, "Bryce", "Roy and Phyllis"),
+            new FamilyClan(8, "Bryce", "David and Edna"),
+            new FamilyClan(9, "Smith", "Dorothy and Marty"),
+            new FamilyClan(10, "Shield", "Hazel and William"),
+            new FamilyClan(11, "Thomas", "Iris and Frank"),
+            new FamilyClan(12, "Bryce", "Desmond and Marjorie"),
+            new FamilyClan(13, "Robson", "Ivan"),
+            new FamilyClan(14, "Bryce", "Cecil and Val"),
+
+
+            /*
+             * 
+             * 1	Bryce	David and Maria
+2	GBryce	George (Lindsay) and Dorothy
+3	Barmby	Ethyl (Sissy) and George
+4	HBryce	Harold and Phyllis
+5	Hose	Thelma and Harold
+6	Moore	Evelyn and Thomas
+7	RBryce	Roy and Phyllis
+8	Bryce	Edna
+9	Smith	Dorothy and Marty
+10	Shield	Hazel and William
+11	Thomas	Iris and Frank
+12	DBryce	Desmond and Marjorie
+13	Robson	Shirley and Benny
+14	CBryce	Cecil and Val
+
+             * */
         };
 
         public IReadOnlyList<FamilyClan> Clans => _clans;

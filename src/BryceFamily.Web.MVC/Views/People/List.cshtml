@@ -5,16 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>List</h2>
+<h2>Search Results</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Clan)
+                @Html.DisplayNameFor(model => model.ClanName)
             </th>
                 <th>
                     @Html.DisplayNameFor(model => model.FirstName)
@@ -36,10 +34,10 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.OrderBy(t => t.ClanName).ThenBy(f => f.LastName).ThenBy(fn => fn.FirstName)){
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Clan)
+                @Html.DisplayFor(modelItem => item.ClanName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)

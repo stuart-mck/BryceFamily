@@ -57,7 +57,7 @@ namespace BryceFamily.Repo.Core.Write.People
         {
             var dynamoContext = _clientFactory.GetDynamoDBContext();
             var person = entity as Person;
-            person.ParentKey = $"{person.FatherID}_{person.MotherID}";
+            person.ParentKey =  person.FatherID.HasValue && person.MotherID.HasValue ?  $"{person.FatherID}_{person.MotherID}" : string.Empty;
             person.LastUpdated = DateTime.Now;
             await dynamoContext.SaveAsync(person, _dynamoDBOperationConfig, cancellationToken);
         }
