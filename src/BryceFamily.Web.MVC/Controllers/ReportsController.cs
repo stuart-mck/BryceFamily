@@ -52,5 +52,20 @@ namespace BryceFamily.Web.MVC.Controllers
             return View(updates);
         }
 
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        public IActionResult FamilyCountByState()
+        {
+            
+            var updates = from state in _clanAndPeopleService.People
+                            group state by state.State into g
+                            select new FamilyStateSummary()
+                            {
+                                State = g.Key,
+                                Count = g.Count()
+                            };
+            return View(updates);
+            
+        }
+
     }
 }

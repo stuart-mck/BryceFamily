@@ -1,9 +1,11 @@
-﻿@model IEnumerable<BryceFamily.Web.MVC.Models.FamilyUpdateSummary>
+﻿@model IEnumerable<BryceFamily.Web.MVC.Models.FamilyStateSummary>
+
 
 @{
     ViewData["Title"] = "Family Reports";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 
 <h2>List of latest family updates</h2>
 
@@ -15,24 +17,24 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FamilyName)
+                @Html.DisplayNameFor(model => model.State)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastUpdate)
+                @Html.DisplayNameFor(model => model.Count)
             </th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.OrderByDescending(t => t.Count))
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FamilyName)
+                    @Html.DisplayFor(modelItem => item.State)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.LastUpdate)
+                    @Html.DisplayFor(modelItem => item.Count)
                 </td>
-                </tr>
+            </tr>
         }
-        </tbody>
-    </table>
+    </tbody>
+</table>
