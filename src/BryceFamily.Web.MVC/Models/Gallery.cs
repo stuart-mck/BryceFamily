@@ -20,7 +20,11 @@ namespace BryceFamily.Web.MVC.Models
         public Guid Id { get; set; }
         public DateTime DateCreated { get; set; }
 
+        public DateTime GalleryDate { get; set; }
+
         public string Family { get; set; }
+
+        public FamilyClan Clan { get; set; }
 
         public bool DefaultFamilyEventGallery { get; set; }
 
@@ -42,7 +46,9 @@ namespace BryceFamily.Web.MVC.Models
                 DateCreated = sourceGallery.DateCreated,
                 ImageReferences = MapImageReferences(await imageReferenceReadRepository.LoadByGallery(sourceGallery.ID, cancellationToken)),
                 Family = familyName,
-                DefaultFamilyEventGallery = sourceGallery.DefaultFamilyEventGallery
+                DefaultFamilyEventGallery = sourceGallery.DefaultFamilyEventGallery,
+                GalleryDate = sourceGallery.GalleryDate,
+                Clan = clanAndFamilyService.Clans.FirstOrDefault(t => t.Id == sourceGallery.FamilyId)
             }
             );
         }
@@ -65,7 +71,8 @@ namespace BryceFamily.Web.MVC.Models
                 DateCreated = this.DateCreated,
                 Name = this.Title,
                 Summary = this.Summary,
-                DefaultFamilyEventGallery = this.DefaultFamilyEventGallery
+                DefaultFamilyEventGallery = this.DefaultFamilyEventGallery,
+                GalleryDate = GalleryDate
                
             };
         }

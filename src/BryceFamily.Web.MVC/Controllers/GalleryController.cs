@@ -57,7 +57,7 @@ namespace BryceFamily.Web.MVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var galleries = await _readModel.LoadAll(CancellationToken.None);
+            var galleries = (await _readModel.LoadAll(CancellationToken.None)).Where(t => t.FamilyId.HasValue);
 
             var readModel = galleries.Select(
                 g => Models.Gallery.Map(g, _clanAndPeopleService,_familyEventReadRepository, _imageReferenceReadRepository, CancellationToken.None).Result);
@@ -136,11 +136,12 @@ namespace BryceFamily.Web.MVC.Controllers
                 Name = newGallery.Name,
                 Summary = newGallery.Description,
                 FamilyId = newGallery.FamilyId,
-                Owner = _contextService.LoggedInPerson.Id
+                Owner = _contextService.LoggedInPerson.Id,
+                GalleryDate = newGallery.GalleryDate
             };
 
             await _writeModel.Save(gallery, new CancellationToken());
-            return View(new FamilyGalleryCreateModel(_clanAndPeopleService.Clans.ToList())).WithSuccess("Gallery saved");
+            return RedirectToAction("Index").WithSuccess("Gallery saved");
         }
 
 

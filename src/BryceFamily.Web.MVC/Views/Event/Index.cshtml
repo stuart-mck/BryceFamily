@@ -1,52 +1,19 @@
-﻿@model IEnumerable<FamilyEvent>
-@using BryceFamily.Web.MVC.Infrastructure.Authentication
+﻿
 @{
-    Layout = "_Layout";
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-    <div class="col-md-10">
-        <div class="row">
-            @{
-                Html.RenderPartial("Intro");
-            }
-        </div>
-        <h3>Upcoming Events</h3>
-        <ul class="event-summary">
-            @foreach (var evt in Model.Where(t => t.StartDate > DateTime.Now))
-            {
-            <li class="event">
-                <h3>@Html.ActionLink(evt.Title, "Detail", "Event", new { eventId = evt.EntityId }, new { @class = "detail-link" })</h3>
-                <div class="row">
-                    <div class="col-md-2">Event Type: @Html.DisplayFor(t => evt.EventType)</div>
-                    <div class="col-md-2">Start Date: @Html.DisplayFor(t => evt.StartDate)</div>
-                    <div class="col-md-2">Location: @Html.DisplayFor(t => evt.City)</div>
-                    
-                </div>
-            </li>
-            }
-        </ul>
-        <h3>Previous Events</h3>
-        <ul class="event-summary">
-            @foreach (var evt in Model.Where(t => t.StartDate < DateTime.Now))
-            {
-                <li class="event">
-                    <h3>@Html.ActionLink(evt.Title, "Detail", "Event", new { eventId = evt.EntityId }, new { @class = "detail-link" })</h3>
-                    <div class="row">
-                        <div class="col-md-2">Event Type: @Html.DisplayFor(t => evt.EventType)</div>
-                        <div class="col-md-2">Start Date: @Html.DisplayFor(t => evt.StartDate)</div>
-                        <div class="col-md-2">Location: @Html.DisplayFor(t => evt.City)</div>
+<h2>Events</h2>
 
-                    </div>
-                </li>
-            }
-        </ul>
-        <div class="row">
-            @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
-            {
-                <span class="editorButton">@Html.ActionLink("Add New", "NewEvent", "Event", null, new { @class = "btn btn-primary" })</span>
-            }
-        </div>
+<div class="row">
+    <div class="col-md-4">
+        <h4>Reunions</h4>
+        @Html.ActionLink("Reunions", "Reunions", "Event")
     </div>
-
-
+    <div class="col-md-4">
+        <h4>Events</h4>
+        @Html.ActionLink("Events", "Events", "Event")
+    </div>
+</div>
 

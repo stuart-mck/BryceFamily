@@ -19,6 +19,8 @@ namespace BryceFamily.Repo.Core.Model
 
         public DateTime DateCreated { get; set; }
 
+        public DateTime GalleryDate { get; set; }
+
         public bool DefaultFamilyEventGallery { get; set; }
 
 

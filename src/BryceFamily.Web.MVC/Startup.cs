@@ -101,10 +101,8 @@ namespace BryceFamily.Web.MVC
             services.Configure<IdentityOptions>(options =>
             {
                 options.Lockout.AllowedForNewUsers = true;
-                options.Password.RequireDigit = true;
                 options.Password.RequiredLength = 8;
                 options.Password.RequireUppercase = true;
-                options.Password.RequireLowercase = true;
             });
 
             services.ConfigureApplicationCookie(options =>

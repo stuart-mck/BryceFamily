@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "New Family Gallery";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var families = Model.Families.OrderBy(x => x.Id).Select(f => new SelectListItem()
+    var families = Model.Families.OrderBy(x => x.FormattedName).Select(f => new SelectListItem()
     {
         Text = $"{f.Family}, {f.FamilyName}",
         Value = f.Id.ToString(),
@@ -26,7 +26,7 @@
             <label>Description:</label>
         </div>
         <div class="col-md-8">
-            <textarea asp-for="Description" class="form-control" rows="10" cols="10" ></textarea>
+            <textarea asp-for="Description" class="form-control" rows="10" cols="10"></textarea>
         </div>
     </div>
     <div class="row">
@@ -35,6 +35,14 @@
         </div>
         <div class="col-md-8">
             <select asp-for="FamilyId" asp-items="families" class="form-control"></select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <label>Gallery Date:</label>
+        </div>
+        <div class="col-md-8">
+            <input type="date" asp-for="GalleryDate" class="form-control" />
         </div>
     </div>
     <button type="submit" class="btn btn-primary">Save</button>

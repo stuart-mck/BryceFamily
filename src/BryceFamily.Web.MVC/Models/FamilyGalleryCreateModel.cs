@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BryceFamily.Web.MVC.Models
@@ -26,6 +27,8 @@ namespace BryceFamily.Web.MVC.Models
 
         [Required]
         public int FamilyId { get; set; }
+
+        public DateTime GalleryDate { get; set; }
 
         public IReadOnlyList<FamilyClan> Families => _clans;
     }

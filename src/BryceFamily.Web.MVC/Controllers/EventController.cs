@@ -41,7 +41,7 @@ namespace BryceFamily.Web.MVC.Controllers
                                IWriteRepository<Repo.Core.Model.ImageReference, Guid> imageReferenceWriteModel,
                                ISesService sesServive,
                                ClanAndPeopleService clanAndPeopleService)
-            : base("Family Events", "events")
+            : base("Family Reunions", "events")
         {
             _readmodel = readmodel;
             _writeModel = writeModel;
@@ -61,7 +61,26 @@ namespace BryceFamily.Web.MVC.Controllers
         // GET: /<controller>/
         public async Task<IActionResult> Index()
         {
-            var events = (await _readmodel.GetAllEvents(new CancellationToken())).ToList();
+            //var events = (await _readmodel.GetAllEvents(new CancellationToken())).ToList();
+            //return View(events.Select(e => Models.FamilyEvent.Map(e)));
+            return View();
+        }
+
+        [AllowAnonymous]
+        [Route("Event/Reunions")]
+        // GET: /<controller>/
+        public async Task<IActionResult> Reunions()
+        {
+            var events = (await _readmodel.GetAllEvents(new CancellationToken())).Where(t => t.EventType == Repo.Core.Model.EventType.Reunion).ToList();
+            return View(events.Select(e => Models.FamilyEvent.Map(e)));
+        }
+
+        [AllowAnonymous]
+        [Route("Event/Events")]
+        // GET: /<controller>/
+        public async Task<IActionResult> Events()
+        {
+            var events = (await _readmodel.GetAllEvents(new CancellationToken())).Where(t => t.EventType != Repo.Core.Model.EventType.Reunion).ToList();
             return View(events.Select(e => Models.FamilyEvent.Map(e)));
         }
 

@@ -2,6 +2,7 @@
 {
     public enum EventType
     {
+        Reunion,
         Gathering,
         Birthday,
         Funeral,

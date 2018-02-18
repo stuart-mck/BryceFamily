@@ -29,20 +29,20 @@ namespace BryceFamily.Web.MVC.Infrastructure
 
         private readonly IReadOnlyList<FamilyClan> _clans = new List<FamilyClan>
         {
-            new FamilyClan(1,"Bryce", "David and Maria"),
-            new FamilyClan(2, "Bryce", "George (Lindsay) and Dorothy"),
-            new FamilyClan(3, "Barmby", "Ethyl (Sissy) and George"),
-            new FamilyClan(4, "Bryce", "Harold and Phyllis"),
-            new FamilyClan(5, "Hose", "Thelma and Harold"),
-            new FamilyClan(6, "Moore", "Eveleyn and Thomas"),
-            new FamilyClan(7, "Bryce", "Roy and Phyllis"),
-            new FamilyClan(8, "Bryce", "David and Edna"),
-            new FamilyClan(9, "Smith", "Dorothy and Marty"),
-            new FamilyClan(10, "Shield", "Hazel and William"),
-            new FamilyClan(11, "Thomas", "Iris and Frank"),
-            new FamilyClan(12, "Bryce", "Desmond and Marjorie"),
-            new FamilyClan(13, "Robson", "Ivan"),
-            new FamilyClan(14, "Bryce", "Cecil and Val"),
+            new FamilyClan(1,"Bryce", "David and Maria", 0),
+            new FamilyClan(2, "Bryce", "George (Lindsay) and Dorothy", 1),
+            new FamilyClan(3, "Barmby", "Ethyl (Sissy) and George", 2),
+            new FamilyClan(4, "Bryce", "Harold and Phyllis", 3),
+            new FamilyClan(5, "Hose", "Thelma and Harold", 4),
+            new FamilyClan(6, "Moore", "Eveleyn and Thomas", 5),
+            new FamilyClan(7, "Bryce", "Roy and Phyllis", 6),
+            new FamilyClan(8, "Bryce", "David and Edna", 7),
+            new FamilyClan(9, "Smith", "Dorothy and Marty", 8),
+            new FamilyClan(10, "Shield", "Hazel and William", 9 ),
+            new FamilyClan(11, "Thomas", "Iris and Frank", 10),
+            new FamilyClan(12, "Bryce", "Desmond and Marjorie", 11),
+            new FamilyClan(13, "Robson", "Ivan and Shirley", 12 ),
+            new FamilyClan(14, "Bryce", "Cecil and Val", 13),
 
 
             /*

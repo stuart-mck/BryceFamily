@@ -2,7 +2,7 @@
 {
     public class FamilyClan
     {
-        public FamilyClan(int id, string family, string familyName)
+        public FamilyClan(int id, string family, string familyName, int order)
         {
             Id = id;
             Family = family;
@@ -12,7 +12,7 @@
         public int Id { get; }
         public string Family { get; }
         public string FamilyName { get; }
-
+        public int DisplayOrder { get; set; }
         public string FormattedName => $"{Family}, {FamilyName}";
     }
 }
