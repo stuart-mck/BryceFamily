@@ -369,6 +369,50 @@ namespace BryceFamily.Web.MVC.Controllers
                                 rowId++;
 
                             }
+
+                            //do unions from pointers to parents
+                            var parentChildRowId = 2;
+                            while (sheet.Cells[parentChildRowId, 1].Text != string.Empty)
+                            {
+                                var father = string.IsNullOrWhiteSpace(sheet.Cells[parentChildRowId, 12].Text) ? null : await _writeModel.FindByQuery(new PersonIdentifier { PersonId = ReadIntCell(sheet, parentChildRowId, PersonImport.FatherId) },
+                                                                                cancellationToken);
+                                var mother = string.IsNullOrWhiteSpace(sheet.Cells[parentChildRowId, 11].Text) ? null : await _writeModel.FindByQuery(new PersonIdentifier { PersonId = ReadIntCell(sheet, parentChildRowId, PersonImport.MotherId) },
+                                                                                cancellationToken);
+
+                                if (father != null || mother != null) // we have a parent / parents
+                                {
+                                    //is there a union?
+                                    var thisUnion = await _unionWriteRepository.FindByQuery(new UnionQuery
+                                    {
+                                        Partner1Id = father.ID,
+                                        Partner2Id = mother.ID
+
+                                    }, cancellationToken);
+                                    if (thisUnion == null)
+                                    {
+                                        thisUnion = await _unionWriteRepository.FindByQuery(new UnionQuery
+                                        {
+                                            Partner1Id = mother.ID,
+                                            Partner2Id = father.ID
+
+                                        }, cancellationToken);
+                                    }
+                                    if (thisUnion == null)
+                                    {
+                                        await _unionWriteRepository.Save(new Repo.Core.Model.Union()
+                                        {
+                                            PartnerID = father?.ID,
+                                            Partner2ID = mother?.ID,
+                                            ID = Guid.NewGuid()
+                                        }, cancellationToken);
+                                    }
+                                    var child = await _writeModel.FindByQuery(new PersonIdentifier { PersonId = ReadIntCell(sheet, parentChildRowId, PersonImport.ID) },
+                                                                                cancellationToken);
+                                    child.ParentRelationship = thisUnion.ID;
+                                    await _writeModel.Save(child, cancellationToken);
+                                }
+                                parentChildRowId++;
+                            }
                         }
 
                         var spouseSheet = excel.Workbook.Worksheets["Spouses"];
@@ -378,11 +422,11 @@ namespace BryceFamily.Web.MVC.Controllers
                             while (spouseSheet.Cells[rowId, 1].Text != string.Empty)
                             {
 
-                                var clanMember = await _writeModel.FindByQuery(new PersonIdentifier { PersonId = ReadIntCell(spouseSheet, rowId, 1) }, 
-                                                                                CancellationToken.None);
+                                var clanMember = await _writeModel.FindByQuery(new PersonIdentifier { PersonId = ReadIntCell(spouseSheet, rowId, 1) },
+                                                                                cancellationToken);
 
                                 var spouse = await _writeModel.FindByQuery(new PersonIdentifier { PersonId = ReadIntCell(spouseSheet, rowId, 2) },
-                                                                                CancellationToken.None);
+                                                                                cancellationToken);
 
                                 var union = await _unionWriteRepository.FindByQuery(new UnionQuery
                                 {
@@ -393,21 +437,32 @@ namespace BryceFamily.Web.MVC.Controllers
 
                                 if (union == null)
                                 {
-                                    union = new Repo.Core.Model.Union()
+                                    //is there one going the other way?
+                                    union = await _unionWriteRepository.FindByQuery(new UnionQuery
                                     {
-                                        PartnerID = ReadIntCell(spouseSheet, rowId, 1),
-                                        Partner2ID = ReadIntCell(spouseSheet, rowId, 2),
-                                        ID = Guid.NewGuid()
-                                    };
+                                        Partner1Id = ReadIntCell(spouseSheet, rowId, 2),
+                                        Partner2Id = ReadIntCell(spouseSheet, rowId, 1)
+
+                                    }, cancellationToken);
+
+                                    if (union == null)
+                                    {
+
+                                        union = new Repo.Core.Model.Union()
+                                        {
+                                            PartnerID = ReadIntCell(spouseSheet, rowId, 1),
+                                            Partner2ID = ReadIntCell(spouseSheet, rowId, 2),
+                                            ID = Guid.NewGuid()
+                                        };
+                                    }
                                 }
 
 
                                 union.MarriageDate = ReadNullableDate(spouseSheet, rowId, 3);
                                 union.DivorceDate = ReadNullableDate(spouseSheet, rowId, 4);
+                                union.IsEnded = string.IsNullOrEmpty(ReadStringCell(spouseSheet, rowId, 5)) ? false : true;
 
                                 await _unionWriteRepository.Save(union, cancellationToken);
-
-                                await ProcessDirectChildrenOfUnion(union, clanMember, spouse, cancellationToken);
                                 
                                 rowId++;
                             }
@@ -486,10 +541,10 @@ namespace BryceFamily.Web.MVC.Controllers
             private static int ReadIntCell(ExcelWorksheet sheet, int rowNumber, int columnId)
         {
             var cellValue = sheet.Cells[rowNumber, columnId].Text;
-            if (string.IsNullOrEmpty(cellValue)) throw new ArgumentOutOfRangeException($"Cannot convert {columnId} to integer");
+            if (string.IsNullOrEmpty(cellValue)) throw new ArgumentOutOfRangeException($"Cannot convert columnId [{columnId}] to integer as it is null from rowId of {rowNumber} and sheet {sheet.Name}");
             if (int.TryParse(cellValue, out var intValue))
                 return intValue;
-            throw new ArgumentOutOfRangeException($"Cannot convert {columnId} to integer");
+            throw new ArgumentOutOfRangeException($"Cannot convert columnId [{columnId}] to integer with supplied value of {cellValue} from rowId of {rowNumber} and sheet {sheet.Name}");
         }
 
         private static int ReadIntCell(ExcelWorksheet sheet, int rowNumber, PersonImport columnId)
@@ -500,6 +555,11 @@ namespace BryceFamily.Web.MVC.Controllers
         private static string ReadStringCell(ExcelWorksheet sheet, int rowNumber, PersonImport columnId)
         {
             return sheet.Cells[rowNumber, columnId.ToInt()].Text.Trim();
+        }
+
+        private static string ReadStringCell(ExcelWorksheet sheet, int rowNumber, int columnId)
+        {
+            return sheet.Cells[rowNumber, columnId].Text.Trim();
         }
 
         private static int? GetNullableInt(ExcelWorksheet sheet, PersonImport columnId, int rowNumber)

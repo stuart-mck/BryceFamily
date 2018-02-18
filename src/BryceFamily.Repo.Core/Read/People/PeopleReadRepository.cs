@@ -27,7 +27,7 @@ namespace BryceFamily.Repo.Core.Read.People
             return results;
         }
 
-        public async Task<List<Person>> GetChildrenByParents(int fatherId, int motherId, CancellationToken cancellationToken)
+        public async Task<List<Person>> GetChildrenByParents(int? fatherId, int? motherId, CancellationToken cancellationToken)
         {
             var dbContext = _awsClientFactory.GetDynamoDBContext();
 

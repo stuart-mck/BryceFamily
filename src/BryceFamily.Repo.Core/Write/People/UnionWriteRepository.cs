@@ -42,7 +42,6 @@ namespace BryceFamily.Repo.Core.Write.People
 
             var queryResult = await dynamoContext.QueryAsync<TEntity>(BuildIndex(personQuery.Partner1Id, personQuery.Partner2Id), dynamoOperationContext).GetRemainingAsync(cancellationToken);
             return queryResult.FirstOrDefault();
-            
         }
 
         public async Task Save(TEntity entity, CancellationToken cancellationToken)
@@ -51,12 +50,13 @@ namespace BryceFamily.Repo.Core.Write.People
             var union = entity as Union;
             if (union.ID == Guid.Empty)
                 union.ID = Guid.NewGuid();
-            union.Members = BuildIndex(union.PartnerID, union.Partner2ID);
+            union.LastUpdated = DateTime.Now;
+            union.Members = BuildIndex(union?.PartnerID, union?.Partner2ID);
             await dynamoContext.SaveAsync(union, _dynamoDBOperationConfig, cancellationToken);
 
         }
 
-        private string BuildIndex(int partner1Id, int partner2Id)
+        private string BuildIndex(int? partner1Id, int? partner2Id)
         {
             return $"{partner1Id}_{partner2Id}";
         }

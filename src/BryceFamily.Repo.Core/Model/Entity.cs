@@ -10,5 +10,7 @@ namespace BryceFamily.Repo.Core.Model
         [DynamoDBHashKey]   
         public TId ID { get; set; }
 
+        public DateTime LastUpdated { get; set; }
+
     }
 }

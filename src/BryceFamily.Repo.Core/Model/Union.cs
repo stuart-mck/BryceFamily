@@ -18,5 +18,7 @@ namespace BryceFamily.Repo.Core.Model
 
         public bool IsEnded { get; set; }
 
+        public string Members { get; set; }
+
     }
 }

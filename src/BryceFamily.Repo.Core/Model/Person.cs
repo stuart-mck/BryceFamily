@@ -54,7 +54,6 @@ namespace BryceFamily.Repo.Core.Model
 
         public bool IsSpouse { get; set; }
 
-        public DateTime LastUpdated { get; set; }
 
         public bool IsClanManager { get; set; }
         public int ClandId { get; set; }
