@@ -1,9 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using BryceFamily.Web.MVC.Infrastructure;
 using BryceFamily.Web.MVC.Models;
+using BryceFamily.Web.MVC.Infrastructure.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using System;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
@@ -16,16 +17,20 @@ namespace BryceFamily.Web.MVC.Controllers
             _clanAndPeopleService = clanAndPeopleService;
         }
 
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public IActionResult Index()
         {
             return View();
         }
 
+
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public IActionResult Vale()
         {
             return View(_clanAndPeopleService.People.Where(t => t.DateOfDeath.HasValue));
         }
 
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public IActionResult FamilyUpdates()
         {
             var updates = from clan in _clanAndPeopleService.People
@@ -37,6 +42,13 @@ namespace BryceFamily.Web.MVC.Controllers
                               LastUpdate = g.Max(t => t.LastUpdated)
                           };
             
+            return View(updates);
+        }
+
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        public IActionResult UpdatesByDate(DateTime dateTime)
+        {
+            var updates = _clanAndPeopleService.People.Where(d => d.LastUpdated > dateTime);
             return View(updates);
         }
 

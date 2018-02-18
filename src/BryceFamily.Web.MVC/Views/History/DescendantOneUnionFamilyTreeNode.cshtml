@@ -27,20 +27,29 @@
             @if (Model.Unions.Any())
             {
                 var union = Model.Unions.First();
-                var partner = union.Partner1.Id == Model.Id ? union.Partner2 : union.Partner1;
+                Person partner = null;
+                if (union.Partner1 != null)
+                {
+                    partner = union.Partner1.Id == Model.Id ? union.Partner2 : union.Partner1;
+                }
+                else if (union.Partner2 != null)
+                {
+
+                    partner = union.Partner2.Id == Model.Id ? union.Partner2 : null;
+                }
                 <li>
                     <div>&nbsp;</div>
                     <div class="familyMember spouse gender @partner.Gender">
                         <span><b>@partner.LastName</b>,  @partner.FirstName @partner.MiddleName</span><br/>
                         @if (partner.Stories.Any())
-                       {
+                    {
                             <span>@Html.ActionLink("View Stories", "Stories", "History", new { id = partner.Id})</span><br />
                         }
                         @if (partner.Galleries.Any())
-                        {
+                    {
                             <span>View Galleries</span><br />
                         }
-                        @Html.ActionLink("Details", "Person", "People", new { id = partner.Id })<br />
+                    @Html.ActionLink("Details", "Person", "People", new { id = partner.Id })<br />
                         @Html.ActionLink("Select", "Tree", "History", new { id = Model.Id })
                     </div>
                 </li>

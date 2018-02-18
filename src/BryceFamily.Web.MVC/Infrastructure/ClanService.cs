@@ -148,8 +148,8 @@ namespace BryceFamily.Web.MVC.Infrastructure
             if (processedUnions.Any(u => u == union.ID))
                 return;
 
-            var partner1 = peopleList.First(p => p.Id == union.PartnerID);
-            var partner2 = peopleList.First(p => p.Id == union.Partner2ID);
+            var partner1 = peopleList.FirstOrDefault(p => p.Id == union.PartnerID);
+            var partner2 = peopleList.FirstOrDefault(p => p.Id == union.Partner2ID);
             var children = peopleList.Where(c => c.ParentRelationship == union.ID);
             //var children = peopleLookup.Where(f => f?.ParentRelationship == union.ID);
             //make the union
@@ -164,8 +164,8 @@ namespace BryceFamily.Web.MVC.Infrastructure
             processedUnions.Add(union.ID);
 
 
-            partner1.Unions.Add(newUnion);
-            partner2.Unions.Add(newUnion);
+            partner1?.Unions.Add(newUnion);
+            partner2?.Unions.Add(newUnion);
 
         }
 

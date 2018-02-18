@@ -151,14 +151,14 @@ namespace BryceFamily.Web.MVC.Controllers
             foreach (var person in _clanAndPeopleService.People)
             {
                 output.AppendLine($"{person.Id}," +
-                    $"{person.ClanName}," +
+                    $"{_clanAndPeopleService.Clans.First(t => t.Id == person.ClanId).Family} - {_clanAndPeopleService.Clans.First(t => t.Id == person.ClanId).FamilyName} ," +
                     $"{person.FirstName}," +
                     $"{person.LastName}," +
                     $"{person.MiddleName}," +
                     $"{person.Gender}," +
                     $"{person.DateOfBirth:dd-MMM-yyyy}," +
-                    $"{person.Mother?.FirstName} {person.Mother?.LastName}," +
-                    $"{person.Father?.FirstName} {person.Father?.LastName}," +
+                    $"{person.Mother?.FullName}," +
+                    $"{person.Father?.FullName}," +
                     $"{person?.DateOfDeath:dd-MMM-yyyy}," +
                     $"{person.Phone}," +
                     $"{person.Address}," +
@@ -384,27 +384,28 @@ namespace BryceFamily.Web.MVC.Controllers
                                     //is there a union?
                                     var thisUnion = await _unionWriteRepository.FindByQuery(new UnionQuery
                                     {
-                                        Partner1Id = father.ID,
-                                        Partner2Id = mother.ID
+                                        Partner1Id = father?.ID,
+                                        Partner2Id = mother?.ID
 
                                     }, cancellationToken);
                                     if (thisUnion == null)
                                     {
                                         thisUnion = await _unionWriteRepository.FindByQuery(new UnionQuery
                                         {
-                                            Partner1Id = mother.ID,
-                                            Partner2Id = father.ID
+                                            Partner1Id = mother?.ID,
+                                            Partner2Id = father?.ID
 
                                         }, cancellationToken);
                                     }
                                     if (thisUnion == null)
                                     {
-                                        await _unionWriteRepository.Save(new Repo.Core.Model.Union()
+                                        thisUnion = new Repo.Core.Model.Union()
                                         {
                                             PartnerID = father?.ID,
                                             Partner2ID = mother?.ID,
                                             ID = Guid.NewGuid()
-                                        }, cancellationToken);
+                                        };
+                                        await _unionWriteRepository.Save(thisUnion, cancellationToken);
                                     }
                                     var child = await _writeModel.FindByQuery(new PersonIdentifier { PersonId = ReadIntCell(sheet, parentChildRowId, PersonImport.ID) },
                                                                                 cancellationToken);

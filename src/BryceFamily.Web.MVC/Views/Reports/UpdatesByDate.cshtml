@@ -1,11 +1,12 @@
 ﻿@model IEnumerable<BryceFamily.Web.MVC.Models.Person>
 
 @{
-    ViewData["Title"] = "Family Reports";
+    ViewData["Title"] = "Family Reports - Updates since";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Vale</h2>
+
+<h2>Updates since</h2>
 
 <div class="row">
     <p>Here is some text about the people in the family who have passed away</p>
@@ -14,6 +15,9 @@
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ClanName)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.FirstName)
             </th>
@@ -24,13 +28,7 @@
                 @Html.DisplayNameFor(model => model.LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateOfBirth)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateOfDeath)
-            </th>
-            <th>
-                Age
+                @Html.DisplayNameFor(model => model.LastUpdated)
             </th>
             <th>
                 &nbsp;
@@ -39,9 +37,12 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.OrderByDescending(t => t.DateOfDeath.Value))
+        @foreach (var item in Model.OrderByDescending(t => t.LastUpdated))
         {
             <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClanName)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FirstName)
                 </td>
@@ -52,13 +53,7 @@
                     @Html.DisplayFor(modelItem => item.LastName)
                 </td>
                 <td>
-                    @item.DateOfBirth.Value.ToShortDateString()
-                </td>
-                <td>
-                    @item.DateOfDeath.Value.ToShortDateString()
-                </td>
-                <td>
-                    @(Math.Floor((item.DateOfDeath.Value.Subtract(item.DateOfBirth.Value).Days /365F)))
+                    @Html.DisplayFor(modelItem => item.LastUpdated)
                 </td>
                 <td>
                     @Html.ActionLink("Details", "Person", "People", new { id = item.Id })
