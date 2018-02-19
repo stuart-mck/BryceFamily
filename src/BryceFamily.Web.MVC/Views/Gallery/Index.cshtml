@@ -19,7 +19,7 @@
                        <li>
                         <h3>@clan.FormattedName</h3>
                            <ul>
-                            @foreach (var evt in Model.Where(g => g?.Clan?.Id == clan.Id).OrderBy(c => c.GalleryDate))
+                            @foreach (var evt in Model.Where(g => g.Clan.Id == clan.Id).OrderBy(c => c.GalleryDate))
                             {
                                 <li class="event">
                                 <h4>@Html.ActionLink(string.IsNullOrEmpty(evt.Title) ? "Link" : evt.Title, "Detail", "Gallery", new { id = evt.Id }, new { @class = "detail-link" })</h4>

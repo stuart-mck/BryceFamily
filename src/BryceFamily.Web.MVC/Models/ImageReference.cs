@@ -19,6 +19,8 @@ namespace BryceFamily.Web.MVC.Models
 
         public bool DefaultGalleryImage { get; set; }
 
+        public int PersonId { get; set; }
+
      
         public string ThumbnailSizeLink => $"{Reference}/thumbnail/{Title}";
 
@@ -33,7 +35,8 @@ namespace BryceFamily.Web.MVC.Models
                 MimeType = MimeType,
                 ImageID = Id,
                 DefaultGalleryImage = DefaultGalleryImage,
-                GalleryId = GalleryReference
+                GalleryId = GalleryReference,
+                PersonId = PersonId
             };
         }
 

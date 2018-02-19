@@ -178,8 +178,6 @@ namespace BryceFamily.Web.MVC.Controllers
 
             var cancellationToken = CancellationToken.None;
 
-           
-
             await _writeModel.Save(gallery, cancellationToken);
             var events = (await _familyEventReadRepository.GetAllEvents(cancellationToken)).Select(Models.FamilyEvent.Map);
             return View(new EventGalleryCreateModel(events)).WithSuccess("Gallery saved"); 
@@ -193,11 +191,13 @@ namespace BryceFamily.Web.MVC.Controllers
             var cancellationToken = new CancellationToken();
 
             var gallery =await  Models.Gallery.Map(await _readModel.Load(id, cancellationToken), _clanAndPeopleService, _familyEventReadRepository, _imageReferenceReadRepository,  cancellationToken);
+            
 
             return View(new FileUploadModel()
             {
                 GalleryId = gallery.Id,
-                GalleryName = gallery.Title
+                GalleryName = gallery.Title,
+                ClanMembers = _clanAndPeopleService.People.Where(t => t.ClanId == gallery.Clan.Id && !t.IsSpouse)
             });
         }
 
@@ -213,7 +213,7 @@ namespace BryceFamily.Web.MVC.Controllers
 
         [HttpPost]
         [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
-        public async Task<IActionResult> UploadFiles(Guid galleryId, List<IFormFile> files)
+        public async Task<IActionResult> UploadFiles(Guid galleryId, int FamilyImageId, List<IFormFile> files)
         {
             try
             {
@@ -239,7 +239,8 @@ namespace BryceFamily.Web.MVC.Controllers
                         MimeType = formFile.ContentType,
                         Title = formFile.FileName,
                         Id = Guid.NewGuid(),
-                        GalleryReference = galleryId
+                        GalleryReference = galleryId,
+                        PersonId = FamilyImageId
                     };
 
                     if (formFile.Length > 0)
