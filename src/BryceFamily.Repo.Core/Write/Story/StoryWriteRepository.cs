@@ -36,6 +36,7 @@ namespace BryceFamily.Repo.Core.Write.Story
             if (entity.ID == Guid.Empty)
                 entity.ID = Guid.NewGuid();
             var dbContext = _clientFactory.GetDynamoDBContext();
+            entity.LastUpdated = DateTime.Now;
             await dbContext.SaveAsync(entity, _dynamoDBOperationConfig, cancellationToken);
         }
     }

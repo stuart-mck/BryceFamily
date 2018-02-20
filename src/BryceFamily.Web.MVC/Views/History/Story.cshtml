@@ -5,20 +5,19 @@
     ViewData["Title"] = "Story";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var peopleSelect = ClanService.People.OrderBy(t => t.LastName).ThenBy(t => t.FirstName).Select(c => new SelectListItem()
+    var peopleSelect = ClanService.People.OrderBy(t => t.LastName).ThenBy(x => x.FirstName).Select(c => new SelectListItem()
     {
-        Selected = c.Id == Model.PersonID,
-        Text = $"{c.LastName}, {c.FirstName}",
+        Text = $"{c.LastName}, {c.FirstName} {c.MiddleName?.FirstOrDefault()}",
         Value = c.Id.ToString()
-    }).Union(new List<SelectListItem>()
-    {
-        new SelectListItem()
+    }).OrderBy(t => t.Text)
+    .ToList();
+
+    peopleSelect.Insert(0, new SelectListItem()
     {
         Text = "Select ...",
         Value = "",
         Selected = true
-    }
-    }).OrderBy(t => t.Value); ;
+    });
 }
 
 <h2>Contribute A Story</h2>

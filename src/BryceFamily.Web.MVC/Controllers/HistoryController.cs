@@ -40,7 +40,7 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = RoleNameConstants.AdminRole)]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public async Task<IActionResult> Story(StoryWriteModel storyWriteModel)
         {
             if (ModelState.IsValid)
@@ -79,6 +79,16 @@ namespace BryceFamily.Web.MVC.Controllers
                 return BadRequest("Invalid Person reference");
 
             return View(startNode);
+        }
+
+
+        [Route("History/ReadStory/{id}")]
+        public async Task<IActionResult> ReadStory(Guid id)
+        {
+            var story = await _storyReadRepository.Load(id, GetCancellationToken());
+            var mappedStory = Models.Story.Map(story, _clanService);
+
+            return View(mappedStory);
         }
 
         [Route("History/Stories/{id}")]

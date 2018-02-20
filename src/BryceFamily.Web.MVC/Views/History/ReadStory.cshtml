@@ -1,0 +1,15 @@
+﻿@model BryceFamily.Web.MVC.Models.Story
+
+@{
+    ViewData["Title"] = "Story";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>@Model.StoryTitle</h2>
+
+<div>
+    @Html.Raw(@Model.StoryContent)
+</div>
+
+

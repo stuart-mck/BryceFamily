@@ -73,7 +73,7 @@ namespace BryceFamily.Web.MVC.Infrastructure
         private const string _PEOPLELIST = "peopleList";
         private const string _FAMILYTREE = "familyTree";
 
-
+        private static object _lockObject = new object();
         
         public IReadOnlyList<Person> People
         {
@@ -82,52 +82,54 @@ namespace BryceFamily.Web.MVC.Infrastructure
                 // Key not in cache, so get data.
                 if (!_memoryCache.TryGetValue(_PEOPLELIST, out List<Person> peopleList))
                 {
-                    var cancellationToken = CancellationToken.None;
-                     var processedPeople = new List<Person>();
-        
-                    var temp = _peopleReadRepository.GetAllPeople(cancellationToken).Result;
-
-                    peopleList = new List<Person>();
-
-                    //hydrate the master list of people
-
-                    peopleList.AddRange(temp.Select(p => Person.FlatMap(p, this)));
-
-                    foreach(var person in temp)
+                    lock (_lockObject)
                     {
-                        MapParents(person, peopleList);
-                    }
+                        var cancellationToken = CancellationToken.None;
+                        var processedPeople = new List<Person>();
 
-                    var processedUnions = new List<Guid>();
+                        var temp = _peopleReadRepository.GetAllPeople(cancellationToken).Result;
 
-                    var unions = _unionReadRepository.GetAllUnions(cancellationToken).Result;
+                        peopleList = new List<Person>();
 
-                    unions.ForEach(union => ProcessUnionDescendants(unions, union, temp, peopleList, processedUnions));
+                        //hydrate the master list of people
 
-                    try
-                    {
-                        var stories = _storyReadRepository.GetStories(cancellationToken).Result;
+                        peopleList.AddRange(temp.Select(p => Person.FlatMap(p, this)));
 
-                        foreach (var story in stories.Where(t => t.PersonID.HasValue))
+                        foreach (var person in temp)
                         {
-                            var person = peopleList.FirstOrDefault(p => p.Id == story.PersonID);
-                            person.Stories.Add(Story.MapToIndex(story));
+                            MapParents(person, peopleList);
                         }
-                    }
-                    catch (AggregateException ex)
-                    {
-                        _logger.LogError("Failed when building people list", ex);
-                        throw;
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError("Failed when building people list", ex);
-                        throw;
-                    }
 
-                  
-                    //// Save data in cache.
-                    _memoryCache.Set(_PEOPLELIST, peopleList);
+                        var processedUnions = new List<Guid>();
+
+                        var unions = _unionReadRepository.GetAllUnions(cancellationToken).Result;
+
+                        unions.ForEach(union => ProcessUnionDescendants(unions, union, temp, peopleList, processedUnions));
+
+                        try
+                        {
+                            var stories = _storyReadRepository.GetStories(cancellationToken).Result;
+
+                            foreach (var story in stories.Where(t => t.PersonID.HasValue))
+                            {
+                                var person = peopleList.FirstOrDefault(p => p.Id == story.PersonID);
+                                person.Stories.Add(Story.MapToIndex(story));
+                            }
+                        }
+                        catch (AggregateException ex)
+                        {
+                            _logger.LogError("Failed when building people list", ex);
+                            throw;
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError("Failed when building people list", ex);
+                            throw;
+                        }
+
+                        //// Save data in cache.
+                        _memoryCache.Set(_PEOPLELIST, peopleList);
+                    }
 
                 }
                 return (IReadOnlyList<Person>) peopleList;
