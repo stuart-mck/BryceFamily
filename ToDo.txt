@@ -5,11 +5,6 @@ contacts
 
 - rowes into family tree
 - program for reunion
-- pin march event to the front page
-
-- home page
-	- login
-	- add new user
 
 - menu
 	- fix styling
@@ -23,6 +18,8 @@ contacts
 	- cancel button
 	- styling
 	- filter by type?
+	- tidy event page
+
 
 -users
 	- add new user
@@ -36,4 +33,4 @@ Stories
 
 - logged in readonly mode!
 - return to search results from detail view 
-
+- pin march event to the front page
