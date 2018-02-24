@@ -35,4 +35,5 @@ Stories
 
 
 - logged in readonly mode!
+- return to search results from detail view 
 

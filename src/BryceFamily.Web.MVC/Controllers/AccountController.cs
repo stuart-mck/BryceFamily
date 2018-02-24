@@ -20,6 +20,7 @@ namespace BryceFamily.Web.MVC.Controllers
         private readonly ContextService _contextService;
         private readonly ISesService _sesService;
         private readonly ClanAndPeopleService _clanAndPeopleService;
+        private readonly DynamoRoleUsersStore<DynamoIdentityRole, DynamoIdentityUser> _roleManager;
         private readonly ILogger<AccountController> _logger;
         private readonly UserManager<DynamoIdentityUser> _userManager;
 
@@ -29,6 +30,7 @@ namespace BryceFamily.Web.MVC.Controllers
             ContextService contextService,
             ISesService sesService,
             ClanAndPeopleService clanAndPeopleService,
+            DynamoRoleUsersStore<DynamoIdentityRole, DynamoIdentityUser> roleManager,
             ILogger<AccountController> logger)
         {
             _userManager = userManager;
@@ -36,6 +38,7 @@ namespace BryceFamily.Web.MVC.Controllers
             _contextService = contextService;
             _sesService = sesService;
             _clanAndPeopleService = clanAndPeopleService;
+            _roleManager = roleManager;
             _logger = logger;
         }
 
@@ -120,12 +123,8 @@ namespace BryceFamily.Web.MVC.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
-                    // Send an email with this link
-                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
-                    //    "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
+
+                    await _roleManager.AddToRoleAsync(user, "user", CancellationToken.None);
                     await _signInManager.SignInAsync(user, false);
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToLocal(returnUrl);

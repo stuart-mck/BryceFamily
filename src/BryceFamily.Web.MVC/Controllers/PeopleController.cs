@@ -142,12 +142,12 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        [Authorize(Roles = RoleNameConstants.AllRoles)]
         public IActionResult Bluebook()
         {
             var output = new StringBuilder();
 
-            output.AppendLine("Id,Family,First Name,Last Name,Middle Name,Gender,Birth,Mother,Father,Death,Phone,Address1,Address2,City,State,PostCode,Email");
+            output.AppendLine("Id,Family,First Name,Last Name,Middle Name,Gender,Birth,Parents,Death,Phone,Address1,Address2,City,State,PostCode,Email");
             foreach (var person in _clanAndPeopleService.People)
             {
                 output.AppendLine($"{person.Id}," +
@@ -157,8 +157,7 @@ namespace BryceFamily.Web.MVC.Controllers
                     $"{person.MiddleName}," +
                     $"{person.Gender}," +
                     $"{person.DateOfBirth:dd-MMM-yyyy}," +
-                    $"{person.Mother?.FullName}," +
-                    $"{person.Father?.FullName}," +
+                    $"{person.Mother?.FullName} & {person.Father?.FullName}," +
                     $"{person?.DateOfDeath:dd-MMM-yyyy}," +
                     $"{person.Phone}," +
                     $"{person.Address}," +

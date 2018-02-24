@@ -118,10 +118,6 @@
                 <input type="submit" value="Save Changes" class="btn btn-default" />
             </div>
         </form>
-        <div>
-            <a asp-action="Index">Back to List</a>
-        </div>
-
     </div>
     @if (Model.Unions.Any())
     {
@@ -173,7 +169,7 @@
 
     <div class="form-group">
         <label asp-for="ClanId" class="control-label"></label>
-        @Model.ClanId
+        @Model.ClanName
     </div>
         <div class="form-group">
             <label asp-for="FirstName" class="control-label"></label>

@@ -40,7 +40,7 @@ namespace BryceFamily.Web.MVC.Infrastructure
         {
             get
             {
-                return LoggedInPerson != null;
+                return _context.HttpContext.User.Claims.Any();
             }
         }
 
@@ -50,7 +50,7 @@ namespace BryceFamily.Web.MVC.Infrastructure
             get
             {
                 var person = LoggedInPerson;
-                return person.IsClanManager;
+                return person != null && person.IsClanManager;
             }
         }
 
@@ -58,13 +58,26 @@ namespace BryceFamily.Web.MVC.Infrastructure
         {
             
             var person = LoggedInPerson;
+            if (person == null)
+                return false;
             var user = _userStore.FindByEmailAsync(person.EmailAddress).Result;
             var roles = _roleStore.GetRolesAsync(user, CancellationToken.None).Result;
             if (roles.Any(t => t == RoleNameConstants.SuperAdminRole))
                 return true;
             return false;
+        }
 
-            
+        public bool IsLoggedInEditor()
+        {
+            var person = LoggedInPerson;
+            if (person == null)
+                return false;
+
+            var user = _userStore.FindByEmailAsync(person.EmailAddress).Result;
+            var roles = _roleStore.GetRolesAsync(user, CancellationToken.None).Result;
+            if (roles.Any(t => t == RoleNameConstants.AllAdminRoles))
+                return true;
+            return false;
         }
 
     }

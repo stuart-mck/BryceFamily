@@ -15,7 +15,7 @@
 
 <div class="row">
     
-        @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
+        @if (contextService.IsLoggedIn)
         {
         <div class="col-md-3">
             <h3>@Html.ActionLink("Find People", "Search", "People")</h3>
