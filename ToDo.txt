@@ -1,34 +1,18 @@
 contacts
 	- emails editor
 	- message filters?
-	- subcription / unsubscription
 	- send email
-
-
-contact
-- captcha
- lookups
- - occupations
- - users / current user
-
- search
- - event by date / clan
 
 - rowes into family tree
 - program for reunion
-- email unsubscriptions
 - pin march event to the front page
 
 - home page
 	- login
 	- add new user
-	- email subscription / unsubscription
 
 - menu
 	- fix styling
-
-- history
-	- family tree to 2 levels only
 
 - story edit
 	- styling
@@ -40,20 +24,15 @@ contact
 	- styling
 	- filter by type?
 
-	- 
-- people
-	- facebook link
-	- blue book export
-	- add new person / add relationship / add person to relationship
-	- edit other properties 
-		- dob / dod
-		- place of death?
-		- marriage date / divorce date
-
-
+-users
+	- add new user
+	- manage roles
 
 Stories
 - xover - mary jane wilde stories
 - link to william wilde war record - pdf's have been uploaded to s3
+- hard links to stories so far
 
+
+- logged in readonly mode!
 

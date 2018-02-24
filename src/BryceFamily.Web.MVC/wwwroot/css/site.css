@@ -52,13 +52,7 @@ body {
     font-size: 1.2em;
 }
 
-/*.site-page h1, .site-page p {
-    display: none;
-}*/
 
-/*.site-page .header {
-    height: 40px;
-}*/
 
 .site-page .container{
     width: 100px;
@@ -275,6 +269,9 @@ body {
     border-radius: 3px 4px;
 }
 
+
+/* Events */
+
 .event-summary {
     display: inline;
     list-style-type: none;
@@ -299,11 +296,16 @@ body {
         max-height: 100%;
     }
 
+.event-description {
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 3px 4px;
+}
 
 @media (max-width: 767px) {
     /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */
     .body-content {
-        padding-top: 50px;
+        padding: 50px;
     }
 }
 
@@ -320,88 +322,62 @@ body {
     border-color: palevioletred
 }
 
-.childPanel {
-    float: left;
-}
 
 .familyTreePanel{
     font-size: .9em;
-    width: 1000px;
+
 }
 
-.spouse {
-    margin-left: 5px;
+
+
+.direct-relation {
+    float: left;
+    width: 30%;
+}
+
+.spouses {
+    width: 30%;
+    float: right;
+}
+
+.spouse{
+    width: 100%;
 }
 
 .right-panel {
     float: left;
 }
 
-.children ul {
-    white-space: nowrap;
-    display: inline-block;
-    list-style: none;
-}
-
-.children ul li {
-    display: table-cell;
-}
-
-.parents ul {
-    white-space: nowrap;
-    display: inline-block;
-    list-style: none;
-}
-
-.parents ul li {
-    display: table-cell;
-}
 
 .familyMember {
     border: 1px solid;
     padding: 2px;
+    min-width: 200px;
+    
 }
 
-.parents ul {
-    display: flex;
-    justify-content: center;
-}
 
-.parents {
-    margin-bottom: 5px;
+.spouse > .familyMember {
+    float: left;
+    width: 750%;
+    max-width: 130%;
 }
-
-.childHeader{
-    width: 100%;
-    border-bottom: 1px solid black;
-}
-
-.ancestorLink {
-    width: 100%;
-    height: 20px;
-    position: relative;
-}
-
-    .ancestorLink:before {
-        content: "";
-        width: 1px;
-        height: 100%;
-        display: block;
-        left: 50%;
-        position: absolute;
-        background-image: -webkit-linear-gradient(top, #fff, #000, #fff);
-        background-image: -moz-linear-gradient(top, #fff, #000, #fff);
-        background-image: -ms-linear-gradient(top, #fff, #000, #fff);
-        background-image: -o-linear-gradient(top, #fff, #000, #fff);
-        background-image: linear-gradient(top, #fff, #000, #fff);
-    }
 
 .childPanel{
-    margin-left: 20px;
+    clear: both;
+    min-height: 100px;
 }
+
+.descendent-link {
+    float: right;
+    width: 25%;
+}
+
 
 a {
     color: black;
+    font-weight: bold;
+    text-decoration: underline;
 }
 
 a:hover {
@@ -415,8 +391,3 @@ a:hover {
     margin-right: auto;
 }
 
-.event-description{
-    padding: 10px;
-    border: 1px solid black;
-    border-radius: 3px 4px;
-}

@@ -113,7 +113,18 @@ namespace BryceFamily.Web.MVC.Infrastructure
                             foreach (var story in stories.Where(t => t.PersonID.HasValue))
                             {
                                 var person = peopleList.FirstOrDefault(p => p.Id == story.PersonID);
-                                person.Stories.Add(Story.MapToIndex(story));
+                                if (person != null)
+                                {
+                                    try
+                                    {
+                                        person.Stories.Add(Story.MapToIndex(story));
+                                    }
+                                    catch (Exception ex)
+                                    {
+
+                                        throw;
+                                    }
+                                }
                             }
                         }
                         catch (AggregateException ex)

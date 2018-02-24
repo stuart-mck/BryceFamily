@@ -1,0 +1,46 @@
+﻿@model BryceFamily.Web.MVC.Models.Person
+
+
+
+<div class="childPanel">
+    <div class="direct-relation">
+        @{ Html.RenderPartial("Person", Model);}
+    </div>
+    <div class="spouses">
+        @foreach (var union in Model.Unions)
+        {
+            Person partner = null;
+
+            if (union.Partner1 != null)
+            {
+                partner = union.Partner1.Id == Model.Id ? union.Partner2 : union.Partner1;
+            }
+            else if (union.Partner2 != null)
+            {
+                partner = union.Partner2.Id == Model.Id ? union.Partner2 : null;
+            }
+            <div class="spouse">
+            @if (partner != null)
+            {
+                Html.RenderPartial("Person", partner);
+            }
+            else
+            {
+                    <text>&nbsp;</text>
+
+            }
+                <div class="descendent-link">
+                    @if (union.Descendents.Any())
+                    {
+                        @Html.ActionLink("Offspring", "Tree", "History", new { id = Model.Id })
+                    }
+                    else
+                    {
+                        <text>&nbsp;</text>
+
+                    }
+                </div>
+            </div>
+        }
+        </div>
+</div>

@@ -2,6 +2,7 @@
 using Amazon.DynamoDBv2.DocumentModel;
 using BryceFamily.Repo.Core.AWS;
 using BryceFamily.Repo.Core.Model;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -11,11 +12,13 @@ namespace BryceFamily.Repo.Core.Read.People
 {
     public class PeopleReadRepository : IPersonReadRepository
     {
+        private readonly ILogger<PeopleReadRepository> _logger;
         private readonly IAWSClientFactory _awsClientFactory;
         private readonly DynamoDBOperationConfig _operationConfig;
 
-        public PeopleReadRepository(IAWSClientFactory awsClientFactory, DynamoDBOperationConfig operationConfig)
+        public PeopleReadRepository(ILogger<PeopleReadRepository> logger, IAWSClientFactory awsClientFactory, DynamoDBOperationConfig operationConfig)
         {
+            _logger = logger;
             _awsClientFactory = awsClientFactory;
             _operationConfig = operationConfig;
         }
@@ -45,6 +48,7 @@ namespace BryceFamily.Repo.Core.Read.People
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 throw;
             }
         }

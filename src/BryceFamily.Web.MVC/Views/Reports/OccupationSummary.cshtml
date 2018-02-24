@@ -1,0 +1,41 @@
+﻿@model IEnumerable<BryceFamily.Web.MVC.Models.OccupationSummary>
+@{
+    ViewData["Title"] = "OccupationCount";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Count of Family Members by Occupation</h2>
+
+<div class="row">
+    <p>This is a count of the occupations registered in the family list in alphabetical order. <br/>
+    Click on the link to view details about the family members who have listed that occupation.</p>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Occupation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Count)
+            </th>
+            <th>
+                &nbsp;
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var occuaption in Model.OrderBy(o => o.Occupation))
+        {
+            <tr>
+                <td>@occuaption.Occupation</td>
+                <td>@occuaption.Count</td>
+                <td><form asp-action="Search" asp-controller="People"><input type="hidden" name="Occupation" value="@occuaption.Occupation" /><button class="btn btn-sm" type="submit">Show Details</button></form></td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+
+

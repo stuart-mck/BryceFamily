@@ -1,17 +1,33 @@
 ﻿@model BryceFamily.Web.MVC.Models.Person
 
-@{
-    var unions = Model.Unions.Count();
-}
+<div class="row">
+    <div class="col-md-3">
+        <h4>Parents</h4>
+        @{
+            Html.RenderPartial("Person", Model);
+        }
 
-@switch (unions)
-{
-    case 0:
-    case 1:
-        Html.RenderPartial("OneUnionFamilyTreeNode", Model);
-        break;
-    default:
-        Html.RenderPartial("TwoUnionFamilyTreeNode", Model);
-        break;
+        @if (Model.Unions.Any())
+        {
+            <div class="row"><div class="col-md-6" style="border-right: 1px solid black">&nbsp;</div><div class="col-md-6">&nbsp;</div></div>
+            var union = Model.Unions.First();
+            var partner = union.Partner1.Id == Model.Id ? union.Partner2 : union.Partner1;
+            Html.RenderPartial("Person", partner);
+        }
+    </div>
+    <div class="col-md-offset-1 col-md-4 col-lg-4">
+        <h4>Children</h4>
+        @if (Model.Unions.Any())
+        {
+            var union = Model.Unions.First();
+            if (union.Descendents.Any())
+            {
+                @foreach (var child in union.Descendents.OrderBy(t => t.DateOfBirth))
+                {
+                    Html.RenderPartial("Descendants", child);
 
-}
+                }
+            }
+        }
+    </div>
+</div>

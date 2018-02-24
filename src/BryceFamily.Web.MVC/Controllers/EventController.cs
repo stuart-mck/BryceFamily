@@ -59,7 +59,7 @@ namespace BryceFamily.Web.MVC.Controllers
         [Route("Event")]
         [Route("Event/Index")]
         // GET: /<controller>/
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             //var events = (await _readmodel.GetAllEvents(new CancellationToken())).ToList();
             //return View(events.Select(e => Models.FamilyEvent.Map(e)));

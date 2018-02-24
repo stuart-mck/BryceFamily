@@ -67,5 +67,19 @@ namespace BryceFamily.Web.MVC.Controllers
             
         }
 
+        public IActionResult OccupationSummary()
+        {
+            var people = from occupation in _clanAndPeopleService.People
+                         where !string.IsNullOrEmpty(occupation.Occupation)
+                         group occupation by occupation.Occupation into g
+                         select new OccupationSummary()
+                         {
+                             Occupation = g.Key,
+                             Count = g.Count()
+                         };
+            return View(people);
+
+        }
+
     }
 }

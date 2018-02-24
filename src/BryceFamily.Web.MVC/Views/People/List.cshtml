@@ -12,38 +12,43 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.ClanName)
             </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LastName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Phone)
-                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
                 
-                <th>
-                    @Html.DisplayNameFor(model => model.Occupation)
-                </th>
-                <th>
-                    &nbsp;
-                </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Occupation)
+            </th>
+            <th>
+                &nbsp;
+            </th>
+        <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model.OrderBy(t => t.ClanName).ThenBy(f => f.LastName).ThenBy(fn => fn.FirstName)){
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ClanName)
+                @Html.DisplayFor(modelItem => item.LastName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
+                @if (!string.IsNullOrEmpty(item.MiddleName))
+                {
+                    @item.MiddleName.First()
+
+                }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LastName)
+                @Html.DisplayFor(modelItem => item.ClanName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Phone)
