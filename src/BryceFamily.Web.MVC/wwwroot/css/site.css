@@ -336,12 +336,13 @@ body {
 }
 
 .spouses {
-    width: 30%;
+    width: 60%;
     float: right;
 }
 
 .spouse{
-    width: 100%;
+    margin-left: 10px;
+    margin-bottom: 10px;
 }
 
 .right-panel {
@@ -352,25 +353,25 @@ body {
 .familyMember {
     border: 1px solid;
     padding: 2px;
-    min-width: 200px;
-    
+    margin-bottom: 5px;
+    min-width: 150px;
 }
 
 
 .spouse > .familyMember {
     float: left;
-    width: 750%;
-    max-width: 130%;
+    width: 75%;
 }
 
 .childPanel{
     clear: both;
-    min-height: 100px;
+    margin-bottom: 5px;
 }
 
 .descendent-link {
     float: right;
-    width: 25%;
+    margin-left: 10px;
+    padding-top: 28px;
 }
 
 

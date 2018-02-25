@@ -1,4 +1,70 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model BryceFamily.Web.MVC.Models.Person
+@inject BryceFamily.Web.MVC.Infrastructure.ClanAndPeopleService ClanService
+
+<div class="col-md-4">
+    <div class="form-group">
+        <label asp-for="ClanId" class="control-label"></label>
+        @Model.ClanName
+    </div>
+    <div class="form-group">
+        <label asp-for="Phone" class="control-label"></label>
+        @Model.Phone
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Address" class="control-label"></label>
+        @Model.Address<br />
+        @Model.Address1<br />
+        @Model.Suburb, @Model.State
+        @Model.PostCode
+    </div>
+    <div class="form-group">
+        <label asp-for="EmailAddress" class="control-label"></label>
+        @Model.EmailAddress
+    </div>
+    <div class="form-group">
+        <label asp-for="Occupation" class="control-label"></label>
+        @Model.Occupation
+    </div>
+    <div class="form-group">
+        <label asp-for="SubscribeToEmail" class="control-label"></label>
+        @Model.SubscribeToEmail
+    </div>
+</div>
+@if (Model.Unions.Any())
+{
+    <div class="col-md-4">
+        <h4>Family Relationships</h4>
+        @foreach (var union in Model.Unions)
+        {
+            var partnerId = 0;
+            var partnerName = string.Empty;
+            <div class="row">
+                <div class="col-md-4">
+                    @if (union.Partner1.Id == Model.Id)
+                    {
+                        partnerId = union.Partner2.Id;
+                        partnerName = union.Partner2.FullName;
+                    }
+                    else
+                    {
+                        partnerId = union.Partner1.Id;
+                        partnerName = union.Partner1.FullName;
+                    }
+                    @Html.ActionLink(partnerName, "Relationship", "People", new { partner1 = Model.Id, partner2 = partnerId })
+                </div>
+                @if (union.Descendents.Any())
+                {
+                    <div class="col-md-4">
+                        @foreach (var child in union.Descendents.OrderBy(d => d.DateOfBirth))
+                        {
+                            <div class="row">
+                                @Html.ActionLink($"{child.FirstName} {child.LastName}", "Person", "People", new { id = child.Id })
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}

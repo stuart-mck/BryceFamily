@@ -22,7 +22,17 @@
     <li>
         @Html.ActionLink("People", "Index", "People")
     </li>
-    
+    @if (ContextService.IsSuperUser())
+    {
+        <li>
+            @Html.ActionLink("Add User", "Register", "Account")
+        </li>
+        <li>
+            @Html.ActionLink("Configure User Access", "RoleManager", "Account")
+        </li>
+
+    }
+
     @if (!ContextService.IsLoggedIn)
     {
         <li>

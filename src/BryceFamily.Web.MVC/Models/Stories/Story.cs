@@ -1,11 +1,9 @@
 ﻿using BryceFamily.Repo.Core.Model;
 using BryceFamily.Web.MVC.Infrastructure;
-using BryceFamily.Repo.Core.Read.Story;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
-namespace BryceFamily.Web.MVC.Models
+namespace BryceFamily.Web.MVC.Models.Stories
 {
     public class Story
     {

@@ -128,14 +128,14 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public IActionResult Email()
         {
             return View(new EmailCreateModel());
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public IActionResult Email(EmailCreateModel email)
         {
             return View();
@@ -225,7 +225,7 @@ namespace BryceFamily.Web.MVC.Controllers
 
 
         [HttpGet, Route("Relationship/{partner1}/{partner2}")]
-        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        [Authorize(Roles = RoleNameConstants.AllRoles)]
         public IActionResult Relationship([FromRoute]int partner1, [FromRoute]int partner2)
         {
             var person = _clanAndPeopleService.People.First(t => t.Id == partner1);

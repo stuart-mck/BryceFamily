@@ -29,7 +29,15 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.State)
+                    @if (string.IsNullOrEmpty(item.State))
+                    {
+                        <text>Not Entered</text>
+
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.State)
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Count)

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using BryceFamily.Web.MVC.Models;
+using BryceFamily.Web.MVC.Models.Stories;
 using BryceFamily.Web.MVC.Infrastructure;
 using System.Linq;
 using System;
@@ -82,11 +82,19 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
 
+        [HttpGet("History/Stories")]
+        public async Task<IActionResult> Stories()
+        {
+            var cancellationToken = GetCancellationToken();
+            var stories = await _storyReadRepository.GetStoryIndexes(cancellationToken);
+            return View(stories.Select(s => Models.Stories.StoryIndex.MapToIndex(s, _clanService)));
+        }
+
         [Route("History/ReadStory/{id}")]
         public async Task<IActionResult> ReadStory(Guid id)
         {
             var story = await _storyReadRepository.Load(id, GetCancellationToken());
-            var mappedStory = Models.Story.Map(story, _clanService);
+            var mappedStory = Models.Stories.Story.Map(story, _clanService);
 
             return View(mappedStory);
         }

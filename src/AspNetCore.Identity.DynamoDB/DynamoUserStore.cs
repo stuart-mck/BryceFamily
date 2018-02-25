@@ -780,6 +780,12 @@ namespace AspNetCore.Identity.DynamoDB
 			return EnsureInitializedImplAsync(client, userTableName);
 		}
 
+
+        public async Task<IEnumerable<TUser>> GetAllUsers(CancellationToken cancellationToken)
+        {
+            return await _context.ScanAsync<TUser>(new List<ScanCondition>()).GetRemainingAsync(cancellationToken);
+        }
+
 		private async Task EnsureInitializedImplAsync(IAmazonDynamoDB client, string userTableName)
 		{
 			var defaultProvisionThroughput = new ProvisionedThroughput

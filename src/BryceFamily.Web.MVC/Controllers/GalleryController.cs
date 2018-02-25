@@ -60,9 +60,9 @@ namespace BryceFamily.Web.MVC.Controllers
             var galleries = (await _readModel.LoadAll(CancellationToken.None)).Where(t => t.FamilyId.HasValue);
 
             var readModel = galleries.Select(
-                g => Models.Gallery.Map(g, _clanAndPeopleService,_familyEventReadRepository, _imageReferenceReadRepository, CancellationToken.None).Result);
+                g => Models.GalleryIndex.Map(g, _clanAndPeopleService,_familyEventReadRepository, CancellationToken.None).Result);
 
-            return View(readModel);
+            return View(readModel.ToList());
             
         }
 

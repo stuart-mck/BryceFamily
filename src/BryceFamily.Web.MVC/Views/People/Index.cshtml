@@ -40,9 +40,10 @@
 </div>
             </div>
         }
-        else
+        else if (!contextService.IsLoggedIn)
         {
-            @Html.ActionLink("Log in to search for family contact details", "Login", "Account")
+
+            @Html.ActionLink("Log in to search for family contact details", "Login", "Account", new { returnUrl = "/People" })
 
         }
 

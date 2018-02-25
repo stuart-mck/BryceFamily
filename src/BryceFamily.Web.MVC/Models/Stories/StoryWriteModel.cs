@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BryceFamily.Web.MVC.Models
+namespace BryceFamily.Web.MVC.Models.Stories
 {
     public class StoryWriteModel
     {

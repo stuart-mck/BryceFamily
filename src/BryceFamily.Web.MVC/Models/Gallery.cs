@@ -26,6 +26,7 @@ namespace BryceFamily.Web.MVC.Models
 
         public FamilyClan Clan { get; set; }
 
+
         public bool DefaultFamilyEventGallery { get; set; }
 
 

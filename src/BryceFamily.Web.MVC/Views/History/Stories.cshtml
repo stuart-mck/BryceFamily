@@ -1,0 +1,30 @@
+﻿@model IEnumerable<BryceFamily.Web.MVC.Models.Stories.StoryIndex>
+
+@{
+    ViewData["Title"] = "Stories";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2></h2>
+
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Person</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var story in Model)
+            {
+
+                <tr>
+                    <td>@Html.DisplayFor(t => story.StoryTitle)</td>
+                    <td>@Html.DisplayFor(t => story.StoryObject)</td>
+                    <td>@Html.ActionLink("Read", "ReadStory", "History", new { id = story.ID })</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

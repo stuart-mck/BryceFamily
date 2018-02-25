@@ -11,6 +11,7 @@ using BryceFamily.Web.MVC.Infrastructure;
 using BryceFamily.Repo.Core.Emails;
 using System.Threading;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
@@ -234,6 +235,93 @@ namespace BryceFamily.Web.MVC.Controllers
         public IActionResult ResetPasswordConfirmation()
         {
             return View();
+        }
+
+        [HttpGet]
+        [Authorize(Roles = RoleNameConstants.SuperAdminRole)]
+        public async Task<IActionResult> RoleManager()
+        {
+            var cancellationToken = CancellationToken.None;
+            return View((await GetUserRolesList(cancellationToken)).OrderBy(t => t.Email));
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = RoleNameConstants.SuperAdminRole)]
+        public async Task<IActionResult> RoleManager(IEnumerable<RoleManagerViewModel> roles)
+        {
+            var cancellationToken = CancellationToken.None;
+
+            var currentRoles = await GetUserRolesList(cancellationToken);
+
+            foreach (var role in roles)
+            {
+                var current = currentRoles.FirstOrDefault(r => r.Id == role.Id);
+                if (current.IsInSuperUserRole != role.IsInSuperUserRole)
+                {
+                    if (role.IsInSuperUserRole)
+                    {
+                        role.IsInEditorRole = false;
+                        role.IsInUserRole = false;
+                    }
+                    await UpdateRole(role.Id, RoleNameConstants.SuperAdminRole, !role.IsInSuperUserRole, cancellationToken);
+                }
+                if (current.IsInEditorRole != role.IsInEditorRole)
+                {
+                    if (role.IsInEditorRole)
+                    {
+                        role.IsInUserRole = false;
+                    }
+                    await UpdateRole(role.Id, RoleNameConstants.AdminRole, !role.IsInEditorRole, cancellationToken);
+                }
+                if (!(role.IsInSuperUserRole || (role.IsInEditorRole)))
+                {
+                    role.IsInUserRole = true;
+                }
+                // make sure we are at least set the user to readonly mode 
+                if (current.IsInUserRole != role.IsInUserRole)
+                {
+                    await UpdateRole(role.Id, RoleNameConstants.UserRole, !role.IsInUserRole, cancellationToken);
+                }
+            }
+
+            return RedirectToAction("RoleManager");
+        }
+
+
+        private async Task UpdateRole(string userId, string roleName, bool remove, CancellationToken cancellationToken)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (remove)
+                await _roleManager.RemoveFromRoleAsync(user, roleName, cancellationToken);
+            else
+                await _roleManager.AddToRoleAsync(user, roleName, cancellationToken);
+        }
+
+        private async Task<IEnumerable<RoleManagerViewModel>> GetUserRolesList(CancellationToken cancellationToken)
+        {
+            var readonlyUsers = (await _roleManager.GetUserIdsInRoleAsync(RoleNameConstants.UserRole, cancellationToken)).ToList();
+            var adminUsers = (await _roleManager.GetUserIdsInRoleAsync(RoleNameConstants.AdminRole, cancellationToken)).ToList();
+            var superAdminUsers = (await _roleManager.GetUserIdsInRoleAsync(RoleNameConstants.SuperAdminRole, cancellationToken)).ToList();
+
+            var users = new List<RoleManagerViewModel>();
+
+            readonlyUsers.AddRange(adminUsers);
+            readonlyUsers.AddRange(superAdminUsers);
+            foreach (var user in readonlyUsers.Distinct())
+            {
+                var x = await _userManager.FindByIdAsync(user);
+                users.Add(new RoleManagerViewModel()
+                {
+                    Email = x.UserName,
+                    IsInUserRole = await _roleManager.IsInRoleAsync(x, RoleNameConstants.UserRole, cancellationToken),
+                    IsInEditorRole = await _roleManager.IsInRoleAsync(x, RoleNameConstants.AdminRole, cancellationToken),
+                    IsInSuperUserRole = await _roleManager.IsInRoleAsync(x, RoleNameConstants.SuperAdminRole, cancellationToken),
+                    Id = x.Id
+                });
+            }
+
+            return users;
         }
 
 

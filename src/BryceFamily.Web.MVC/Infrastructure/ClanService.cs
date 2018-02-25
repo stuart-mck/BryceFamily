@@ -1,6 +1,7 @@
 ﻿using BryceFamily.Repo.Core.Read.People;
 using BryceFamily.Repo.Core.Read.Story;
 using BryceFamily.Web.MVC.Models;
+using BryceFamily.Web.MVC.Models.Stories;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
@@ -110,14 +111,14 @@ namespace BryceFamily.Web.MVC.Infrastructure
                         {
                             var stories = _storyReadRepository.GetStories(cancellationToken).Result;
 
-                            foreach (var story in stories.Where(t => t.PersonID.HasValue))
+                            foreach (var storyContent in stories.Where(t => t.PersonID.HasValue))
                             {
-                                var person = peopleList.FirstOrDefault(p => p.Id == story.PersonID);
+                                var person = peopleList.FirstOrDefault(p => p.Id == storyContent.PersonID);
                                 if (person != null)
                                 {
                                     try
                                     {
-                                        person.Stories.Add(Story.MapToIndex(story));
+                                        person.Stories.Add(Story.MapToIndex(storyContent));
                                     }
                                     catch (Exception ex)
                                     {

@@ -1,4 +1,5 @@
 ﻿using BryceFamily.Web.MVC.Infrastructure;
+using BryceFamily.Web.MVC.Models.Stories;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

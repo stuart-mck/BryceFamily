@@ -17,20 +17,20 @@ namespace BryceFamily.Web.MVC.Controllers
             _clanAndPeopleService = clanAndPeopleService;
         }
 
-        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        [Authorize(Roles = RoleNameConstants.AllRoles)]
         public IActionResult Index()
         {
             return View();
         }
 
 
-        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        [Authorize(Roles = RoleNameConstants.AllRoles)]
         public IActionResult Vale()
         {
             return View(_clanAndPeopleService.People.Where(t => t.DateOfDeath.HasValue));
         }
 
-        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        [Authorize(Roles = RoleNameConstants.AllRoles)]
         public IActionResult FamilyUpdates()
         {
             var updates = from clan in _clanAndPeopleService.People
@@ -45,14 +45,14 @@ namespace BryceFamily.Web.MVC.Controllers
             return View(updates);
         }
 
-        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
-        public IActionResult UpdatesByDate(DateTime dateTime)
+        [Authorize(Roles = RoleNameConstants.AllRoles)]
+        public IActionResult UpdatesByDate(DateTime fromDate)
         {
-            var updates = _clanAndPeopleService.People.Where(d => d.LastUpdated > dateTime);
+            var updates = _clanAndPeopleService.People.Where(d => d.LastUpdated > fromDate);
             return View(updates);
         }
 
-        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        [Authorize(Roles = RoleNameConstants.AllRoles)]
         public IActionResult FamilyCountByState()
         {
             
@@ -67,6 +67,7 @@ namespace BryceFamily.Web.MVC.Controllers
             
         }
 
+        [Authorize(Roles = RoleNameConstants.AllRoles)]
         public IActionResult OccupationSummary()
         {
             var people = from occupation in _clanAndPeopleService.People

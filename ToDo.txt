@@ -31,6 +31,5 @@ Stories
 - hard links to stories so far
 
 
-- logged in readonly mode!
 - return to search results from detail view 
 - pin march event to the front page

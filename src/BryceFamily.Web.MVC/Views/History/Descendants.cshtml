@@ -4,7 +4,7 @@
 
 <div class="childPanel">
     <div class="direct-relation">
-        @{ Html.RenderPartial("Person", Model);}
+        @{ Html.RenderPartial("PersonNode", Model);}
     </div>
     <div class="spouses">
         @foreach (var union in Model.Unions)
@@ -22,7 +22,7 @@
             <div class="spouse">
             @if (partner != null)
             {
-                Html.RenderPartial("Person", partner);
+                Html.RenderPartial("PersonNode", partner);
             }
             else
             {

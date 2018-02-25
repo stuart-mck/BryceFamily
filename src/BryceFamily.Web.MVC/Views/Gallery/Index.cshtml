@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Gallery>
+﻿@model List<GalleryIndex>
 @using BryceFamily.Web.MVC.Infrastructure.Authentication
 @inject BryceFamily.Web.MVC.Infrastructure.ContextService ContextService
 @inject BryceFamily.Web.MVC.Infrastructure.ClanAndPeopleService ClanService
@@ -16,10 +16,17 @@
                 <ul class="event-summary">
                    @foreach (var clan in ClanService.Clans.OrderBy(t => t.DisplayOrder))
                    {
+
+                       var clanGalleries = Model.Where(g => g.Clan.Id == clan.Id).OrderBy(r => r.GalleryDate).ToList();
+
+                       if (clanGalleries.Any())
+                       {
+
                        <li>
                         <h3>@clan.FormattedName</h3>
                            <ul>
-                            @foreach (var evt in Model.Where(g => g.Clan.Id == clan.Id).OrderBy(c => c.GalleryDate))
+                            
+                            @foreach (var evt in clanGalleries)
                             {
                                 <li class="event">
                                 <h4>@Html.ActionLink(string.IsNullOrEmpty(evt.Title) ? "Link" : evt.Title, "Detail", "Gallery", new { id = evt.Id }, new { @class = "detail-link" })</h4>
@@ -35,7 +42,8 @@
                             }
                             </ul>
                         </li>
-                    }
+                       }
+                   }
                 </ul>
             </div>
     
