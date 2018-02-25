@@ -392,3 +392,8 @@ a:hover {
     margin-right: auto;
 }
 
+@media(max-width: 776px) {
+    .bodyContent {
+        padding-left: 60px;
+    }
+}

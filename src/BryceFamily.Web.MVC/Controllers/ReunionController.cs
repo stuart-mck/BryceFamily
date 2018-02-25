@@ -18,7 +18,7 @@ using System.Text;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
-    public class EventController : BaseController
+    public class ReunionController : BaseController
     {
         private readonly IFamilyEventReadRepository _readmodel;
         private readonly IWriteRepository<Repo.Core.Model.FamilyEvent, Guid> _writeModel;
@@ -31,7 +31,7 @@ namespace BryceFamily.Web.MVC.Controllers
         private readonly ISesService _sesServive;
         private readonly ClanAndPeopleService _clanAndPeopleService;
 
-        public EventController(IFamilyEventReadRepository readmodel,
+        public ReunionController(IFamilyEventReadRepository readmodel,
                                IWriteRepository<Repo.Core.Model.FamilyEvent, Guid> writeModel,
                                IImageReferenceReadRepository imageReferenceReadRepository,
                                IGalleryReadRepository galleryReadRepository,
@@ -41,7 +41,7 @@ namespace BryceFamily.Web.MVC.Controllers
                                IWriteRepository<Repo.Core.Model.ImageReference, Guid> imageReferenceWriteModel,
                                ISesService sesServive,
                                ClanAndPeopleService clanAndPeopleService)
-            : base("Significant Events", "events")
+            : base("Family Reunions", "events")
         {
             _readmodel = readmodel;
             _writeModel = writeModel;
@@ -56,8 +56,8 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [AllowAnonymous]
-        [Route("Event")]
-        [Route("Event/Index")]
+        [Route("Reunion")]
+        [Route("Reunion/Index")]
         // GET: /<controller>/
         public IActionResult Index()
         {
@@ -67,7 +67,7 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [AllowAnonymous]
-        [Route("Event/Reunions")]
+        [Route("Reunion/Reunions")]
         // GET: /<controller>/
         public async Task<IActionResult> Reunions()
         {
@@ -76,7 +76,7 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [AllowAnonymous]
-        [Route("Event/Events")]
+        [Route("Reunion/Events")]
         // GET: /<controller>/
         public async Task<IActionResult> Events()
         {
@@ -84,7 +84,7 @@ namespace BryceFamily.Web.MVC.Controllers
             return View(events.Select(e => Models.FamilyEvent.Map(e)));
         }
 
-        [HttpGet("Event/{eventId}")]
+        [HttpGet("Reunion/{eventId}")]
         public async Task<IActionResult> Detail(Guid eventId)
         {
             var cancellationToken = GetCancellationToken();
@@ -95,7 +95,7 @@ namespace BryceFamily.Web.MVC.Controllers
 
         }
 
-        [HttpGet("Event/Edit/{eventId}")]
+        [HttpGet("Reunion/Edit/{eventId}")]
         public async Task<IActionResult> Edit(Guid eventId)
         {
             var cancellationToken = GetCancellationToken();
@@ -201,7 +201,7 @@ namespace BryceFamily.Web.MVC.Controllers
         //    return View("EditorTemplates/EventImage", new EventImage(@event.ID));
         //}
 
-        [HttpPost("Event/EventImage")]
+        [HttpPost("Reunion/EventImage")]
         public async Task<IActionResult> EventImage(FamilyEventImage imageWriteModel)
         {
             var cancellationToken = GetCancellationToken();

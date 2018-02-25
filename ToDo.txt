@@ -6,9 +6,6 @@ contacts
 - rowes into family tree
 - program for reunion
 
-- menu
-	- fix styling
-
 - story edit
 	- styling
 	- sort person list (search?)
@@ -19,11 +16,6 @@ contacts
 	- styling
 	- filter by type?
 	- tidy event page
-
-
--users
-	- add new user
-	- manage roles
 
 Stories
 - xover - mary jane wilde stories

@@ -1,50 +1,66 @@
 ﻿@inject BryceFamily.Web.MVC.Infrastructure.ContextService ContextService
-<ul class="nav nav-list">
-    <li>
-        @Html.ActionLink("Home", "Index", "Home")
-    </li>
-    <li>
-    @Html.ActionLink("History", "Index", "History")
-    @*@Html.ActionLink("History", "Index", "History", null, new { data_toggle = "dropdown" })
-        <b class="caret"></b>
-        <ul class="dropdown-menu">
-            <li>@Html.ActionLink("Stories", "Stories", "History")</li>
-            <li>@Html.ActionLink("Videos", "Video", "History")</li>
-            <li>@Html.ActionLink("Family Tree", "Tree", "History")</li>
-        </ul>*@
-    </li>
-    <li>
-        @Html.ActionLink("Events", "Index", "Event")
-    </li>
-    <li>
-        @Html.ActionLink("Gallery", "Index", "Gallery")
-    </li>
-    <li>
-        @Html.ActionLink("People", "Index", "People")
-    </li>
-    @if (ContextService.IsSuperUser())
-    {
-        <li>
-            @Html.ActionLink("Add User", "Register", "Account")
-        </li>
-        <li>
-            @Html.ActionLink("Configure User Access", "RoleManager", "Account")
-        </li>
 
-    }
+<div class="sidebar-nav">
+    <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <span class="visible-xs navbar-brand">Bryce Family</span>
+        </div>
+        <div class="navbar-collapse collapse sidebar-navbar-collapse">
 
-    @if (!ContextService.IsLoggedIn)
-    {
-        <li>
-            @Html.ActionLink("Log In", "LogIn", "Account")
-        </li>
-    }
-    else
-    {
+            <ul class="nav nav-list">
+                <li>
+                    @Html.ActionLink("Home", "Index", "Home")
+                </li>
+                <li>
+                    @Html.ActionLink("History", "Index", "History")
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink("Stories", "Stories", "History")</li>
+                        <li>@Html.ActionLink("Videos", "Video", "History")</li>
+                        <li>@Html.ActionLink("Family Tree", "Tree", "History")</li>
+                    </ul>
+                </li>
+                <li>
+                    @Html.ActionLink("Events", "Index", "Event")
+                </li>
+                <li>
+                    @Html.ActionLink("Gallery", "Index", "Gallery")
+                </li>
+                <li>
+                    @Html.ActionLink("People", "Index", "People")
+                </li>
+                @if (ContextService.IsSuperUser())
+                {
+                    <li>
+                        @Html.ActionLink("Add User", "Register", "Account")
+                    </li>
+                    <li>
+                        @Html.ActionLink("Configure User Access", "RoleManager", "Account")
+                    </li>
 
-        <li>
-            @Html.ActionLink("Log Out", "LogOff", "Account")
-        </li>
-    }
+                }
 
-</ul>
+                @if (!ContextService.IsLoggedIn)
+                {
+                    <li>
+                        @Html.ActionLink("Log In", "LogIn", "Account")
+                    </li>
+                }
+                else
+                {
+
+                    <li>
+                        @Html.ActionLink("Log Out", "LogOff", "Account")
+                    </li>
+                }
+
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</div>
+  

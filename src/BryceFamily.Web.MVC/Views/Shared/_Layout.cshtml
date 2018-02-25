@@ -28,12 +28,12 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-md-2 col-lg-1">
+            <div class="col-md-2 col-lg-2 col-sm-2">
                 @{ 
                     Html.RenderPartial("_nav");
                 }
             </div>
-            <div class="col-md-10 col-lg-10">
+            <div class="col-lg-10 col-sm-10 col-md-10 bodyContent">
                 <div id="alert-container" class="container alert-container"></div>
                   @RenderBody()  
             </div>
