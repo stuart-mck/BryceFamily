@@ -339,7 +339,7 @@ namespace BryceFamily.Web.MVC.Controllers
                                 person.MiddleName = ReadStringCell(sheet, rowId, PersonImport.MiddleName).ToTitleCase();
                                 person.MaidenName = ReadStringCell(sheet, rowId, PersonImport.MaindenName).ToUpper();
                                 person.Phone = ReadStringCell(sheet, rowId, PersonImport.PhoneNumber);
-                                person.ClandId = ReadIntCell(sheet, rowId, PersonImport.Clan);
+                                person.ClandId = ReadNullableIntCell(sheet, rowId, PersonImport.Clan);
                                 person.IsSpouse = ReadStringCell(sheet, rowId, PersonImport.IsSpouse).Equals("y", StringComparison.CurrentCultureIgnoreCase);
                                 person.MotherID = GetNullableInt(sheet, PersonImport.MotherId, rowId);
                                 person.FatherID = GetNullableInt(sheet, PersonImport.FatherId, rowId);
@@ -538,7 +538,7 @@ namespace BryceFamily.Web.MVC.Controllers
             return ReadNullableDate(sheet, rowId, (int)columnId);
         }
 
-            private static int ReadIntCell(ExcelWorksheet sheet, int rowNumber, int columnId)
+        private static int ReadIntCell(ExcelWorksheet sheet, int rowNumber, int columnId)
         {
             var cellValue = sheet.Cells[rowNumber, columnId].Text;
             if (string.IsNullOrEmpty(cellValue)) throw new ArgumentOutOfRangeException($"Cannot convert columnId [{columnId}] to integer as it is null from rowId of {rowNumber} and sheet {sheet.Name}");
@@ -550,6 +550,21 @@ namespace BryceFamily.Web.MVC.Controllers
         private static int ReadIntCell(ExcelWorksheet sheet, int rowNumber, PersonImport columnId)
         {
             return ReadIntCell(sheet, rowNumber, columnId.ToInt());
+        }
+
+        private static int? ReadNullableIntCell(ExcelWorksheet sheet, int rowNumber, PersonImport columnId)
+        {
+            return ReadNullableIntCell(sheet, rowNumber, columnId.ToInt());
+        }
+
+
+        private static int? ReadNullableIntCell(ExcelWorksheet sheet, int rowNumber, int columnId)
+        {
+            var cellValue = sheet.Cells[rowNumber, columnId].Text;
+            if (string.IsNullOrEmpty(cellValue)) throw new ArgumentOutOfRangeException($"Cannot convert columnId [{columnId}] to integer as it is null from rowId of {rowNumber} and sheet {sheet.Name}");
+            if (int.TryParse(cellValue, out var intValue))
+                return intValue;
+            return null;
         }
 
         private static string ReadStringCell(ExcelWorksheet sheet, int rowNumber, PersonImport columnId)

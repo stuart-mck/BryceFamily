@@ -34,11 +34,12 @@ namespace BryceFamily.Web.MVC.Controllers
         public IActionResult FamilyUpdates()
         {
             var updates = from clan in _clanAndPeopleService.People
+                          where clan.ClanId.HasValue
                           group clan by clan.ClanId into g
                           select new FamilyUpdateSummary()
                           {
                               FamilyName = _clanAndPeopleService.Clans.First(cx => cx.Id == g.Key).FormattedName,
-                              ClanId = g.Key,
+                              ClanId = g.Key.Value,
                               LastUpdate = g.Max(t => t.LastUpdated)
                           };
             

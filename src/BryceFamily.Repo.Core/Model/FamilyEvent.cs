@@ -28,6 +28,9 @@ namespace BryceFamily.Repo.Core.Model
 
         public string OrganiserEmail { get; set; }
 
+        public bool FrontPage { get; set; }
+
+
     }
 
 }

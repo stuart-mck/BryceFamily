@@ -56,6 +56,6 @@ namespace BryceFamily.Repo.Core.Model
 
 
         public bool IsClanManager { get; set; }
-        public int ClandId { get; set; }
+        public int? ClandId { get; set; }
     }
 }

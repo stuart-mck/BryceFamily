@@ -1,6 +1,16 @@
 ﻿@inject BryceFamily.Web.MVC.Infrastructure.ContextService ContextService
+@inject BryceFamily.Repo.Core.Read.FamilyEvents.IFamilyEventReadRepository Events
+@inject BryceFamily.Repo.Core.Read.Gallery.IGalleryReadRepository Galleries
+@inject BryceFamily.Repo.Core.Read.ImageReference.IImageReferenceReadRepository ImageReferences
+@inject BryceFamily.Web.MVC.Infrastructure.CDNServiceRoot serviceRoot
+@using System.Threading;
+
 @{ 
     Layout = "_LayoutHome";
+    var eventGuid = new Guid("4e0e876e-2f9d-459c-8740-7488da3d7881");
+    var frontPageEvent = await Events.Load(eventGuid, CancellationToken.None);
+    var gallery = (await Galleries.FindAllByFamilyEvent(frontPageEvent.ID, CancellationToken.None)).FirstOrDefault(g => g.DefaultFamilyEventGallery);
+    var img = (await ImageReferences.LoadByGallery(gallery.ID, CancellationToken.None)).FirstOrDefault(t => t.DefaultGalleryImage);
 }
 <div class="home-page">
     <section>
@@ -54,9 +64,18 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="nav-panel highlight">
-                        <h2>@Html.ActionLink("Next Family Event", "Detail", "Event", new {eventId = "fb457c0b-be87-4ccc-8a2c-978d0871de67" })</h2>
+                        <h3>@Html.ActionLink("Next Family Event", "Detail", "Event", new {eventId = eventGuid })</h3>
                         <div class="item-text">
-                            That thing in March ...
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img class="front-page-img" src="@Url.Content($"{serviceRoot.ServiceRoot}/familybryce.gallery/{img.GalleryId}/{img.Title}")" />
+                                </div>
+                                <div class="col-md-9">
+                                    <b>@Html.ActionLink(frontPageEvent.Title, "Detail", "Event", new { eventId = eventGuid })</b><br />
+                                    Start: @frontPageEvent.StartDate.ToString("dd MMM yyyy") <br />
+                                    At: @frontPageEvent.Location.City
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

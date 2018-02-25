@@ -28,6 +28,9 @@ namespace BryceFamily.Web.MVC.Models
 
         public Guid ImageReference { get; set; }
 
+        public bool FrontPage { get; set; }
+
+
         public List<string> GalleryImageList { get; }
 
         public string FormattedStartDate
@@ -63,7 +66,8 @@ namespace BryceFamily.Web.MVC.Models
                 Title = Title,
                 OrganiserContact = OrganiserContact,
                 OrganiserEmail = OrganiserEmail,
-                OrganiserName = OrganiserName
+                OrganiserName = OrganiserName,
+                FrontPage = FrontPage
             };
         }
 
@@ -108,7 +112,8 @@ namespace BryceFamily.Web.MVC.Models
                 OrganiserContact = sourceFamilyEvent.OrganiserEmail,
                 ImageReference = imageReference,
                 ImagePath = $"{imageReference}/{imageTitle}",
-                GalleryId = galleryId
+                GalleryId = galleryId,
+                FrontPage = sourceFamilyEvent.FrontPage
                 
 
             };

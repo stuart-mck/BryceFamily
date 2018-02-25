@@ -106,7 +106,7 @@ namespace BryceFamily.Web.MVC.Controllers
             return View("EditEvent", fe);
         }
 
-        [HttpGet]
+        [HttpGet("Event/NewEvent")]
         [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public IActionResult NewEvent()
         {

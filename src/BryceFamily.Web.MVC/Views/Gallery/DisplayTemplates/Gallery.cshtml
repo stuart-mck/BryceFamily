@@ -4,30 +4,18 @@
 
 <h2>@Html.DisplayFor(t => t.Title)</h2>
 <div class="row">
-    @{
-        var total = Model.ImageReferences.Count();
-        const int maxInRow = 4;
-        var totalRows = Math.Ceiling((double)total / (double)maxInRow);
-
-    }
-        
-        @for (var counter = 0; counter < total; counter++)
-        {
-            if (counter == 0 || counter % 6 == 0)
-            {
-                @Html.Raw("<div class=\"row\" >") 
-            }
-
+    @foreach (var img in Model.ImageReferences)
+    {
+        <div class="row imageThumbnail">
             <div class="col-md-2">
-                <img src="@Url.Content($"{serviceRoot.ServiceRoot}/{Model.ImageReferences[counter].ThumbnailSizeLink}")" />
-                <label>@Model.ImageReferences[counter].Title</label><br />
-                @Html.ActionLink("View Image", "ViewImage", "Gallery", new { galleryId = Model.Id, imageId = Model.ImageReferences[counter].Id } )
+                <label>@img.Title</label><br />
             </div>
-
-            @if (counter > 0 && counter % 6 == 0)
-            {
-                @Html.Raw("</div>")
-            }
-        }
-       
+            <div class="col-md-2">
+                <img src="@Url.Content($"{serviceRoot.ServiceRoot}/{img.ThumbnailSizeLink}")" />
+            </div>
+            <div class="col-md-2">
+                @Html.ActionLink("View Image", "ViewImage", "Gallery", new { galleryId = Model.Id, imageId = img.Id })
+            </div>
+        </div>
+    }       
 </div>
