@@ -8,8 +8,10 @@
 
 <h2>@Model.StoryTitle</h2>
 
-<div>
+<div class="row">
     @Html.Raw(@Model.StoryContent)
 </div>
 
-
+@{
+    Html.RenderPartial("HistoryFooter");
+}

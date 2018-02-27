@@ -1,6 +1,7 @@
 using System;
 using BryceFamily.Repo.Core.Model;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BryceFamily.Web.MVC.Models
 {
@@ -9,7 +10,9 @@ namespace BryceFamily.Web.MVC.Models
     
         public Guid EntityId { get; set; }
         public string Title { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime StartDate { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime EndDate { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }

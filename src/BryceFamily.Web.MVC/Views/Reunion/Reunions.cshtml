@@ -15,7 +15,7 @@
             @foreach (var evt in Model.Where(t => t.StartDate > DateTime.Now))
             {
             <li class="event">
-                <h3>@Html.ActionLink(evt.Title, "Detail", "Event", new { eventId = evt.EntityId }, new { @class = "detail-link" })</h3>
+                <h3>@Html.ActionLink(evt.Title, "Detail", "Reunion", new { eventId = evt.EntityId }, new { @class = "detail-link" })</h3>
                 <div class="row">
                     <div class="col-md-2">Event Type: @Html.DisplayFor(t => evt.EventType)</div>
                     <div class="col-md-2">Start Date: @Html.DisplayFor(t => evt.StartDate)</div>
@@ -30,7 +30,7 @@
             @foreach (var evt in Model.Where(t => t.StartDate < DateTime.Now))
             {
                 <li class="event">
-                    <h3>@Html.ActionLink(evt.Title, "Detail", "Event", new { eventId = evt.EntityId }, new { @class = "detail-link" })</h3>
+                    <h3>@Html.ActionLink(evt.Title, "Detail", "Reunion", new { eventId = evt.EntityId }, new { @class = "detail-link" })</h3>
                     <div class="row">
                         <div class="col-md-2">Event Type: @Html.DisplayFor(t => evt.EventType)</div>
                         <div class="col-md-2">Start Date: @Html.DisplayFor(t => evt.StartDate)</div>

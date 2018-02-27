@@ -4,49 +4,40 @@
     ViewData["Title"] = "Stories";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var rowePeople = new List<int> { 415, 416, 417, 418, 419, 420 };
+    var bryceList = Model.Where(t => !rowePeople.Contains(t.StoryPerson.Id)).ToList();
+    var rowList = Model.Where(t => rowePeople.Contains(t.StoryPerson.Id)).ToList();
+
 }
-<h2></h2>
 
-<div>
-    <h4>Stories about the Bryce Clan</h4>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Person</th>
-                <th>&nbsp;</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var story in Model.Where(t => !rowePeople.Contains(t.StoryPerson.Id)).OrderBy(d => d.StoryPerson.Id))
-            {
-
-                <tr>
-                    <td>@Html.DisplayFor(t => story.StoryTitle)</td>
-                    <td>@Html.DisplayFor(t => story.StoryObject)</td>
-                    <td>@Html.ActionLink("Read", "ReadStory", "History", new { id = story.ID })</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <h4>Stories about the Rowe Clan</h4>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Person</th>
-                <th>&nbsp;</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var story in Model.Where(t => rowePeople.Contains(t.StoryPerson.Id)).OrderBy(d => d.StoryPerson.Id))
-            { 
-                <tr>
-                    <td>@Html.DisplayFor(t => story.StoryTitle)</td>
-                    <td>@Html.DisplayFor(t => story.StoryObject)</td>
-                    <td>@Html.ActionLink("Read", "ReadStory", "History", new { id = story.ID })</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+<div class="row storyPanel">
+    <h3>Stories about the Bryce Clan</h3>
+    @foreach (var story in bryceList.OrderBy(d => d.StoryPerson.YearOfBirth))
+    {
+        <div class="row">
+            <div class="col-md-3">
+                @Html.DisplayFor(t => story.StoryTitle)
+            </div>
+            <div class="col-md-2">
+                @Html.ActionLink("Read", "ReadStory", "History", new { id = story.ID })
+            </div>
+        </div>
+    }
 </div>
+<div class="row storyPanel">
+    <h3>Stories about the Rowe Clan</h3>
+    @foreach (var story in rowList.OrderBy(d => d.StoryPerson.YearOfBirth))
+    {
+        <div class="row">
+            <div class="col-md-3">
+                @Html.DisplayFor(t => story.StoryTitle)
+            </div>
+            <div class="col-md-2">
+                @Html.ActionLink("Read", "ReadStory", "History", new { id = story.ID })
+            </div>
+        </div>
+    }
+</div>
+          
+@{
+    Html.RenderPartial("HistoryFooter");
+}

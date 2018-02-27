@@ -280,7 +280,7 @@ body {
 .event  {
     background: white;
     padding: 15px;
-    border-top: 1px solid black;
+    
     
 }
 
@@ -298,7 +298,6 @@ body {
 
 .event-description {
     padding: 10px;
-    border: 1px solid black;
     border-radius: 3px 4px;
 }
 
@@ -434,4 +433,9 @@ img.front-page-img {
 .imageThumbnail {
     padding-top: 10px;
     padding-bottom: 10px;
+}
+
+
+.storyPanel{
+    padding-bottom: 20px;
 }

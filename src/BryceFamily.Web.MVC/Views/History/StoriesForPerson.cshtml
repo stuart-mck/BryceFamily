@@ -10,7 +10,7 @@
 
 <h2>Stories about @Model.FirstOrDefault().StoryPerson.FullName</h2>
 
-<div>
+<div class="row">
     <table class="table">
         <thead>
             <tr>
@@ -33,4 +33,6 @@
     </table>
 </div>
 
-
+@{
+    Html.RenderPartial("HistoryFooter");
+}

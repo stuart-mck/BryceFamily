@@ -75,14 +75,6 @@ namespace BryceFamily.Web.MVC.Controllers
             return View(events.Select(e => Models.FamilyEvent.Map(e)));
         }
 
-        [AllowAnonymous]
-        [Route("Reunion/Events")]
-        // GET: /<controller>/
-        public async Task<IActionResult> Events()
-        {
-            var events = (await _readmodel.GetAllEvents(new CancellationToken())).Where(t => t.EventType != Repo.Core.Model.EventType.Reunion).ToList();
-            return View(events.Select(e => Models.FamilyEvent.Map(e)));
-        }
 
         [HttpGet("Reunion/{eventId}")]
         public async Task<IActionResult> Detail(Guid eventId)
@@ -91,8 +83,10 @@ namespace BryceFamily.Web.MVC.Controllers
             var familyEvent = await _readmodel.Load(eventId, cancellationToken);
             var gallery = await _galleryReadRepository.FindAllByFamilyEvent(familyEvent.ID, cancellationToken);
             var imageReference = (await _imageReferenceReadRepository.LoadByGallery(gallery.FirstOrDefault(g => g.DefaultFamilyEventGallery).ID, cancellationToken)).FirstOrDefault(ir => ir.DefaultGalleryImage);
-            return View(Models.FamilyEvent.MapWithImageReference(familyEvent, imageReference.ID, gallery.FirstOrDefault(g => g.DefaultFamilyEventGallery).ID,  imageReference.Title));
-
+            if (imageReference == null)
+                return View(Models.FamilyEvent.Map(familyEvent));
+            else
+                return View(Models.FamilyEvent.MapWithImageReference(familyEvent, imageReference.ID, gallery.FirstOrDefault(g => g.DefaultFamilyEventGallery).ID,  imageReference.Title));
         }
 
         [HttpGet("Reunion/Edit/{eventId}")]

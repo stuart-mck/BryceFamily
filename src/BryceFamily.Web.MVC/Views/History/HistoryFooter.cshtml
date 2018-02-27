@@ -1,0 +1,23 @@
+﻿@inject BryceFamily.Web.MVC.Infrastructure.ContextService ContextService
+
+<div class="row">
+    <div class="col-md-4">
+        <h3>
+            @Html.ActionLink("Videos", "Index", "Video")
+        </h3>
+    </div>
+    <div class="col-md-4">
+        <h3>
+            @Html.ActionLink("Stories", "Stories", "History")
+        </h3>
+
+    </div>
+    @if (ContextService.IsLoggedIn)
+    {
+    <div class="col-md-4">
+        <h3>
+            @Html.ActionLink("Family Tree", "Tree", "History", new { id = 112 })
+        </h3>
+    </div>
+    }
+</div>

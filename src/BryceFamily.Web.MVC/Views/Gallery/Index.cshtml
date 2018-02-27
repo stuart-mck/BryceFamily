@@ -1,60 +1,94 @@
 ﻿@model List<GalleryIndex>
-@using BryceFamily.Web.MVC.Infrastructure.Authentication
 @inject BryceFamily.Web.MVC.Infrastructure.ContextService ContextService
 @inject BryceFamily.Web.MVC.Infrastructure.ClanAndPeopleService ClanService
+@inject BryceFamily.Repo.Core.Read.FamilyEvents.IFamilyEventReadRepository FamilyEvents
+@using BryceFamily.Web.MVC.Infrastructure.Authentication
+@using System.Threading  
 
     @{
         ViewData["Title"] = "Index";
         Layout = "~/Views/Shared/_Layout.cshtml";
+        var events = await FamilyEvents.GetAllEvents(CancellationToken.None);
     }
 
 
-    <div class="col-md-10">
-        <div class="row">
-            <div class="col-md-8">
-                <h3>Family Galleries</h3>
-                <ul class="event-summary">
-                   @foreach (var clan in ClanService.Clans.OrderBy(t => t.DisplayOrder))
-                   {
-
-                       var clanGalleries = Model.Where(g => g.Clan.Id == clan.Id).OrderBy(r => r.GalleryDate).ToList();
-
-                       if (clanGalleries.Any())
-                       {
-
-                       <li>
-                        <h3>@clan.FormattedName</h3>
-                           <ul>
-                            
-                            @foreach (var evt in clanGalleries)
-                            {
-                                <li class="event">
-                                <h4>@Html.ActionLink(string.IsNullOrEmpty(evt.Title) ? "Link" : evt.Title, "Detail", "Gallery", new { id = evt.Id }, new { @class = "detail-link" })</h4>
-                                <div>
-                                    @Html.DisplayFor(t => evt.Summary)
-                                </div>
-
-                                @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
-                                {
-                                    <div>@Html.ActionLink("Edit Images", "EditGalleryImages", "Gallery", new { id = evt.Id }, new { @class = "btn btn-sml" })</div>
-                                }
-                                </li>
-                            }
-                            </ul>
-                        </li>
-                       }
-                   }
-                </ul>
-            </div>
     
-        </div>
-        @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
-        {
-            <div class="row">
-                <div class="col-md-4">
-                    <span class="editorButton">@Html.ActionLink("Add New", "NewGallery", "Gallery", null, new { @class = "btn btn-primary" })</span>
-                </div>
-            </div>
-        }
+<div class="row">
+    <div class="col-md-6">
+        <h3>Galleries by Family</h3>
+        <ul class="event-summary">
+            @foreach (var clan in ClanService.Clans.OrderBy(t => t.DisplayOrder))
+            {
+
+                var clanGalleries = Model.Where(g => g.Clan.Id == clan.Id).OrderBy(r => r.GalleryDate).ToList();
+
+                if (clanGalleries.Any())
+                {
+
+                <li>
+                <h4>@clan.FormattedName</h4>
+                    <ul>
+                            
+                    @foreach (var evt in clanGalleries)
+                    {
+                        <li class="event">
+                        <h5>@Html.ActionLink(string.IsNullOrEmpty(evt.Title) ? "Link" : evt.Title, "Detail", "Gallery", new { id = evt.Id }, new { @class = "detail-link" })</h5>
+                        <div>
+                            @Html.DisplayFor(t => evt.Summary)
+                        </div>
+
+                        @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
+                        {
+                            <div>@Html.ActionLink("Edit Images", "EditGalleryImages", "Gallery", new { id = evt.Id }, new { @class = "btn btn-sml" })</div>
+                        }
+                        </li>
+                    }
+                    </ul>
+                </li>
+                }
+            }
+        </ul>
     </div>
+    <div class="col-md-6">
+        <h3>Galleries by Event</h3>
+        <ul class="event-summary">
+                @foreach (var familyEvent in events.OrderByDescending(t => t.StartDate))
+                {
+                    if (Model.Any(g => g.FamilyEvent?.EntityId == familyEvent.ID))
+                    {
+                    <li>
+                        <h3>@familyEvent.Title</h3>
+                        @foreach (var gallery in Model.Where(t => t.FamilyEvent != null && t.FamilyEvent.EntityId != familyEvent.ID))
+                        {
+
+                            <ul>
+                                <li class="event">
+                                    <h4>@Html.ActionLink(string.IsNullOrEmpty(gallery.Title) ? "Link" : gallery.Title, "Detail", "Gallery", new { id = gallery.Id }, new { @class = "detail-link" })</h4>
+                                    <div>
+                                        @Html.DisplayFor(t => gallery.Summary)
+                                    </div>
+
+                                    @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
+                                    {
+                                        <div>@Html.ActionLink("Edit Images", "EditGalleryImages", "Gallery", new { id = gallery.Id }, new { @class = "btn btn-sml" })</div>
+                                    }
+                                </li>
+                            </ul>
+                        }
+                    </li>
+                    }
+                }
+        </ul>
+    </div>
+</div>
+
+@if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
+{
+    <div class="row">
+        <div class="col-md-4">
+            <span class="editorButton">@Html.ActionLink("Add New", "NewGallery", "Gallery", null, new { @class = "btn btn-primary" })</span>
+        </div>
+    </div>
+}
+    
 

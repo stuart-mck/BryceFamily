@@ -53,9 +53,19 @@
                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="YearOfBirth" class="control-label"></label>
+                <input type="number" asp-for="YearOfBirth" class="form-control" />
+                <span asp-validation-for="YearOfBirth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="DateOfDeath" class="control-label"></label>
                 <input type="date" asp-for="DateOfDeath" class="form-control" />
                 <span asp-validation-for="DateOfDeath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="YearOfDeath" class="control-label"></label>
+                <input type="number" asp-for="YearOfDeath" class="form-control" />
+                <span asp-validation-for="YearOfDeath" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Gender" class="control-label"></label>
