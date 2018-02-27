@@ -99,13 +99,14 @@ namespace BryceFamily.Web.MVC.Controllers
             return View(mappedStory);
         }
 
-        [Route("History/Stories/{id}")]
+        [Route("History/StoriesForPerson/{id}")]
         public IActionResult StoriesForPerson(int id)
         {
             var person = _clanService.People.First(t => t.Id == id);
-            
-
-            return View(person.Stories);
+            if (person.Stories.Count() == 1)
+                return RedirectToAction("ReadStory", new { id = person.Stories.First().ID });
+            else
+                return View(person.Stories);
         }
     }
 }

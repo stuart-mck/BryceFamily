@@ -3,8 +3,6 @@ contacts
 	- message filters?
 	- send email
 
-- rowes into family tree
-- program for reunion
 
 - story edit
 	- styling
@@ -22,6 +20,4 @@ Stories
 - link to william wilde war record - pdf's have been uploaded to s3
 - hard links to stories so far
 
-
 - return to search results from detail view 
-- pin march event to the front page

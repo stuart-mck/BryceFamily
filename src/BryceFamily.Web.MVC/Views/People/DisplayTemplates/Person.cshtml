@@ -6,6 +6,13 @@
         <label asp-for="ClanId" class="control-label"></label>
         @Model.ClanName
     </div>
+    @if (Model.Gender.ToUpper() == "F")
+    {
+    <div class="form-group">
+        <label asp-for="MaidenName" class="control-label"></label>
+        @Model.MaidenName
+    </div>
+    }
     <div class="form-group">
         <label asp-for="Phone" class="control-label"></label>
         @Model.Phone
@@ -29,6 +36,32 @@
     <div class="form-group">
         <label asp-for="SubscribeToEmail" class="control-label"></label>
         @Model.SubscribeToEmail
+    </div>
+    <div class="form-group">
+        <label asp-for="DateOfBirth" class="control-label"></label>
+        @if (Model.DateOfBirth.HasValue)
+        {
+
+            @Model.DateOfBirth
+        }
+        else
+        {
+            @Model.YearOfBirth
+
+        }
+    </div>
+    <div class="form-group">
+        <label asp-for="DateOfDeath" class="control-label"></label>
+        @if (Model.DateOfDeath.HasValue)
+        {
+
+            @Model.DateOfDeath
+        }
+        else
+        {
+            @Model.YearOfDeath
+
+        }
     </div>
 </div>
 @if (Model.Unions.Any())

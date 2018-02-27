@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BryceFamily.Web.MVC.Models.Story>
+﻿@model IEnumerable<BryceFamily.Web.MVC.Models.Stories.Story>
 
 @{
     ViewData["Title"] = "Story";
@@ -8,12 +8,29 @@
 
 }
 
-
-
-<h2>@Model.FirstOrDefault().StoryTitle</h2>
+<h2>Stories about @Model.FirstOrDefault().StoryPerson.FullName</h2>
 
 <div>
-    @Html.Raw(@Model.FirstOrDefault().StoryContent)
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Person</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var story in Model)
+            {
+
+                <tr>
+                    <td>@Html.DisplayFor(t => story.StoryTitle)</td>
+                    <td>@Html.DisplayFor(t => story.StoryObject)</td>
+                    <td>@Html.ActionLink("Read", "ReadStory", "History", new { id = story.ID })</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 
 

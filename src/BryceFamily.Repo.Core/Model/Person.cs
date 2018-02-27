@@ -38,7 +38,11 @@ namespace BryceFamily.Repo.Core.Model
 
         public DateTime? DateOfBirth { get; set; }
 
+        public int? YearOfBirth { get; set; }
+
         public DateTime? DateOfDeath { get; set; }
+
+        public int? YearOfDeath { get; set; }
 
         public string PostCode { get; set; }
 

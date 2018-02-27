@@ -1,4 +1,17 @@
 ﻿@model BryceFamily.Web.MVC.Models.Person
+@inject BryceFamily.Repo.Core.Read.People.IUnionReadRepository Unions
+@using System.Threading
+
+@{ 
+    BryceFamily.Repo.Core.Model.Union parentUnion = null;
+    var partnerId = 0;
+    if (Model.IsSpouse && Model.ParentRelationship != Guid.Empty)
+    {
+        parentUnion = await Unions.Load(Model.ParentRelationship, CancellationToken.None);
+        partnerId = parentUnion.PartnerID.HasValue ? parentUnion.PartnerID.Value : parentUnion.Partner2ID.Value;
+
+    }
+}
 
 <div class="familyMember gender @Model.Gender">
     <span><b>@Model.LastName</b>,  @Model.FirstName @Model.MiddleName</span><br />
@@ -6,17 +19,33 @@
             {
         <span>Born: @Model.DateOfBirth.Value.ToString("dd MMM yyyy")</span><br />
     }
+    else if (Model.YearOfBirth.HasValue)
+    {
+        <span>Born: @Model.YearOfBirth</span><br />
+
+    }
     @if (Model.DateOfDeath.HasValue)
             {
         <span>Passed: @Model.DateOfDeath.Value.ToString("dd MMM yyyy")</span><br />
     }
-    @*@if (Model.Stories.Any())
+    else if (Model.YearOfDeath.HasValue)
+    {
+        <span>Born: @Model.YearOfDeath</span><br />
+
+    }
+    @if (Model.Stories.Any())
             {
-        <span>View Stories</span><br />
-    }*@
+        <span>@Html.ActionLink("View Stories", "StoriesForPerson", "History", new { id = Model.Id })</span><br />
+
+    }
     @if (Model.Galleries.Any())
             {
         <span>View Galleries</span><br />
+    }
+    @if (Model.IsSpouse && Model.ParentRelationship != Guid.Empty)
+    {
+
+        @Html.ActionLink("View Parents", "Tree", "History", new { id = partnerId })<br />
     }
     @Html.ActionLink("Details", "Person", "People", new { id = Model.Id })<br />
 </div>

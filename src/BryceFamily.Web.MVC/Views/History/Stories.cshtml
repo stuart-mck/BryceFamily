@@ -3,10 +3,12 @@
 @{
     ViewData["Title"] = "Stories";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var rowePeople = new List<int> { 415, 416, 417, 418, 419, 420 };
 }
 <h2></h2>
 
 <div>
+    <h4>Stories about the Bryce Clan</h4>
     <table class="table">
         <thead>
             <tr>
@@ -16,9 +18,29 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var story in Model)
+            @foreach (var story in Model.Where(t => !rowePeople.Contains(t.StoryPerson.Id)).OrderBy(d => d.StoryPerson.Id))
             {
 
+                <tr>
+                    <td>@Html.DisplayFor(t => story.StoryTitle)</td>
+                    <td>@Html.DisplayFor(t => story.StoryObject)</td>
+                    <td>@Html.ActionLink("Read", "ReadStory", "History", new { id = story.ID })</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <h4>Stories about the Rowe Clan</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Person</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var story in Model.Where(t => rowePeople.Contains(t.StoryPerson.Id)).OrderBy(d => d.StoryPerson.Id))
+            { 
                 <tr>
                     <td>@Html.DisplayFor(t => story.StoryTitle)</td>
                     <td>@Html.DisplayFor(t => story.StoryObject)</td>

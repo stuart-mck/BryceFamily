@@ -30,6 +30,9 @@ namespace BryceFamily.Web.MVC.Models
         public string LastName { get; set; }
         [DisplayName("Middle Name")]
         public string MiddleName { get; private set; }
+        [DisplayName("Maiden Name")]
+        public string MaidenName { get; private set; }
+
         public string Phone { get; set; }
         public string Address { get; set; }
         public string Address1 { get; set; }
@@ -47,8 +50,24 @@ namespace BryceFamily.Web.MVC.Models
         [DisplayName("Birth Date")]
         public DateTime? DateOfBirth { get; set; }
 
+        public int? YearOfBirth { get; set; }
+
         [DisplayName("Passed")]
         public DateTime? DateOfDeath { get; set; }
+
+        public int Age {
+            get
+            {
+                if (DateOfBirth.HasValue && DateOfDeath.HasValue)
+                    return Convert.ToInt32(Math.Floor((DateOfDeath.Value.Subtract(DateOfBirth.Value).Days / 365F)));
+                else if (YearOfBirth.HasValue && YearOfDeath.HasValue)
+                    return YearOfDeath.Value - YearOfBirth.Value;
+                return 0;
+            }
+        }
+
+        public int? YearOfDeath { get; set; }
+
         public string Gender { get; set; }
         public bool IsSpouse { get; set; }
         public Guid ParentRelationship { get; set; }
@@ -79,6 +98,7 @@ namespace BryceFamily.Web.MVC.Models
                 FatherID = clanAndPeopleService.People.FirstOrDefault(t => t.Id == Father.Id)?.Id,
                 FirstName = FirstName,
                 MiddleName = MiddleName,
+                MaidenName = MaidenName,
                 MotherID = clanAndPeopleService.People.FirstOrDefault(t => t.Id == Mother.Id)?.Id,
                 Phone = Phone,
                 LastName = LastName,
@@ -89,7 +109,9 @@ namespace BryceFamily.Web.MVC.Models
                 Occupation = Occupation,
                 ClandId = ClanId,
                 DateOfBirth = DateOfBirth,
+                YearOfBirth = YearOfBirth,
                 DateOfDeath = DateOfDeath,
+                YearOfDeath = YearOfDeath,
                 IsSpouse = IsSpouse,
                 IsClanManager = IsClanManager,
                 Gender = Gender,
@@ -111,6 +133,7 @@ namespace BryceFamily.Web.MVC.Models
                 EmailAddress = person.EmailAddress,
                 FirstName = person.FirstName,
                 MiddleName = person.MiddleName,
+                MaidenName = person.MaidenName,
                 Phone = person.Phone,
                 LastName = person.LastName,
                 PostCode = person.PostCode,
@@ -118,12 +141,14 @@ namespace BryceFamily.Web.MVC.Models
                 SubscribeToEmail = person.SubscribeToEmail,
                 Suburb = person.Suburb,
                 Occupation = person.Occupation,
-                ClanName = clanAndPeopleService.Clans.First(t => t.Id == person.ClandId).FormattedName,
+                ClanName = clanAndPeopleService.Clans.FirstOrDefault(t => t.Id == person.ClandId)?.FormattedName,
                 ClanId = person.ClandId,
                 Id = person.ID,
                 IsSpouse = person.IsSpouse,
                 DateOfBirth = person.DateOfBirth,
                 DateOfDeath = person.DateOfDeath,
+                YearOfBirth = person.YearOfBirth,
+                YearOfDeath = person.YearOfDeath,
                 Gender = person.Gender,
                 ParentRelationship = person.ParentRelationship,
                 IsClanManager  = person.IsClanManager,

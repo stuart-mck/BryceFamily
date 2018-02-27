@@ -52,13 +52,27 @@
                     @Html.DisplayFor(modelItem => item.LastName)
                 </td>
                 <td>
-                    @item.DateOfBirth.Value.ToShortDateString()
+                    @if (item.DateOfBirth.HasValue)
+                    {
+                        @item.DateOfBirth.Value.ToShortDateString()
+                    }
+                    else
+                    {
+                        @item.YearOfBirth
+                    }
                 </td>
                 <td>
-                    @item.DateOfDeath.Value.ToShortDateString()
+                    @if (item.DateOfDeath.HasValue)
+                    {
+                        @item.DateOfDeath.Value.ToShortDateString()
+                    }
+                    else
+                    {
+                        @item.YearOfDeath
+                    }
                 </td>
                 <td>
-                    @(Math.Floor((item.DateOfDeath.Value.Subtract(item.DateOfBirth.Value).Days /365F)))
+                    @item.Age
                 </td>
                 <td>
                     @Html.ActionLink("Details", "Person", "People", new { id = item.Id })

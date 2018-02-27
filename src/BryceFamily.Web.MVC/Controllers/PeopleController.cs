@@ -148,7 +148,7 @@ namespace BryceFamily.Web.MVC.Controllers
             var output = new StringBuilder();
 
             output.AppendLine("Id,Family,First Name,Last Name,Middle Name,Gender,Birth,Parents,Death,Phone,Address1,Address2,City,State,PostCode,Email");
-            foreach (var person in _clanAndPeopleService.People)
+            foreach (var person in _clanAndPeopleService.People.Where(t => t.ClanId.HasValue).OrderBy(t => t.LastName))
             {
                 output.AppendLine($"{person.Id}," +
                     $"{_clanAndPeopleService.Clans.First(t => t.Id == person.ClanId).Family} - {_clanAndPeopleService.Clans.First(t => t.Id == person.ClanId).FamilyName} ," +
@@ -156,9 +156,9 @@ namespace BryceFamily.Web.MVC.Controllers
                     $"{person.LastName}," +
                     $"{person.MiddleName}," +
                     $"{person.Gender}," +
-                    $"{person.DateOfBirth:dd-MMM-yyyy}," +
-                    $"{person.Mother?.FullName} & {person.Father?.FullName}," +
-                    $"{person?.DateOfDeath:dd-MMM-yyyy}," +
+                    $"{GetDate(person.DateOfBirth, person.YearOfBirth)}," +
+                    $"{BuildParents(person)}," +
+                    $"{GetDate(person.DateOfDeath, person.YearOfDeath)}," +
                     $"{person.Phone}," +
                     $"{person.Address}," +
                     $"{person.Address1}," +
@@ -170,6 +170,25 @@ namespace BryceFamily.Web.MVC.Controllers
 
             byte[] buffer = Encoding.Default.GetBytes(output.ToString());
             return File(buffer, "text/csv", "bluebook.csv");
+        }
+
+        private string BuildParents(Models.Person person)
+        {
+            return (person.Mother != null && person.Father != null)
+                ? $"{person.Mother?.FullName} & {person.Father?.FullName}"
+                : person.Mother != null ? person.Mother.FullName
+                                        : person.Father != null ? person.Father.FullName : string.Empty;
+
+        }
+
+        public string GetDate(DateTime? birthOrDeathDate, int? birthOrDeathYear)
+        {
+            if (birthOrDeathDate.HasValue)
+                return birthOrDeathDate.Value.ToString("dd-MMM-yyyy");
+            else if (birthOrDeathYear.HasValue)
+                return birthOrDeathYear.ToString();
+            return string.Empty;
+            
         }
 
         [HttpPut, Route("{personId}")]
@@ -349,8 +368,17 @@ namespace BryceFamily.Web.MVC.Controllers
                                 person.State = ReadStringCell(sheet, rowId, PersonImport.State).ToUpper();
                                 person.PostCode = ReadStringCell(sheet, rowId, PersonImport.PostCode);
                                 person.Occupation = ReadStringCell(sheet, rowId, PersonImport.Occupation);
-                                person.DateOfBirth = ReadNullableDate(sheet, rowId, PersonImport.DOB);
-                                person.DateOfDeath = ReadNullableDate(sheet, rowId, PersonImport.DOD);
+
+                                if (ReadStringCell(sheet, rowId, PersonImport.DOB).Length == 4)
+                                    person.YearOfBirth = ReadIntCell(sheet, rowId, PersonImport.DOB);
+                                else                                
+                                    person.DateOfBirth = ReadNullableDate(sheet, rowId, PersonImport.DOB);
+
+                                if (ReadStringCell(sheet, rowId, PersonImport.DOD).Length == 4)
+                                    person.YearOfDeath = ReadIntCell(sheet, rowId, PersonImport.DOD);
+                                else
+                                    person.DateOfDeath = ReadNullableDate(sheet, rowId, PersonImport.DOD);
+
                                 person.Gender = ReadStringCell(sheet, rowId, PersonImport.Gender);
                                 person.IsClanManager = false;
                                 person.LastUpdated = DateTime.Now;
@@ -561,7 +589,6 @@ namespace BryceFamily.Web.MVC.Controllers
         private static int? ReadNullableIntCell(ExcelWorksheet sheet, int rowNumber, int columnId)
         {
             var cellValue = sheet.Cells[rowNumber, columnId].Text;
-            if (string.IsNullOrEmpty(cellValue)) throw new ArgumentOutOfRangeException($"Cannot convert columnId [{columnId}] to integer as it is null from rowId of {rowNumber} and sheet {sheet.Name}");
             if (int.TryParse(cellValue, out var intValue))
                 return intValue;
             return null;
