@@ -458,8 +458,8 @@ namespace BryceFamily.Web.MVC.Controllers
 
                                 var union = await _unionWriteRepository.FindByQuery(new UnionQuery
                                 {
-                                    Partner1Id = ReadIntCell(spouseSheet, rowId, 1),
-                                    Partner2Id = ReadIntCell(spouseSheet, rowId, 2)
+                                    Partner1Id = ReadNullableIntCell(spouseSheet, rowId, 1),
+                                    Partner2Id = ReadNullableIntCell(spouseSheet, rowId, 2)
 
                                 }, cancellationToken);
 
@@ -468,8 +468,8 @@ namespace BryceFamily.Web.MVC.Controllers
                                     //is there one going the other way?
                                     union = await _unionWriteRepository.FindByQuery(new UnionQuery
                                     {
-                                        Partner1Id = ReadIntCell(spouseSheet, rowId, 2),
-                                        Partner2Id = ReadIntCell(spouseSheet, rowId, 1)
+                                        Partner1Id = ReadNullableIntCell(spouseSheet, rowId, 2),
+                                        Partner2Id = ReadNullableIntCell(spouseSheet, rowId, 1)
 
                                     }, cancellationToken);
 
@@ -478,8 +478,8 @@ namespace BryceFamily.Web.MVC.Controllers
 
                                         union = new Repo.Core.Model.Union()
                                         {
-                                            PartnerID = ReadIntCell(spouseSheet, rowId, 1),
-                                            Partner2ID = ReadIntCell(spouseSheet, rowId, 2),
+                                            PartnerID = ReadNullableIntCell(spouseSheet, rowId, 1),
+                                            Partner2ID = ReadNullableIntCell(spouseSheet, rowId, 2),
                                             ID = Guid.NewGuid()
                                         };
                                     }
