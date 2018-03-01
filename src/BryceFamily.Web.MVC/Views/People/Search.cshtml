@@ -7,7 +7,7 @@
 
 
 
-    var clansSelectItems = ClanService.Clans.Select(c => new SelectListItem()
+    var clansSelectItems = ClanService.Clans.Where(c => c.Id > 1).Select(c => new SelectListItem()
     {
         Text = $"{c.Family}, {c.FamilyName}",
         Value = c.Id.ToString()

@@ -37,33 +37,14 @@ namespace BryceFamily.Web.MVC.Infrastructure
             new FamilyClan(5, "Hose", "Thelma and Harold", 4),
             new FamilyClan(6, "Moore", "Eveleyn and Thomas", 5),
             new FamilyClan(7, "Bryce", "Roy and Phyllis", 6),
-            new FamilyClan(8, "Bryce", "David and Edna", 7),
+            //new FamilyClan(8, "Bryce", "David and Edna", 7),
             new FamilyClan(9, "Smith", "Dorothy and Marty", 8),
             new FamilyClan(10, "Shield", "Hazel and William", 9 ),
             new FamilyClan(11, "Thomas", "Iris and Frank", 10),
             new FamilyClan(12, "Bryce", "Desmond and Marjorie", 11),
             new FamilyClan(13, "Robson", "Ivan and Shirley", 12 ),
             new FamilyClan(14, "Bryce", "Cecil and Val", 13),
-
-
-            /*
-             * 
-             * 1	Bryce	David and Maria
-2	GBryce	George (Lindsay) and Dorothy
-3	Barmby	Ethyl (Sissy) and George
-4	HBryce	Harold and Phyllis
-5	Hose	Thelma and Harold
-6	Moore	Evelyn and Thomas
-7	RBryce	Roy and Phyllis
-8	Bryce	Edna
-9	Smith	Dorothy and Marty
-10	Shield	Hazel and William
-11	Thomas	Iris and Frank
-12	DBryce	Desmond and Marjorie
-13	Robson	Shirley and Benny
-14	CBryce	Cecil and Val
-
-             * */
+            
         };
 
         public IReadOnlyList<FamilyClan> Clans => _clans;
