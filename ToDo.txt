@@ -3,10 +3,14 @@ contacts
 	- message filters?
 	- send email
 
+	- birthday / anniversary / major birthday list
+
 
 - story edit
 	- styling
 	- sort person list (search?)
+	- start / edit story from person page
+	
 
 - events
 	- list styling
@@ -14,6 +18,7 @@ contacts
 	- styling
 	- filter by type?
 	- tidy event page
+	- refactor email flow
 
 Stories
 - xover - mary jane wilde stories
@@ -21,3 +26,5 @@ Stories
 - hard links to stories so far
 
 - return to search results from detail view 
+- add Is Ended field to union editor
+- by defult - return logged in user to person view - show button for edit for editor logins

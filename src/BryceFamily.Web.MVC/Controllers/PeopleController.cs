@@ -16,6 +16,7 @@ using BryceFamily.Web.MVC.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using BryceFamily.Web.MVC.Infrastructure.Authentication;
 using System.Text;
+using BryceFamily.Web.MVC.Models.People;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
@@ -40,7 +41,9 @@ namespace BryceFamily.Web.MVC.Controllers
         
         public IActionResult Index()
         {
-            return View();
+            var peopleSummary = new FamilySummary(_clanAndPeopleService);
+
+            return View(peopleSummary);
         }
 
         [HttpGet, Route("EmailUnsubscribe/{personId}")]
@@ -444,7 +447,7 @@ namespace BryceFamily.Web.MVC.Controllers
                         }
 
                         var spouseSheet = excel.Workbook.Worksheets["Spouses"];
-                        if (spouseSheet == null) continue;
+                        if (spouseSheet != null) 
                         {
                             var rowId = 2; // sheet has header row!
                             while (spouseSheet.Cells[rowId, 1].Text != string.Empty)
@@ -484,7 +487,6 @@ namespace BryceFamily.Web.MVC.Controllers
                                         };
                                     }
                                 }
-
 
                                 union.MarriageDate = ReadNullableDate(spouseSheet, rowId, 3);
                                 union.DivorceDate = ReadNullableDate(spouseSheet, rowId, 4);

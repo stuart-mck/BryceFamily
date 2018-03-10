@@ -154,7 +154,8 @@ namespace BryceFamily.Web.MVC.Infrastructure
                 Partner2 = partner2,
                 DateOfUnion = union.MarriageDate,
                 DateOfDissolution = union.DivorceDate,
-                Descendents = children.ToList()
+                Descendents = children.ToList(),
+                Divorced = union.IsEnded
             };
             processedUnions.Add(union.ID);
 

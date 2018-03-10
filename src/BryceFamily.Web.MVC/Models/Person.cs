@@ -58,10 +58,18 @@ namespace BryceFamily.Web.MVC.Models
         public int Age {
             get
             {
+                //full birth and death values
                 if (DateOfBirth.HasValue && DateOfDeath.HasValue)
                     return Convert.ToInt32(Math.Floor((DateOfDeath.Value.Subtract(DateOfBirth.Value).Days / 365F)));
+                //birth and death year information
                 else if (YearOfBirth.HasValue && YearOfDeath.HasValue)
                     return YearOfDeath.Value - YearOfBirth.Value;
+                //not dead - full birthdate info
+                else if (DateOfBirth.HasValue)
+                    return Convert.ToInt32(Math.Floor((DateTime.Now.Subtract(DateOfBirth.Value).Days / 365F)));
+                else if (YearOfBirth.HasValue)
+                    return DateTime.Now.Year - YearOfBirth.Value;
+
                 return 0;
             }
         }

@@ -1,4 +1,5 @@
-﻿@using BryceFamily.Web.MVC.Infrastructure.Authentication
+﻿@model BryceFamily.Web.MVC.Models.People.FamilySummary
+@using BryceFamily.Web.MVC.Infrastructure.Authentication
 @inject BryceFamily.Web.MVC.Infrastructure.ContextService contextService
 
 @{
@@ -13,39 +14,145 @@
     <p>Also, some info about the facebook page could go in here. The link to the family facebook page is <a href="https://www.facebook.com/groups/78127174594/" target="_blank">Bryce Family Facebook Page</a></p>
 </div>
 
-<div class="row">
-    
-        @if (contextService.IsLoggedIn)
+
+
+@if (contextService.IsLoggedIn)
+{
+    <div class="row">
+        @if (Model.NearByBirthdays.Any())
         {
-        <div class="col-md-3">
-            <h3>@Html.ActionLink("Find People", "Search", "People")</h3>
-            <p>Click here to search for family members. If you are a family owner, you can also update details here.</p>
+            <h4>Upcoming Birthdays</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Birthday
+                        </th>
+                        <th>
+                            Age
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var b in Model.NearByBirthdays.OrderBy(t => t.DateOfBirth.Value.Month).ThenBy(t => t.DateOfBirth.Value.Day))
+                    {
+                        <tr>
+                            <td>@b.FullName</td>
+                            <td>@b.DateOfBirth.Value.ToString("dd MMM")</td>
+                            <td>@b.Age</td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+        }
+
+
+    </div>
+    <div class="row">
+        @if (Model.SignificantBirthdays.Any())
+    {
+        <h4>Significant Birthdays</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Birthday
+                    </th>
+                    <th>
+                        Age
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var b in Model.SignificantBirthdays)
+            {
+                <tr>
+                    <td>@b.FullName</td>
+                    <td>
+                        @if (b.DateOfBirth.HasValue)
+                        {
+                            @b.DateOfBirth.Value.ToString("dd MMM")
+                        }
+                        @if (b.YearOfBirth.HasValue)
+                        {
+                            @b.YearOfBirth
+                        }
+                    </td>
+                    <td>@b.Age</td>
+                </tr>
+
+        }
+            </tbody>
+        </table>
+}
         </div>
-        <div class="col-md-3">
-            <h3>@Html.ActionLink("Dowload Bluebook", "Bluebook", "People")</h3>
-            <p>Download a full list of all the family members and their contact details from here.</p>
+        <div class="row">
+            @if (Model.SignificantAnniversaries.Any())
+        {
+            <h4>Significant Aniversaries</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Years Married
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var b in Model.SignificantAnniversaries.OrderBy(t => t.YearsMarried))
+                {
+                    <tr>
+                        <td>@b.Partner1.FullName &amp; @b.Partner2.FullName</td>
+                        <td>@b.YearsMarried</td>
+                    </tr>
+
+            }
+                </tbody>
+            </table>
+    }
+
         </div>
-        <div class="col-md-3">
-            <h3>@Html.ActionLink("Family Reports", "Index", "Reports")</h3>
-            <p>A list of reports is available on this page.</p>
+        <div class="row">
+            <div class="col-md-3">
+                <h3>@Html.ActionLink("Find People", "Search", "People")</h3>
+                <p>Click here to search for family members. If you are a family owner, you can also update details here.</p>
+            </div>
+            <div class="col-md-3">
+                <h3>@Html.ActionLink("Dowload Bluebook", "Bluebook", "People")</h3>
+                <p>Download a full list of all the family members and their contact details from here.</p>
+            </div>
+            <div class="col-md-3">
+                <h3>@Html.ActionLink("Family Reports", "Index", "Reports")</h3>
+                <p>A list of reports is available on this page.</p>
+            </div>
         </div>
         }
-</div>
+
 
         @if (User.IsInRole(RoleNameConstants.SuperAdminRole))
-        {
-            <div class="row">
-                <div class="col-md-3">
-                    <h3>@Html.ActionLink("Import People File", "Import", "People")</h3>
-</div>
+    {
+        <div class="row">
+            <div class="col-md-3">
+                <h3>@Html.ActionLink("Import People File", "Import", "People")</h3>
             </div>
-        }
-        else if (!contextService.IsLoggedIn)
-        {
+        </div>
+}
+else if (!contextService.IsLoggedIn)
+{
 
-            @Html.ActionLink("Log in to search for family contact details", "Login", "Account", new { returnUrl = "/People" })
+    @Html.ActionLink("Log in to search for family contact details", "Login", "Account", new { returnUrl = "/People" })
 
-        }
+}
 
 
 

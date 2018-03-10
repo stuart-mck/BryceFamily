@@ -17,5 +17,17 @@ namespace BryceFamily.Web.MVC.Models
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime? DateOfDissolution{ get; set; }
         public List<Person> Descendents { get; set; }
+
+        public bool Divorced { get; set; }
+
+        public int YearsMarried
+        {
+            get
+            {
+                if (!DateOfUnion.HasValue)
+                    return -1;
+                return Convert.ToInt32(Math.Floor((((DateTime.Now - DateOfUnion.Value).TotalDays) / 365)));
+            }
+        }
     }
 }
