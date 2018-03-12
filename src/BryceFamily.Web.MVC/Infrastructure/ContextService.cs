@@ -46,13 +46,13 @@ namespace BryceFamily.Web.MVC.Infrastructure
 
         
 
-        public bool IsClanManager {
-            get
-            {
-                var person = LoggedInPerson;
-                return person != null && person.IsClanManager;
-            }
-        }
+        //public bool IsClanManager {
+        //    get
+        //    {
+        //        var person = LoggedInPerson;
+        //        return person != null && person.IsClanManager;
+        //    }
+        //}
 
         public bool IsSuperUser()
         {
@@ -69,13 +69,14 @@ namespace BryceFamily.Web.MVC.Infrastructure
 
         public bool IsLoggedInEditor()
         {
-            var person = LoggedInPerson;
-            if (person == null)
+           var contextUser = _context.HttpContext.User.Identity.Name;
+
+            if (contextUser == null)
                 return false;
 
-            var user = _userStore.FindByEmailAsync(person.EmailAddress).Result;
+            var user = _userStore.FindByEmailAsync(contextUser).Result;
             var roles = _roleStore.GetRolesAsync(user, CancellationToken.None).Result;
-            if (roles.Any(t => t == RoleNameConstants.AllAdminRoles))
+            if (roles.Any(t => RoleNameConstants.AllAdminRoles.Split(",").Contains(t)))
                 return true;
             return false;
         }

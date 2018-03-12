@@ -34,7 +34,7 @@
                 <li>
                     @Html.ActionLink("People", "Index", "People")
                 </li>
-                @if (ContextService.IsSuperUser())
+                @if (ContextService.IsLoggedInEditor())
                 {
                     <li>
                         @Html.ActionLink("Add User", "Register", "Account")

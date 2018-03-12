@@ -18,7 +18,7 @@
 <h2>@Model.FirstName @Model.MiddleName @Model.LastName</h2>
 
 
-@if (ContextService.IsLoggedIn && (ContextService.IsClanManager || ContextService.IsSuperUser()))
+@if (ContextService.IsLoggedInEditor())
 {
     @Html.EditorForModel()
 }

@@ -1,12 +1,15 @@
 ﻿@model  BryceFamily.Web.MVC.Models.AccountViewModels.RoleManagerViewModel
-
+@inject BryceFamily.Web.MVC.Infrastructure.ContextService ContextService
 
 
     <tr>
         <td>@Html.DisplayFor(t => t.Email)</td>
         <td>@Html.EditorFor(t => t.IsInUserRole)</td>
         <td>@Html.EditorFor(t => t.IsInEditorRole)</td>
-        <td>@Html.EditorFor(t => t.IsInSuperUserRole)</td>
+        @if (ContextService.IsSuperUser())
+        {
+            <td>@Html.EditorFor(t => t.IsInSuperUserRole)</td>
+        }
         @Html.HiddenFor(t => t.Id)
         @Html.HiddenFor(t => t.Altered)
     </tr>

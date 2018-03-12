@@ -28,3 +28,9 @@ Stories
 - return to search results from detail view 
 - add Is Ended field to union editor
 - by defult - return logged in user to person view - show button for edit for editor logins
+
+- check offspring for julianne and Tom
+- check null error on Tammy Riley
+- check double birthdate on Tammy Riley
+- validate Deanne has correct parents
+- hide registration button on successful request response

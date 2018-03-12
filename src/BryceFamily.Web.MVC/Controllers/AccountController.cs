@@ -12,10 +12,11 @@ using BryceFamily.Repo.Core.Emails;
 using System.Threading;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly SignInManager<DynamoIdentityUser> _signInManager;
         private readonly ContextService _contextService;
@@ -32,7 +33,7 @@ namespace BryceFamily.Web.MVC.Controllers
             ISesService sesService,
             ClanAndPeopleService clanAndPeopleService,
             DynamoRoleUsersStore<DynamoIdentityRole, DynamoIdentityUser> roleManager,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger):base("Accounts", "accounts")
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -238,7 +239,7 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = RoleNameConstants.SuperAdminRole)]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public async Task<IActionResult> RoleManager()
         {
             var cancellationToken = CancellationToken.None;
@@ -247,7 +248,7 @@ namespace BryceFamily.Web.MVC.Controllers
 
 
         [HttpPost]
-        [Authorize(Roles = RoleNameConstants.SuperAdminRole)]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public async Task<IActionResult> RoleManager(IEnumerable<RoleManagerViewModel> roles)
         {
             var cancellationToken = CancellationToken.None;
@@ -289,6 +290,58 @@ namespace BryceFamily.Web.MVC.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult RegistrationRequest()
+        {
+            return View(new RegistrationRequest());
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> RegistrationRequest(RegistrationRequest request)
+        {
+            try
+            {
+                var cancellationToken = GetCancellationToken();
+                var adminUsers = (await _roleManager.GetUserIdsInRoleAsync(RoleNameConstants.AdminRole, cancellationToken)).ToList();
+                var superAdmminUsers = (await _roleManager.GetUserIdsInRoleAsync(RoleNameConstants.SuperAdminRole, cancellationToken)).ToList();
+
+                var emails = new List<string>();
+                foreach(var userId in (adminUsers.Union(superAdmminUsers)))
+                {
+                    var user = await _userManager.FindByIdAsync(userId);
+                    emails.Add(user.Email.Value);
+                }
+
+                await _sesService.SendBulkEmail(emails.AsEnumerable(), GetRequestEmail(request), "New User Request", cancellationToken);
+                ViewData["message"] = "Thanks, your request has been sent to the web site admins one of whom will respond as soon as they're able to.";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"There was an error handling the registration request for {request.Email}");
+                ViewData["message"] = "Unfortunately there was an error handling your request. The web admins have been notified";
+
+            }
+
+            return View(request);
+        }
+
+        private string GetRequestEmail(RegistrationRequest request)
+        {
+            var sb = new StringBuilder();
+            var url = Url.Action("AutoApprove", "Account", new { emailToApprove = request.Email }, protocol: HttpContext.Request.Scheme);
+
+            sb.Append("<table border=\"0\" valign=\"top\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\"><thead><tr><th>Bryce Family Web Site has received a new request for access</th></tr></thead>");
+            sb.Append($"<tbody><tr><td>First Name:</td><td>{request.FirstName}</td></tr>");
+            sb.Append($"<tr><td>Last Name:</td><td>{request.LastName}</td></tr>");
+            sb.Append($"<tr><td>Email:</td><td>{request.Email}</td></tr>");
+            sb.Append($"<tr><td>Click to approve:</td><td><a href=\"{url}\" target=\"_blank\">Approve</a></td></tr>");
+            sb.Append($"</table>");
+            return sb.ToString();
+
+            
+        }
+
         private async Task UpdateRole(string userId, string roleName, bool remove, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -300,14 +353,20 @@ namespace BryceFamily.Web.MVC.Controllers
 
         private async Task<IEnumerable<RoleManagerViewModel>> GetUserRolesList(CancellationToken cancellationToken)
         {
-            var readonlyUsers = (await _roleManager.GetUserIdsInRoleAsync(RoleNameConstants.UserRole, cancellationToken)).ToList();
-            var adminUsers = (await _roleManager.GetUserIdsInRoleAsync(RoleNameConstants.AdminRole, cancellationToken)).ToList();
-            var superAdminUsers = (await _roleManager.GetUserIdsInRoleAsync(RoleNameConstants.SuperAdminRole, cancellationToken)).ToList();
-
             var users = new List<RoleManagerViewModel>();
+            var readonlyUsers = (await _roleManager.GetUserIdsInRoleAsync(RoleNameConstants.UserRole, cancellationToken)).ToList();
 
+            var adminUsers = (await _roleManager.GetUserIdsInRoleAsync(RoleNameConstants.AdminRole, cancellationToken)).ToList();
             readonlyUsers.AddRange(adminUsers);
-            readonlyUsers.AddRange(superAdminUsers);
+
+
+            if (_contextService.IsSuperUser())
+            {
+                var superAdminUsers = (await _roleManager.GetUserIdsInRoleAsync(RoleNameConstants.SuperAdminRole, cancellationToken)).ToList();
+                readonlyUsers.AddRange(superAdminUsers);
+            }
+
+           
             foreach (var user in readonlyUsers.Distinct())
             {
                 var x = await _userManager.FindByIdAsync(user);
@@ -321,9 +380,58 @@ namespace BryceFamily.Web.MVC.Controllers
                 });
             }
 
-            return users;
+            return users.Where(t => t.Email != User.Identity.Name); // filter out the current logged in user from the list;
         }
 
+        [HttpGet("Account/AutoApprove/{emailToApprove}"), Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        public async Task<IActionResult> AutoApprove(string emailToApprove)
+        {
+            var cancellationToken = GetCancellationToken();
+            var existingUser = await _userManager.FindByEmailAsync(emailToApprove);
+
+            if (existingUser != null)
+            {
+                ViewData["message"] = $"A user has already been registered with this email - perhaps another admin has already handled this request [{emailToApprove}]";
+            }
+
+
+            var user = new DynamoIdentityUser(emailToApprove, emailToApprove);
+            var result = await _userManager.CreateAsync(user, Guid.NewGuid().ToString().ToUpper() + Guid.NewGuid().ToString().ToLower());
+            if (result.Succeeded)
+            {
+                await _roleManager.AddToRoleAsync(user, "user", CancellationToken.None);
+                _logger.LogInformation(3, "User created a new account with password.");
+                ViewData["message"] = $"User [{emailToApprove}] created and login email has been sent";
+            }
+            else
+            {
+                AddErrors(result);
+                ViewData["message"] = string.Join("<br />", result.Errors.Select(e => e.Description));
+            }
+
+            //set up the reset password link
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+            await _sesService.SendEmail(emailToApprove, GetRegistrationEmail(emailToApprove, callbackUrl), "Bryce Family Website Registration", cancellationToken);
+            return View();
+        }
+
+
+        private static string GetRegistrationEmail(string emailToApprove, string callbackUrl)
+        {
+
+            var sb = new StringBuilder();
+
+            sb.Append("<table border=\"0\" valign=\"top\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\"><thead><tr><th>You have been successfully registered on the Bryce Family Website</th></tr></thead>");
+            sb.Append($"<tbody><tr><td><p>Welcome! You have been successfully registered for access to the Bryce Family Website and you now have access to the contact lists etc contained within the site.</p>");
+            sb.Append($"<tbody><tr><td><p>Your username is the email address you entered in the request which is {emailToApprove}</p>");
+            sb.Append("<p>In order to complete your access, you will need to set up a password. In order to do this, click on the link below.</p>");
+            sb.Append($"<p><a href=\"{callbackUrl}\">Click Me</a></p>");
+            sb.Append($"<p>This link is valid for 24 hours. If the link has expired, simply head <a href=\"https://www.brycefamily.net/Account/ForgotPassword\" >here</a> and request a new password.</p>");
+            sb.Append("</td></tr></table>");
+
+            return sb.ToString();
+        }
 
         private IActionResult RedirectToLocal(string returnUrl)
         {
