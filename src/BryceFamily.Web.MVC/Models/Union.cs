@@ -29,5 +29,20 @@ namespace BryceFamily.Web.MVC.Models
                 return Convert.ToInt32(Math.Floor((((DateTime.Now - DateOfUnion.Value).TotalDays) / 365)));
             }
         }
+
+        internal Repo.Core.Model.Union Map()
+        {
+            return new Repo.Core.Model.Union()
+            {
+                DivorceDate = this.DateOfDissolution,
+                ID = this.Id,
+                IsEnded = this.Divorced,
+                MarriageDate = this.DateOfUnion,
+                Partner2ID = this.Partner2?.Id,
+                PartnerID = this.Partner1?.Id
+            };
+        }
+
+
     }
 }

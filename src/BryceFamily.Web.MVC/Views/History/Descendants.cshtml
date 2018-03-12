@@ -32,7 +32,7 @@
                 <div class="descendent-link">
                     @if (union.Descendents.Any())
                     {
-                        @Html.ActionLink("Offspring", "Tree", "History", new { id = Model.Id })
+                        @Html.ActionLink("Offspring", "Tree", "History", new { id = Model.Id, partnerId = partner.Id })
                     }
                     else
                     {

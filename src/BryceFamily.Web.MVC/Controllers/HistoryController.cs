@@ -66,8 +66,9 @@ namespace BryceFamily.Web.MVC.Controllers
             return View(storyWriteModel);
         }
 
-        [Route("History/Tree/{id}")]
-        public IActionResult Tree (int id)
+        [Route("History/Tree/{id}/")]
+        [Route("History/Tree/{id}/{partnerId}")]
+        public IActionResult Tree (int id, int? partnerId)
         {
             Models.Person startNode;
             if (id < 1)
@@ -78,8 +79,12 @@ namespace BryceFamily.Web.MVC.Controllers
             if (startNode == null)
                 return BadRequest("Invalid Person reference");
 
+            if (partnerId.HasValue)
+                ViewBag.PartnerId = partnerId;
+
             return View(startNode);
         }
+
 
 
         [HttpGet("History/Stories")]

@@ -14,10 +14,42 @@
     </div>
 }
 <div class="row">
-
+    @if (ViewBag.Success == true)
+    {
+    <div class="col-md-6">
+        <h4>Request an account.</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                First Name:
+            </div>
+            <div class="col-md-4">
+                @Model.FirstName
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                Last Name:
+            </div>
+            <div class="col-md-4">
+                @Model.LastName
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                Email Address:
+            </div>
+            <div class="col-md-4">
+                @Model.Email
+            </div>
+        </div>
+    </div>
+    }
+    else
+    {
     <div class="col-md-6">
         <form asp-controller="Account" asp-action="RegistrationRequest" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
-            <h4>Create a new account.</h4>
+            <h4>Request an account.</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
@@ -48,6 +80,7 @@
             </div>
         </form>
     </div>
+    }
 </div>
 
 @section Scripts {

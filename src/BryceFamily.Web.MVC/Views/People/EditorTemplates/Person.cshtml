@@ -135,15 +135,15 @@
                 var partnerName = string.Empty;
                 <div class="row">
                     <div class="col-md-4">
-                        @if (union.Partner1.Id == Model.Id)
+                        @if (union?.Partner1?.Id == Model.Id)
                         {
                             partnerId = union.Partner2.Id;
                             partnerName = union.Partner2.FullName;
                         }
-                        else
+                        else if (union.Partner1 != null)
                         {
                             partnerId = union.Partner1.Id;
-                            partnerName = union.Partner1.FullName;
+                            partnerName = union?.Partner1.FullName;
                         }
                         @Html.ActionLink(partnerName, "Relationship", "People", new { partner1 = Model.Id, partner2 = partnerId })
                     </div>

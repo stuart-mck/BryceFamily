@@ -128,7 +128,10 @@ namespace BryceFamily.Web.MVC.Models
             };
         }
 
-  
+        internal Person Copy()
+        {
+            throw new NotImplementedException();
+        }
 
         public static Person FlatMap(Repo.Core.Model.Person person, ClanAndPeopleService clanAndPeopleService)
         {

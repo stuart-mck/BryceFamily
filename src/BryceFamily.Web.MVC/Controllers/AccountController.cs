@@ -293,6 +293,7 @@ namespace BryceFamily.Web.MVC.Controllers
         [HttpGet]
         public IActionResult RegistrationRequest()
         {
+            ViewBag.Success = false;
             return View(new RegistrationRequest());
         }
 
@@ -315,9 +316,11 @@ namespace BryceFamily.Web.MVC.Controllers
 
                 await _sesService.SendBulkEmail(emails.AsEnumerable(), GetRequestEmail(request), "New User Request", cancellationToken);
                 ViewData["message"] = "Thanks, your request has been sent to the web site admins one of whom will respond as soon as they're able to.";
+                ViewBag.Success = true;
             }
             catch (Exception ex)
             {
+                ViewBag.Success = false;
                 _logger.LogError(ex, $"There was an error handling the registration request for {request.Email}");
                 ViewData["message"] = "Unfortunately there was an error handling your request. The web admins have been notified";
 

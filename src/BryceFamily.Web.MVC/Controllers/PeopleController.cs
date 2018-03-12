@@ -255,6 +255,20 @@ namespace BryceFamily.Web.MVC.Controllers
             return View(relationship);
         }
 
+        [HttpPost]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        public async Task<IActionResult> Union(Models.Union union)
+        {
+            if (ModelState.IsValid)
+            {
+                var dbUnion = union.Map();
+                await _unionWriteRepository.Save(dbUnion, GetCancellationToken());
+                _clanAndPeopleService.ClearPeople();
+            }
+            return RedirectToAction("Relationship", new { partner1 = union.Partner1.Id, partner2 = union.Partner2.Id });
+        }
+
+
         [HttpGet, Route("NewRelationship/{id}")]
         [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
         public IActionResult NewRelationship(int id)

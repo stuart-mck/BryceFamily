@@ -1,5 +1,21 @@
 ﻿@model BryceFamily.Web.MVC.Models.Person
 
+@{ 
+    Union union;
+    if (ViewBag.PartnerId != null)
+    {
+        union = Model.Unions.FirstOrDefault(u => u?.Partner1?.Id == ViewBag.PartnerId);
+        if (union == null)
+        {
+            union = Model.Unions.FirstOrDefault(u => u?.Partner2?.Id == ViewBag.PartnerId);
+        }
+    }
+    else
+    {
+        union = Model.Unions.First();
+    }
+}   
+
 <div class="row">
     <div class="col-md-3">
         <h4>Parents</h4>
@@ -7,19 +23,17 @@
             Html.RenderPartial("PersonNode", Model);
         }
 
-        @if (Model.Unions.Any())
+        @if (union != null)
         {
             <div class="row"><div class="col-md-6" style="border-right: 1px solid black">&nbsp;</div><div class="col-md-6">&nbsp;</div></div>
-            var union = Model.Unions.First();
             var partner = union.Partner1.Id == Model.Id ? union.Partner2 : union.Partner1;
             Html.RenderPartial("PersonNode", partner);
         }
     </div>
     <div class="col-md-offset-1 col-md-5 col-lg-5">
         <h4>Children</h4>
-        @if (Model.Unions.Any())
+        @if (union != null)
         {
-            var union = Model.Unions.First();
             if (union.Descendents.Any())
             {
                 @foreach (var child in union.Descendents.OrderBy(t => t.DateOfBirth))
