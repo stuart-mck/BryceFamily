@@ -38,8 +38,8 @@ namespace BryceFamily.Web.MVC.Models.People
                                             person.DateOfBirth.HasValue &&
                                             !person.DateOfDeath.HasValue &&
                                             person.Age == 21
-                                                        || (person.Age > 21 
-                                                            && person.Age % 10 == 0
+                                                        || (person.Age + 1 > 21 
+                                                            && (person.Age + 1) % 10 == 0
                                                         ))
                                     .ToList();
         }
