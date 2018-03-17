@@ -1,7 +1,7 @@
 ﻿@model BryceFamily.Web.MVC.Models.AccountViewModels.RegistrationRequest
 
 @{
-    ViewData["Title"] = "Request Register";
+    ViewData["Title"] = "Registration Request";
 }
 
 <h2>@ViewData["Title"].</h2>
@@ -10,7 +10,7 @@
 {
 
     <div class="row">
-        @ViewData["message"].ToString()
+        @Html.Raw(ViewData["message"].ToString())
     </div>
 }
 <div class="row">
@@ -20,7 +20,7 @@
         <h4>Request an account.</h4>
         <hr />
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-5">
                 First Name:
             </div>
             <div class="col-md-4">
@@ -28,7 +28,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-5">
                 Last Name:
             </div>
             <div class="col-md-4">
@@ -36,7 +36,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-5">
                 Email Address:
             </div>
             <div class="col-md-4">

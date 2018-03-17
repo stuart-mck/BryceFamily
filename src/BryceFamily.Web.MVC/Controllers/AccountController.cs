@@ -304,19 +304,31 @@ namespace BryceFamily.Web.MVC.Controllers
             try
             {
                 var cancellationToken = GetCancellationToken();
-                var adminUsers = (await _roleManager.GetUserIdsInRoleAsync(RoleNameConstants.AdminRole, cancellationToken)).ToList();
-                var superAdmminUsers = (await _roleManager.GetUserIdsInRoleAsync(RoleNameConstants.SuperAdminRole, cancellationToken)).ToList();
 
-                var emails = new List<string>();
-                foreach(var userId in (adminUsers.Union(superAdmminUsers)))
+                var userExists = await _userManager.FindByEmailAsync(request.Email);
+
+                if (userExists != null)
                 {
-                    var user = await _userManager.FindByIdAsync(userId);
-                    emails.Add(user.Email.Value);
+                    var urlLink = Url.Action("ForgotPassword", "Account");
+                    ViewData["message"] = $"A user has already been registered with this email address. If you are this person, head <a href=\"{urlLink}\"> here </a> to reset your password.";
+                    ViewBag.Success = false;
                 }
+                else
+                {
+                    var adminUsers = (await _roleManager.GetUserIdsInRoleAsync(RoleNameConstants.AdminRole, cancellationToken)).ToList();
+                    var superAdmminUsers = (await _roleManager.GetUserIdsInRoleAsync(RoleNameConstants.SuperAdminRole, cancellationToken)).ToList();
 
-                await _sesService.SendBulkEmail(emails.AsEnumerable(), GetRequestEmail(request), "New User Request", cancellationToken);
-                ViewData["message"] = "Thanks, your request has been sent to the web site admins one of whom will respond as soon as they're able to.";
-                ViewBag.Success = true;
+                    var emails = new List<string>();
+                    foreach (var userId in (adminUsers.Union(superAdmminUsers)))
+                    {
+                        var user = await _userManager.FindByIdAsync(userId);
+                        emails.Add(user.Email.Value);
+                    }
+
+                    await _sesService.SendBulkEmail(emails.AsEnumerable(), GetRequestEmail(request), "New User Request", cancellationToken);
+                    ViewData["message"] = "Thanks, your request has been sent to the web site admins one of whom will respond as soon as they're able to.";
+                    ViewBag.Success = true;
+                }
             }
             catch (Exception ex)
             {

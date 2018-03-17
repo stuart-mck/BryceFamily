@@ -208,8 +208,8 @@ namespace BryceFamily.Web.MVC.Controllers
             var parents = _clanAndPeopleService.People.Where(p => p.Id == parent1Id || p.Id == parent2Id);
 
             var model = new NewChildModel(
-                parents.First(t => t.Gender.Equals("f", StringComparison.CurrentCultureIgnoreCase)),
-                parents.First(t => t.Gender.Equals("m", StringComparison.CurrentCultureIgnoreCase))); 
+                 parents.Count() > 0 ? parents.FirstOrDefault() : null,
+                parents.Count() > 1 ? parents.Skip(1).First() : null ); 
             return View("NewChild", model);
         }
 

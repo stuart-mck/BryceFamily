@@ -17,7 +17,7 @@ namespace BryceFamily.Web.MVC.Models
         {
             Parent1 = parent1.Id;
             Parent2 = parent2.Id;
-            Parents = $"{parent1.FullName} and {parent2.FullName}";
+            Parents = $"{parent1?.FullName ?? "Not Registered"} and {parent2?.FullName ?? "Not Registered"}";
         }
 
         public int Parent1 { get; set; }

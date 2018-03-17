@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace BryceFamily.Web.MVC.Models
 {
@@ -18,23 +19,24 @@ namespace BryceFamily.Web.MVC.Models
             DateOfUnion = DateTime.Today;
         }
 
+        [Required]
         public string PartnerName { get; }
 
         public int PartnerId { get; set; }
 
-        [DisplayName("First Name")]
+        [Required, DisplayName("First Name")]
         public string FirstName { get; set; }
 
         [DisplayName("Middle Name")]
         public string MiddleName { get; set; }
 
-        [DisplayName("Last Name")]
+        [Required, DisplayName("Last Name")]
         public string LastName { get; set; }
 
         [DisplayName("Maiden Name")]
         public string MaidenName { get; set; }
 
-        
+        [Required]
         public string Gender { get; set; }
 
         [DisplayName("Date Of Birth")]
@@ -50,7 +52,6 @@ namespace BryceFamily.Web.MVC.Models
 
         [DisplayName("Email Address")]
         public string EmailAddress { get; set; }
-
 
     }
 }
