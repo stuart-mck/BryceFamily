@@ -37,7 +37,7 @@ namespace BryceFamily.Web.MVC.Models.People
                                     .Where(person => 
                                             person.DateOfBirth.HasValue &&
                                             !person.DateOfDeath.HasValue &&
-                                            person.Age == 21
+                                            person.Age + 1 == 21
                                                         || (person.Age + 1 > 21 
                                                             && (person.Age + 1) % 10 == 0
                                                         ))
