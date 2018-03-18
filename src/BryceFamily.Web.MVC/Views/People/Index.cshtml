@@ -85,7 +85,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var b in Model.SignificantBirthdays)
+                    @foreach (var b in Model.SignificantBirthdays.OrderByDescending(t => t.Age))
                     {
                         <tr>
                             <td>@Html.ActionLink(b.FullName, "Person", "People", new { id = b.Id })</td>
@@ -94,7 +94,7 @@
                                 {
                                     @b.DateOfBirth.Value.ToString("dd MMM")
                                 }
-                                @if (b.YearOfBirth.HasValue)
+                                else if (b.YearOfBirth.HasValue)
                                 {
                                     @b.YearOfBirth
                                 }
