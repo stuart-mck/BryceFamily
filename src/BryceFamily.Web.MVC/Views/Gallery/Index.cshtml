@@ -17,67 +17,37 @@
     <div class="col-md-6">
         <h3>Galleries by Family</h3>
         <ul class="event-summary">
-            @foreach (var clan in ClanService.Clans.OrderBy(t => t.DisplayOrder))
-            {
 
-                var clanGalleries = Model.Where(g => g.Clan.Id == clan.Id).OrderBy(r => r.GalleryDate).ToList();
-
-                if (clanGalleries.Any())
-                {
-
-                <li>
-                <h4>@clan.FormattedName</h4>
-                    <ul>
-                            
-                    @foreach (var evt in clanGalleries)
-                    {
-                        <li class="event">
-                        <h5>@Html.ActionLink(string.IsNullOrEmpty(evt.Title) ? "Link" : evt.Title, "Detail", "Gallery", new { id = evt.Id }, new { @class = "detail-link" })</h5>
-                        <div>
-                            @Html.DisplayFor(t => evt.Summary)
-                        </div>
-
-                        @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
-                        {
-                            <div>@Html.ActionLink("Edit Images", "EditGalleryImages", "Gallery", new { id = evt.Id }, new { @class = "btn btn-sml" })</div>
-                        }
-                        </li>
-                    }
-                    </ul>
-                </li>
-                }
+            @{
+                var familyGroups = Model
+                    .Where(t => t.Family != null && t.Clan != null)
+                    .GroupBy(family => family.Clan.FormattedName,
+                            gallery => gallery,
+                            (key, v) => new { Clan = key, Galleries = v.ToList() }
+                )
+                .ToDictionary(k => k.Clan, k => k.Galleries);
+                
             }
+
+            @Html.Partial("DisplayTemplates/GallerySummary", familyGroups)
+
         </ul>
     </div>
     <div class="col-md-6">
         <h3>Galleries by Event</h3>
         <ul class="event-summary">
-                @foreach (var familyEvent in events.OrderByDescending(t => t.StartDate))
-                {
-                    if (Model.Any(g => g.FamilyEvent?.EntityId == familyEvent.ID))
-                    {
-                    <li>
-                        <h3>@familyEvent.Title</h3>
-                        @foreach (var gallery in Model.Where(t => t.FamilyEvent != null && t.FamilyEvent.EntityId != familyEvent.ID))
-                        {
+            @{
+                var familyEventGalleries = Model
+                    .Where(t => t.FamilyEvent!= null && !t.DefaultFamilyEventGallery)
+                    .OrderByDescending(t => t.FamilyEvent.StartDate)
+                    .GroupBy(evt => evt.FamilyEvent.Title,
+                            gallery => gallery,
+                            (key, v) => new { Event = key, Galleries = v.ToList() }
+                )
+                .ToDictionary(k => k.Event, k => k.Galleries);
+            }
 
-                            <ul>
-                                <li class="event">
-                                    <h4>@Html.ActionLink(string.IsNullOrEmpty(gallery.Title) ? "Link" : gallery.Title, "Detail", "Gallery", new { id = gallery.Id }, new { @class = "detail-link" })</h4>
-                                    <div>
-                                        @Html.DisplayFor(t => gallery.Summary)
-                                    </div>
-
-                                    @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
-                                    {
-                                        <div>@Html.ActionLink("Edit Images", "EditGalleryImages", "Gallery", new { id = gallery.Id }, new { @class = "btn btn-sml" })</div>
-                                    }
-                                </li>
-                            </ul>
-                        }
-                    </li>
-                    }
-                }
+            @Html.Partial("DisplayTemplates/GallerySummary", familyEventGalleries)
         </ul>
     </div>
 </div>

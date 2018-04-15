@@ -15,6 +15,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Text;
+using BryceFamily.Web.MVC.Models.Image;
 
 namespace BryceFamily.Web.MVC.Controllers
 {

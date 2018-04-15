@@ -1,5 +1,6 @@
-﻿@model ImageViewModel
+﻿@model  BryceFamily.Web.MVC.Models.Image.ImageViewModel
 @inject BryceFamily.Web.MVC.Infrastructure.CDNServiceRoot serviceRoot
+
 
 @{
     ViewData["Title"] = "ViewImage";
@@ -11,7 +12,7 @@
 <h2>@title</h2>
 
 <div class="row">
-    <img src="@Url.Content($"{serviceRoot.ServiceRoot}/{Model.FullSizeLink}")" />
+    <img src="@Url.Content($"{serviceRoot.ServiceRoot}/{Model.FullSizeLink}")" class="image-view" />
 </div>
 <div class="row">
     <div class="centered">

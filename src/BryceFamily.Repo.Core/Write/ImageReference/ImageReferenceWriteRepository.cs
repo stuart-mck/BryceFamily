@@ -34,9 +34,7 @@ namespace BryceFamily.Repo.Core.Write.ImageReference
         public async Task Save(TEntity entity, CancellationToken cancellationToken)
         {
             var dynamoContext = _clientFactory.GetDynamoDBContext();
-            //if (entity.ImageID == Guid.Empty)
-            //    entity.ImageID = Guid.NewGuid();
-
+            entity.LastUpdated = DateTime.Now;
             await dynamoContext.SaveAsync(entity, _dynamoDBOperationConfig, cancellationToken);
         }
     }

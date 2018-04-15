@@ -5,9 +5,11 @@
 }
 
 <div class="col-md-10">
-    <h2>Gallery</h2>
     <div class="row">
         @Html.DisplayForModel()
+    </div>
+    <div class="row">
+        @Html.ActionLink("Back to Galleries", "Index", "Gallery")
     </div>
 </div>
 

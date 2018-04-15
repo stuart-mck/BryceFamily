@@ -1,0 +1,29 @@
+﻿@model Dictionary<string, List<GalleryIndex>>
+@using BryceFamily.Web.MVC.Infrastructure.Authentication
+
+
+@foreach (KeyValuePair<string, List<GalleryIndex>> galleryGroup in Model)
+{
+    <li>
+        <h3>@galleryGroup.Key</h3>
+        <ul>
+
+            @foreach (var gallery in galleryGroup.Value)
+            {
+                <li class="event">
+                    <h5>@Html.ActionLink(string.IsNullOrEmpty(gallery.Title) ? "Link" : gallery.Title, "Detail", "Gallery", new { id = gallery.Id }, new { @class = "detail-link" })</h5>
+                    <div>
+                        @Html.DisplayFor(t => gallery.Summary)
+                    </div>
+
+                    @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
+                    {
+                        <div>@Html.ActionLink("Add Image", "EditGalleryImages", "Gallery", new { id = gallery.Id }, new { @class = "btn btn-sml" })</div>
+                    }
+                </li>
+            }
+        </ul>
+    </li>
+
+}
+

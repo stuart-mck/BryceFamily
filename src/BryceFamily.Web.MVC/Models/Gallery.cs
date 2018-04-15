@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BryceFamily.Repo.Core.Read.ImageReference;
 using BryceFamily.Web.MVC.Infrastructure;
+using BryceFamily.Web.MVC.Models.Image;
 
 namespace BryceFamily.Web.MVC.Models
 {
@@ -39,7 +40,7 @@ namespace BryceFamily.Web.MVC.Models
                                 : string.Empty;
             return await Task.FromResult(new Gallery() {
                 Title = sourceGallery.Name,
-                FamilyEvent = FamilyEvent.Map(await familyEventReadModel.Load(sourceGallery.FamilyEvent, cancellationToken)),
+                FamilyEvent = sourceGallery.FamilyEvent != null ? FamilyEvent.Map(await familyEventReadModel.Load(sourceGallery.FamilyEvent, cancellationToken)) : null,
                 Owner = sourceGallery.Owner.ToString(),
                 OwnerId = sourceGallery.Owner,
                 Summary = sourceGallery.Summary,
@@ -49,7 +50,7 @@ namespace BryceFamily.Web.MVC.Models
                 Family = familyName,
                 DefaultFamilyEventGallery = sourceGallery.DefaultFamilyEventGallery,
                 GalleryDate = sourceGallery.GalleryDate,
-                Clan = clanAndFamilyService.Clans.FirstOrDefault(t => t.Id == sourceGallery.FamilyId)
+                Clan = sourceGallery.FamilyId.HasValue ? clanAndFamilyService.Clans.FirstOrDefault(t => t.Id == sourceGallery.FamilyId) : null
             }
             );
         }

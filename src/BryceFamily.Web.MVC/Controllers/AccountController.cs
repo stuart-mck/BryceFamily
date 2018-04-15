@@ -407,6 +407,7 @@ namespace BryceFamily.Web.MVC.Controllers
             if (existingUser != null)
             {
                 ViewData["message"] = $"A user has already been registered with this email - perhaps another admin has already handled this request [{emailToApprove}]";
+                return View();
             }
 
 

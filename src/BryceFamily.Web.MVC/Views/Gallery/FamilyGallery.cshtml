@@ -9,6 +9,13 @@
         Selected = Model.FamilyId == f.Id
 
     });
+    var events = Model.Events.Select(f => new SelectListItem()
+    {
+        Text = f.Title,
+        Value = f.EntityId.ToString(),
+        Selected = Model?.EventId == f.EntityId
+
+    });
 }
 
 <h2>Add New Family Gallery</h2>
@@ -35,6 +42,14 @@
         </div>
         <div class="col-md-8">
             <select asp-for="FamilyId" asp-items="families" class="form-control"></select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <label>Event:</label>
+        </div>
+        <div class="col-md-8">
+            <select asp-for="EventId" asp-items="events" class="form-control"></select>
         </div>
     </div>
     <div class="row">

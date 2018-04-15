@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using BryceFamily.Repo.Core.Model;
@@ -36,8 +34,7 @@ namespace BryceFamily.Repo.Core.Write.Gallery
         public async Task Save(TEntity entity, CancellationToken cancellationToken)
         {
             var dynamoContext = _clientFactory.GetDynamoDBContext();
-            //if (entity.ID == Guid.Empty)
-            //    entity.ID = Guid.NewGuid();
+            entity.LastUpdated = DateTime.Now;
             await dynamoContext.SaveAsync(entity, _dynamoDBOperationConfig, cancellationToken);
         }
     }

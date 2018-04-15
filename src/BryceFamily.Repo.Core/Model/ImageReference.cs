@@ -9,6 +9,8 @@ namespace BryceFamily.Repo.Core.Model
     {
         public string Title { get; set; }
 
+        public string FileName { get; set; }
+
         public string Description { get; set; }
 
         public string ImageLocation { get; set; }
@@ -17,9 +19,9 @@ namespace BryceFamily.Repo.Core.Model
 
         public bool DefaultGalleryImage { get; set; }
 
-        public Guid GalleryId { get; set; }
+        //public Guid GalleryId { get; set; }
 
-        public int PersonId { get; set; }
+        public int? PersonId { get; set; }
 
         public IEnumerable<ImageAssociation> ImageAssociations { get; set; }
 

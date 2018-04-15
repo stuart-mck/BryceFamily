@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using BryceFamily.Repo.Core.Read.ImageReference;
 using System.Threading;
 using BryceFamily.Web.MVC.Models;
+using BryceFamily.Web.MVC.Models.Image;
 
 namespace BryceFamily.Web.MVC.ViewComponents
 {

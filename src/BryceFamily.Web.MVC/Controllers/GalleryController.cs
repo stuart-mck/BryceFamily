@@ -4,6 +4,7 @@ using BryceFamily.Repo.Core.Read.FamilyEvents;
 using BryceFamily.Repo.Core.Read.Gallery;
 using BryceFamily.Repo.Core.Read.ImageReference;
 using BryceFamily.Repo.Core.Write;
+using BryceFamily.Web.MVC.Models.Image;
 using BryceFamily.Web.MVC.Infrastructure;
 using BryceFamily.Web.MVC.Infrastructure.Alerts;
 using BryceFamily.Web.MVC.Infrastructure.Authentication;
@@ -34,7 +35,16 @@ namespace BryceFamily.Web.MVC.Controllers
         private readonly ClanAndPeopleService _clanAndPeopleService;
         private readonly ContextService _contextService;
 
-        public GalleryController(ILogger<GalleryController> logger, IGalleryReadRepository readModel, IFamilyEventReadRepository familyEventReadRepository, IWriteRepository<Repo.Core.Model.Gallery, Guid> galleryWriteModel, IWriteRepository<Repo.Core.Model.ImageReference, Guid> imageReferenceWriteModel, IImageReferenceReadRepository imageReferenceReadRepository, IFileService fileService, ClanAndPeopleService clanAndPeopleService, ContextService contextService):base("Galleries", "gallery")
+        public GalleryController(ILogger<GalleryController> logger, 
+                                 IGalleryReadRepository readModel, 
+                                 IFamilyEventReadRepository familyEventReadRepository, 
+                                 IWriteRepository<Repo.Core.Model.Gallery, Guid> galleryWriteModel, 
+                                 IWriteRepository<Repo.Core.Model.ImageReference, Guid> imageReferenceWriteModel, 
+                                 IImageReferenceReadRepository imageReferenceReadRepository, 
+                                 IFileService fileService, 
+                                 ClanAndPeopleService clanAndPeopleService,
+                                 ContextService contextService)
+            :base("Galleries", "gallery")
         {
             _logger = logger;
             _readModel = readModel;
@@ -50,17 +60,20 @@ namespace BryceFamily.Web.MVC.Controllers
 
         public async Task<IActionResult> Detail(Guid id)
         {
-            var gallery = await _readModel.Load(id, CancellationToken.None);
+            var cancellationToken = GetCancellationToken();
 
-            return View(await Models.Gallery.Map(gallery, _clanAndPeopleService, _familyEventReadRepository, _imageReferenceReadRepository, CancellationToken.None));
+            var gallery = await _readModel.Load(id, cancellationToken);
+
+            return View(await Models.Gallery.Map(gallery, _clanAndPeopleService, _familyEventReadRepository, _imageReferenceReadRepository, cancellationToken));
         }
 
         public async Task<IActionResult> Index()
         {
-            var galleries = (await _readModel.LoadAll(CancellationToken.None)).Where(t => t.FamilyId.HasValue);
+            var cancellationToken = GetCancellationToken();
+            var galleries = (await _readModel.LoadAll(cancellationToken));
 
             var readModel = galleries.Select(
-                g => Models.GalleryIndex.Map(g, _clanAndPeopleService,_familyEventReadRepository, CancellationToken.None).Result);
+                g => Models.GalleryIndex.Map(g, _clanAndPeopleService, _familyEventReadRepository, cancellationToken).Result);
 
             return View(readModel.ToList());
             
@@ -83,6 +96,7 @@ namespace BryceFamily.Web.MVC.Controllers
                     GalleryId = galleryId,
                     ImageId = imageId,
                     Title = img.Title,
+                    FileName = img.FileName,
                     PreviousLink = IndexIsNotFirst(index) ? galleryImages[index - 1].ImageID : Guid.Empty,
                     NextLink =  IndexIsNotLast(index, galleryImages.Count())  ? galleryImages[index + 1].ImageID : Guid.Empty
                 });
@@ -119,9 +133,13 @@ namespace BryceFamily.Web.MVC.Controllers
 
         [HttpGet]
         [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
-        public IActionResult FamilyGallery()
+        public async Task<IActionResult> FamilyGallery()
         {
-            return View(new FamilyGalleryCreateModel(_clanAndPeopleService.Clans.ToList()));
+            var cancellationToken = GetCancellationToken();
+            var events = await _familyEventReadRepository.GetAllEvents(cancellationToken);
+
+            return View(new FamilyGalleryCreateModel(_clanAndPeopleService.Clans.ToList(), 
+                                                    events.Select(Models.FamilyEvent.Map).ToList()));
         }
 
 
@@ -136,6 +154,7 @@ namespace BryceFamily.Web.MVC.Controllers
                 Name = newGallery.Name,
                 Summary = newGallery.Description,
                 FamilyId = newGallery.FamilyId,
+                FamilyEvent = newGallery.EventId,
                 Owner = _contextService.LoggedInPerson.Id,
                 GalleryDate = newGallery.GalleryDate
             };
@@ -188,7 +207,7 @@ namespace BryceFamily.Web.MVC.Controllers
         public async Task<IActionResult> EditGalleryImages(Guid id)
         {
 
-            var cancellationToken = new CancellationToken();
+            var cancellationToken = GetCancellationToken();
 
             var gallery =await  Models.Gallery.Map(await _readModel.Load(id, cancellationToken), _clanAndPeopleService, _familyEventReadRepository, _imageReferenceReadRepository,  cancellationToken);
             
@@ -197,7 +216,7 @@ namespace BryceFamily.Web.MVC.Controllers
             {
                 GalleryId = gallery.Id,
                 GalleryName = gallery.Title,
-                ClanMembers = _clanAndPeopleService.People.Where(t => t.ClanId == gallery.Clan.Id && !t.IsSpouse)
+                ClanMembers = _clanAndPeopleService.People.Where(t => t.ClanId == gallery.Clan?.Id && !t.IsSpouse)
             });
         }
 
@@ -210,6 +229,48 @@ namespace BryceFamily.Web.MVC.Controllers
             _writeModel.Save(gallery.MapToEntity(), new CancellationToken());
             return  RedirectToAction("Index").WithSuccess("Gallery saved"); ;
         }
+
+        [HttpGet]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        [Route("Gallery/EditImage/{galleryId}/{imageId}")]
+        public async Task<IActionResult> EditImage(Guid galleryId, Guid imageId)
+        {
+            var cancellationToken = GetCancellationToken();
+            var imgReference = await _imageReferenceReadRepository.Load(galleryId, imageId, cancellationToken);
+
+            return View(ImageReferenceModel.Map(imgReference));
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        [Route("Gallery/EditImage/{galleryId}/{imageId}")]
+        public async Task<IActionResult> EditImage(ImageReferenceModel imageReferenceModel)
+        {
+            var cancellationToken = GetCancellationToken();
+            var imgReference = await _imageReferenceReadRepository.Load(imageReferenceModel.GalleryReference, imageReferenceModel.Id, cancellationToken);
+
+
+            var imgRefToSave = new ImageReference
+            {
+                DefaultGalleryImage = imgReference.DefaultGalleryImage,
+                Description = imageReferenceModel.Description,
+                FileName = string.IsNullOrEmpty(imgReference.FileName) ? imgReference.Title : imgReference.FileName,
+                //GalleryId = imageReferenceModel.GalleryReference,
+                ID = imgReference.ID,
+                ImageID = imgReference.ImageID,
+                ImageLocation = imgReference.ImageLocation,
+                MimeType = imgReference.MimeType,
+                PersonId = imageReferenceModel.PersonId,
+                Title = imageReferenceModel.Title
+            };
+
+
+            await _imageReferenceWriteModel.Save(imgRefToSave, cancellationToken);
+
+            return RedirectToAction("Detail", new { id = imgRefToSave.ID });
+        }
+
 
         [HttpPost]
         [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
@@ -237,7 +298,7 @@ namespace BryceFamily.Web.MVC.Controllers
                     var img = new ImageReferenceModel()
                     {
                         MimeType = formFile.ContentType,
-                        Title = formFile.FileName,
+                        FileName = formFile.FileName,
                         Id = Guid.NewGuid(),
                         GalleryReference = galleryId,
                         PersonId = FamilyImageId

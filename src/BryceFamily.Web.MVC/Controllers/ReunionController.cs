@@ -15,6 +15,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Text;
+using BryceFamily.Web.MVC.Models.Image;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
@@ -238,7 +239,7 @@ namespace BryceFamily.Web.MVC.Controllers
             var img = new ImageReferenceModel()
             {
                 MimeType = imageWriteModel.DefaultImage.ContentType,
-                Title = imageWriteModel.DefaultImage.FileName ,
+                FileName = imageWriteModel.DefaultImage.FileName ,
                 Id = Guid.NewGuid(),
                 GalleryReference = imageWriteModel.FamilyEventGalleryId,
                 DefaultGalleryImage = true

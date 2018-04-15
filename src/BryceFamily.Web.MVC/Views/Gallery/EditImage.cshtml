@@ -1,0 +1,56 @@
+﻿@model BryceFamily.Web.MVC.Models.Image.ImageReferenceModel
+@inject BryceFamily.Web.MVC.Infrastructure.ClanAndPeopleService ClanService
+@inject BryceFamily.Web.MVC.Infrastructure.CDNServiceRoot serviceRoot
+
+@{ 
+
+    var familyMembers = ClanService.People.OrderBy(t => t.LastName).ThenBy(x => x.FirstName).Select(c => new SelectListItem()
+    {
+        Text = $"{c.LastName}, {c.FirstName} {c.MiddleName?.FirstOrDefault()}",
+        Value = c.Id.ToString(),
+        Selected = Model.PersonId.HasValue && Model.PersonId.Value == c.Id
+    }).OrderBy(t => t.Text)
+    .ToList();
+}
+
+<div class="col-md-6">
+
+    <h2>Edit Image</h2>
+
+
+    <img src="@Url.Content($"{serviceRoot.ServiceRoot}/{Model.ThumbnailSizeLink}")" />
+    <form asp-controller="Gallery" asp-action="EditImage" method="post">
+        <input type="hidden" asp-for="Id" value="@Model.Id" />
+        <input type="hidden" asp-for="GalleryReference" value="@Model.GalleryReference" />
+        <div class="form-group">
+            <div class="col-md-2">
+                <label for="Title">Title:</label>
+            </div>
+            <div class="col-md-10">
+                <input type="text" asp-for="Title" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group"">
+            <div class="col-md-2">
+                <label for="Description">Description:</label>
+            </div>
+            <div class="col-md-10">
+                <textarea type="text" asp-for="Description" class="form-control" cols="10" rows="10" ></textarea>
+            </div>
+        </div>
+        <div class="form-group"">
+            <div class="col-md-2">
+                <label for="PersonId">Family Member:</label>
+            </div>
+            <div class="col-md-10">
+                <select asp-for="PersonId" asp-items="familyMembers" class="form-control" ></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <button type="button" class="btn btn-default" onclick="location = '@Url.Action("Detail", "Gallery", new { id = Model.GalleryReference })';">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>

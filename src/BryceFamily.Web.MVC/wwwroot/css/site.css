@@ -8,7 +8,9 @@ body {
     font-family: "Georgia, serif"
 }
 
-
+img {
+    image-orientation: from-image;
+}
 
 .page-wrapper {
     min-height: 100%;
@@ -269,9 +271,13 @@ body {
     border-radius: 3px 4px;
 }
 
+.image-view {
+    width: 100%;
+    max-width: 800px;
+    image-orientation: from-image;
+}
 
 /* Events */
-
 .event-summary {
     display: inline;
     list-style-type: none;
@@ -294,6 +300,7 @@ body {
         clip: rect(0px,60px,200px,0px);
         max-width: 100%;
         max-height: 100%;
+        image-orientation: 0deg;
     }
 
 .event-description {
@@ -308,6 +315,8 @@ body {
     }
 }
 
+
+/* family tree */
 
 .familyTreeNode {
     border: 1px solid;
@@ -433,6 +442,7 @@ img.front-page-img {
 .imageThumbnail {
     padding-top: 10px;
     padding-bottom: 10px;
+    image-orientation: from-image;
 }
 
 

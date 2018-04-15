@@ -1,10 +1,10 @@
 ﻿@model Gallery
 @inject BryceFamily.Web.MVC.Infrastructure.CDNServiceRoot serviceRoot
-
+@using BryceFamily.Web.MVC.Infrastructure.Authentication
 
 <h2>@Html.DisplayFor(t => t.Title)</h2>
 <div class="row">
-    @foreach (var img in Model.ImageReferences)
+    @foreach (var img in Model.ImageReferences.OrderBy(g => g.LastUpdated))
     {
         <div class="row imageThumbnail">
             <div class="col-md-2">
@@ -16,6 +16,12 @@
             <div class="col-md-2">
                 @Html.ActionLink("View Image", "ViewImage", "Gallery", new { galleryId = Model.Id, imageId = img.Id })
             </div>
+            @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
+            {
+                <div class="col-md-2">
+                    @Html.ActionLink("Edit Image Info", "EditImage", "Gallery", new { galleryId = Model.Id, imageId = img.Id })
+                </div>
+            }
         </div>
     }       
 </div>

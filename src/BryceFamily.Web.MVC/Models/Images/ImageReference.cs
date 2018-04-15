@@ -1,7 +1,7 @@
 ﻿using System;
 using BryceFamily.Repo.Core.Model;
 
-namespace BryceFamily.Web.MVC.Models
+namespace BryceFamily.Web.MVC.Models.Image
 {
     public class ImageReferenceModel
     {
@@ -11,6 +11,8 @@ namespace BryceFamily.Web.MVC.Models
 
         public string Title { get; set; }
 
+        public string FileName { get; set; }
+
         public string Reference { get; set; }
 
         public string Description { get; set; }
@@ -19,23 +21,31 @@ namespace BryceFamily.Web.MVC.Models
 
         public bool DefaultGalleryImage { get; set; }
 
-        public int PersonId { get; set; }
+        public int? PersonId { get; set; }
 
+        public DateTime LastUpdated { get; set; }
      
-        public string ThumbnailSizeLink => $"{Reference}/thumbnail/{Title}";
+        public string ThumbnailSizeLink {
+            get {
+                var fileName = string.IsNullOrEmpty(FileName) ?
+                        Title: FileName;
+                return $"{Reference}/thumbnail/{fileName}";
+            }
+        }
 
         public ImageReference MapToEntity()
         {
             return new ImageReference()
             {
                 Title = Title,
+                FileName = FileName,
                 ImageLocation = Reference,
                 ID = GalleryReference,
                 Description = Description,
                 MimeType = MimeType,
                 ImageID = Id,
                 DefaultGalleryImage = DefaultGalleryImage,
-                GalleryId = GalleryReference,
+                //GalleryId = GalleryReference,
                 PersonId = PersonId
             };
         }
@@ -50,9 +60,12 @@ namespace BryceFamily.Web.MVC.Models
                 MimeType = arg.MimeType,
                 Reference = arg.ImageLocation,
                 Title = arg.Title,
+                FileName = string.IsNullOrEmpty(arg.FileName) ?arg.Title : arg.FileName,
                 Id = arg.ImageID,
                 GalleryReference = arg.ID,
-                DefaultGalleryImage =  arg.DefaultGalleryImage
+                DefaultGalleryImage =  arg.DefaultGalleryImage,
+                LastUpdated = arg.LastUpdated,
+                PersonId = arg.PersonId
             };
         }
     }

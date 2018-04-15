@@ -9,4 +9,12 @@ namespace BryceFamily.Web.MVC.Models
             return (x.Family + x.FamilyName).CompareTo(y.Family + y.FamilyName);
         }
     }
+
+    public class EventComparer : IComparer<FamilyEvent>
+    {
+        public int Compare(FamilyEvent x, FamilyEvent y)
+        {
+            return x.StartDate.CompareTo(y.StartDate);
+        }
+    }
 }

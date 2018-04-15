@@ -7,17 +7,24 @@ namespace BryceFamily.Web.MVC.Models
     public class FamilyGalleryCreateModel
     {
         private IReadOnlyList<FamilyClan> _clans;
+        private IReadOnlyList<FamilyEvent> _events;
 
         public FamilyGalleryCreateModel()
         {
             _clans = new List<FamilyClan>();
+            _events = new List<FamilyEvent>();
+
         }
 
-        public FamilyGalleryCreateModel(List<FamilyClan> clans)
+        public FamilyGalleryCreateModel(List<FamilyClan> clans, List<FamilyEvent> events)
         {
-            IComparer<FamilyClan> myComparer = new FamilyComparer();
-            clans.Sort(myComparer);
+            IComparer<FamilyClan> clanComparer = new FamilyComparer();
+            clans.Sort(clanComparer);
             _clans = clans;
+
+            IComparer<FamilyEvent> eventComparer = new EventComparer();
+            events.Sort(eventComparer);
+            _events = events;
         }
 
         [Required]
@@ -28,8 +35,12 @@ namespace BryceFamily.Web.MVC.Models
         [Required]
         public int FamilyId { get; set; }
 
+        public Guid EventId { get; set; }
+
         public DateTime GalleryDate { get; set; }
 
         public IReadOnlyList<FamilyClan> Families => _clans;
+
+        public IReadOnlyList<FamilyEvent> Events => _events;
     }
 }
