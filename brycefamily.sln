@@ -23,6 +23,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BryceFamily.Web.MVC", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Identity.DynamoDB", "src\AspNetCore.Identity.DynamoDB\AspNetCore.Identity.DynamoDB.csproj", "{3B4B64A0-F7B0-4FC8-94D0-33A5BA18CA2A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BryceFamily.Repo.PG", "src\BryceFamily.Repo.PG\BryceFamily.Repo.PG.csproj", "{7E99A4CB-A2A7-4F9E-A711-05FE8B79FF88}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "database", "database", "{745E8871-BE02-4C1A-83A5-DD06B8B8C1AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +45,10 @@ Global
 		{3B4B64A0-F7B0-4FC8-94D0-33A5BA18CA2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B4B64A0-F7B0-4FC8-94D0-33A5BA18CA2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B4B64A0-F7B0-4FC8-94D0-33A5BA18CA2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E99A4CB-A2A7-4F9E-A711-05FE8B79FF88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E99A4CB-A2A7-4F9E-A711-05FE8B79FF88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E99A4CB-A2A7-4F9E-A711-05FE8B79FF88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E99A4CB-A2A7-4F9E-A711-05FE8B79FF88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,6 +57,7 @@ Global
 		{8286DA71-F1FA-42E8-836E-D62FB455F177} = {DFC070B0-970C-4F5C-97C1-E99AC990387E}
 		{6FC2FCEE-A9E0-40F5-9C47-97071458D2EE} = {DFC070B0-970C-4F5C-97C1-E99AC990387E}
 		{3B4B64A0-F7B0-4FC8-94D0-33A5BA18CA2A} = {DFC070B0-970C-4F5C-97C1-E99AC990387E}
+		{7E99A4CB-A2A7-4F9E-A711-05FE8B79FF88} = {DFC070B0-970C-4F5C-97C1-E99AC990387E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {96D9C2D7-2F38-402B-AC8F-2898D8A0126E}

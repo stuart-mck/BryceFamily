@@ -30,6 +30,7 @@ using System.IO;
 using Microsoft.AspNetCore.DataProtection;
 using Serilog;
 using BryceFamily.Repo.Core.Emails;
+using BryceFamily.Repo.PG;
 
 namespace BryceFamily.Web.MVC
 {
@@ -54,6 +55,7 @@ namespace BryceFamily.Web.MVC
 
             services.AddMvc();
 
+            services.RegisterPostgresDependencies("local");
             
             services.AddScoped<IFamilyEventReadRepository, FamilyEventReadRepository>();
             services.AddScoped<IWriteRepository<FamilyEvent, Guid>, FamilyEventWriteRepository<FamilyEvent, Guid>>();
