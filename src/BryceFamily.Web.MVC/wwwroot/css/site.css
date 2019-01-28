@@ -449,3 +449,15 @@ img.front-page-img {
 .storyPanel{
     padding-bottom: 20px;
 }
+
+.gallery-view{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.gallery-item{
+    order: initial;
+    padding: 5px;
+    margin-bottom: 5px;
+}

@@ -6,6 +6,7 @@ using Amazon.S3.Model;
 using System.Net;
 using System.Threading;
 using System.IO;
+using System.Collections.Generic;
 
 namespace BryceFamily.Repo.Core.AWS
 {
@@ -33,12 +34,7 @@ namespace BryceFamily.Repo.Core.AWS
         public async Task<string> SaveFile(Guid fileId, string galleryId, Stream fileStream, string fileName, string contentType, CancellationToken cancellationToken)
         {
             var s3Context = _awsClientFactory.GetS3Context();
-
-            //validate bucket
-            //root/galleryid/fileName or root/personid/filename
-
             var bucketPath = $"{_bucketRoot}/{galleryId}";
-            //EnsureBucketExists(s3Context, bucketPath, cancellationToken);
 
             //write to bucket
             var result = await s3Context.PutObjectAsync(new PutObjectRequest()
@@ -48,7 +44,8 @@ namespace BryceFamily.Repo.Core.AWS
                 BucketName = bucketPath,
                 ContentType = contentType,
                 InputStream = fileStream,
-                Key = fileName,
+                Key = $"{fileId}{Path.GetExtension(fileName)}",
+                TagSet = new List<Tag> { new Tag { Key = "FileName", Value = fileName} }
             }, cancellationToken);
 
             if (result.HttpStatusCode == HttpStatusCode.OK)
@@ -62,18 +59,6 @@ namespace BryceFamily.Repo.Core.AWS
         public async Task SaveFile(Guid fileId, string galleryId, byte[] contents, string fileName, string contentType, CancellationToken cancellationToken)
         {
             await SaveFile(fileId, galleryId, new MemoryStream(contents), fileName, contentType, cancellationToken);
-        }
-
-        private void EnsureBucketExists(IAmazonS3 s3Context, string bucketPath, CancellationToken cancellationToken)
-        {
-            
-            if (!s3Context.DoesS3BucketExistAsync(bucketPath).Result)
-            {
-                var result = s3Context.PutBucketAsync(bucketPath, cancellationToken).Result;
-                if (result.HttpStatusCode != HttpStatusCode.OK)
-                    throw new Exception($"Could not create location to save photo status code {result.HttpStatusCode}");
-            }
-            
         }
     }
 }

@@ -1,0 +1,19 @@
+﻿@model BryceFamily.Web.MVC.Models.Image.ImageViewModel
+
+<div class="row">
+    <div class="centered">
+        <div class="btn-group">
+            @{ if (Model.PreviousLink != Guid.Empty)
+                {
+                    @Html.ActionLink("< Previous", "ViewImage", "Gallery", new { galleryId = Model.GalleryId, imageId = Model.PreviousLink }, new { @class = "btn" })
+                }
+            }
+            @{ if (Model.NextLink != Guid.Empty)
+                {
+                    @Html.ActionLink("Next >", "ViewImage", "Gallery", new { galleryId = Model.GalleryId, imageId = Model.NextLink }, new { @class = "btn" })
+                }
+            }
+            @Html.ActionLink("Back to Gallery", "Detail", "Gallery", new { id = Model.GalleryId}, new { @class = "btn" })
+        </div>
+    </div>
+</div>

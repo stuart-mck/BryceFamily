@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,9 +17,7 @@ namespace BryceFamily.Web.MVC.Models.Image
         {
             get
             {
-                var fileName = string.IsNullOrEmpty(FileName)
-                                ? Title : FileName;
-                return $"familybryce.gallery/{GalleryId}/{fileName}";
+                return $"familybryce.gallery/{GalleryId}/{ImageId}{Path.GetExtension(FileName)}";
             }
         }
 

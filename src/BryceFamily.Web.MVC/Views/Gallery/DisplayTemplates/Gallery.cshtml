@@ -3,25 +3,23 @@
 @using BryceFamily.Web.MVC.Infrastructure.Authentication
 
 <h2>@Html.DisplayFor(t => t.Title)</h2>
-<div class="row">
+<div class="gallery-view">
     @foreach (var img in Model.ImageReferences.OrderBy(g => g.LastUpdated))
     {
-        <div class="row imageThumbnail">
-            <div class="col-md-2">
-                <label>@img.Title</label><br />
-            </div>
-            <div class="col-md-2">
+    <div class="gallery-item">
+        <a href="@Url.Action("ViewImage", "Gallery", new { galleryId = Model.Id, imageId = img.Id })">
+            <label>@img.Title</label><br />
+            <div>
                 <img src="@Url.Content($"{serviceRoot.ServiceRoot}/{img.ThumbnailSizeLink}")" />
             </div>
-            <div class="col-md-2">
-                @Html.ActionLink("View Image", "ViewImage", "Gallery", new { galleryId = Model.Id, imageId = img.Id })
-            </div>
+        </a>
             @if (User.IsInRole(RoleNameConstants.AdminRole) || User.IsInRole(RoleNameConstants.SuperAdminRole))
             {
-                <div class="col-md-2">
+                <div>
                     @Html.ActionLink("Edit Image Info", "EditImage", "Gallery", new { galleryId = Model.Id, imageId = img.Id })
                 </div>
             }
         </div>
+
     }       
 </div>

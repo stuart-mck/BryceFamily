@@ -19,6 +19,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace BryceFamily.Web.MVC.Controllers
 {
@@ -85,7 +87,7 @@ namespace BryceFamily.Web.MVC.Controllers
             try
             {
                 var cancellationToken = CancellationToken.None;
-                var galleryImages = (await _imageReferenceReadRepository.LoadByGallery(galleryId, cancellationToken)).ToList();
+                var galleryImages = (await _imageReferenceReadRepository.LoadByGallery(galleryId, cancellationToken)).OrderBy(t => t.LastUpdated).ToList();
 
                 var img = await _imageReferenceReadRepository.Load(galleryId, imageId, cancellationToken);
                 var index = galleryImages.IndexOf(galleryImages.FirstOrDefault(t => t.ImageID == imageId));
@@ -253,7 +255,7 @@ namespace BryceFamily.Web.MVC.Controllers
 
             var imgRefToSave = new ImageReference
             {
-                DefaultGalleryImage = imgReference.DefaultGalleryImage,
+                DefaultGalleryImage = imageReferenceModel.DefaultGalleryImage,
                 Description = imageReferenceModel.Description,
                 FileName = string.IsNullOrEmpty(imgReference.FileName) ? imgReference.Title : imgReference.FileName,
                 //GalleryId = imageReferenceModel.GalleryReference,
@@ -271,6 +273,7 @@ namespace BryceFamily.Web.MVC.Controllers
             return RedirectToAction("Detail", new { id = imgRefToSave.ID });
         }
 
+        private static string[] _AllowedExtensions = new[] { ".png", ".gif", ".jpg" };
 
         [HttpPost]
         [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
@@ -278,9 +281,6 @@ namespace BryceFamily.Web.MVC.Controllers
         {
             try
             {
-                var allowedExtensions = new[] { ".png", ".gif", ".jpg" };
-
-
                 var cancellationToken = GetCancellationToken();
 
                 var gallery = await  _readModel.Load(galleryId, cancellationToken);
@@ -291,9 +291,8 @@ namespace BryceFamily.Web.MVC.Controllers
                 {
                     var checkextension = Path.GetExtension(formFile.FileName).ToLower();
 
-                    if (!allowedExtensions.Contains(checkextension))
+                    if (!_AllowedExtensions.Contains(checkextension))
                         return BadRequest($"Invalid file format {checkextension} on file {formFile.FileName}");
-
 
                     var img = new ImageReferenceModel()
                     {
@@ -309,14 +308,20 @@ namespace BryceFamily.Web.MVC.Controllers
                         using (var stream = new MemoryStream())
                         {
                             await formFile.CopyToAsync(stream);
-                            img.Reference = await _fileService.SaveFile(img.Id, galleryId.ToString(), stream, formFile.FileName, formFile.ContentType, cancellationToken);
+                            var rotatedImage = RotateImage(stream);
+                            using (var rotatedStream = new MemoryStream())
+                            {
+                                rotatedImage.Save(rotatedStream, GetRawFormat(formFile.FileName));
+                                img.Reference = await _fileService.SaveFile(img.Id, galleryId.ToString(), rotatedStream, formFile.FileName, formFile.ContentType, cancellationToken);
 
-                            stream.Position = 0;
-                            var resized = FileResizer.GetFileResized(ReadFully(stream), 150);
-                            await _fileService.SaveFile(img.Id, $"{galleryId}/thumbnail", resized, formFile.FileName, formFile.ContentType, cancellationToken);
+                                rotatedStream.Position = 0;
+                                var resized = FileResizer.GetFileResized(ReadFully(rotatedStream), 150);
+                                await _fileService.SaveFile(img.Id, $"{galleryId}/thumbnail", resized, formFile.FileName, formFile.ContentType, cancellationToken);
 
-                            await _imageReferenceWriteModel.Save(img.MapToEntity(), cancellationToken);
+                                await _imageReferenceWriteModel.Save(img.MapToEntity(), cancellationToken);
+                            }
                         }
+
                     }
                 }
                 return await Task.FromResult(RedirectToAction("EditGalleryImages", new { id = gallery.ID}).WithSuccess("Image/s saved")); 
@@ -329,6 +334,50 @@ namespace BryceFamily.Web.MVC.Controllers
             
         }
 
+        private ImageFormat GetRawFormat(string fileName)
+        {
+            switch (Path.GetExtension(fileName).ToLower())
+            {
+                case ".jpg":
+                case ".jpeg":
+                    return ImageFormat.Jpeg;
+                case ".gif":
+                    return ImageFormat.Gif;
+                case ".png":
+                    return ImageFormat.Png;
+                default:
+                    throw new Exception("Invalid file type");
+                    
+            }
+        }
 
+        private Image RotateImage(Stream imageStream)
+        {
+            Image originalImage = Image.FromStream(imageStream);
+
+            if (originalImage.PropertyIdList.Contains(0x0112))
+            {
+                int rotationValue = originalImage.GetPropertyItem(0x0112).Value[0];
+                switch (rotationValue)
+                {
+                    case 1: // landscape, do nothing
+                        break;
+
+                    case 8: // rotated 90 right
+                            // de-rotate:
+                        originalImage.RotateFlip(rotateFlipType: RotateFlipType.Rotate270FlipNone);
+                        break;
+
+                    case 3: // bottoms up
+                        originalImage.RotateFlip(rotateFlipType: RotateFlipType.Rotate180FlipNone);
+                        break;
+
+                    case 6: // rotated 90 left
+                        originalImage.RotateFlip(rotateFlipType: RotateFlipType.Rotate90FlipNone);
+                        break;
+                }
+            }
+            return originalImage;
+        }
     }
 }

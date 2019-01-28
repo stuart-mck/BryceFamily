@@ -1,4 +1,4 @@
-﻿@model  BryceFamily.Web.MVC.Models.Image.ImageViewModel
+﻿@model BryceFamily.Web.MVC.Models.Image.ImageViewModel
 @inject BryceFamily.Web.MVC.Infrastructure.CDNServiceRoot serviceRoot
 
 
@@ -6,28 +6,17 @@
     ViewData["Title"] = "ViewImage";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var title = string.IsNullOrEmpty(Model.Title) ? "Untitled" : Model.Title;
+    var title = string.IsNullOrEmpty(Model.Title) ? Model.FileName : Model.Title;
 }
 
 <h2>@title</h2>
 
+@{ Html.RenderPartial("_GalleryNavigation", Model);}
+
 <div class="row">
     <img src="@Url.Content($"{serviceRoot.ServiceRoot}/{Model.FullSizeLink}")" class="image-view" />
 </div>
-<div class="row">
-    <div class="centered">
-        <div class="btn-group">
-            @{ if (Model.PreviousLink != Guid.Empty)
-            {
-                    @Html.ActionLink("< Previous", "ViewImage", "Gallery", new { galleryId = Model.GalleryId, imageId = Model.PreviousLink }, new { @class = "btn" })
-                }
-            }
-            @{ if (Model.NextLink != Guid.Empty)
-            {
-                    @Html.ActionLink("Next >", "ViewImage", "Gallery", new { galleryId = Model.GalleryId, imageId = Model.NextLink }, new { @class = "btn" })
-                }
-            }
-        </div>
-    </div>
-</div>
+
+@{ Html.RenderPartial("_GalleryNavigation", Model);}
+
 

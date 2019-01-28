@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using BryceFamily.Repo.Core.Model;
 
 namespace BryceFamily.Web.MVC.Models.Image
@@ -27,9 +28,7 @@ namespace BryceFamily.Web.MVC.Models.Image
      
         public string ThumbnailSizeLink {
             get {
-                var fileName = string.IsNullOrEmpty(FileName) ?
-                        Title: FileName;
-                return $"{Reference}/thumbnail/{fileName}";
+                return $"{Reference}/thumbnail/{Id}{Path.GetExtension(FileName)}";
             }
         }
 
