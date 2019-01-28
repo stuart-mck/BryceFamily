@@ -15,7 +15,7 @@ namespace BryceFamily.Web.MVC
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseUrls("http://*:4000")
+                .UseUrls("http://*:4000", "http://*:80", "http://*:443")
                 .Build();
     }
 }
