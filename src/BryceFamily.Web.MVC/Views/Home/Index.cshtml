@@ -68,7 +68,7 @@
                         <div class="item-text">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <img class="front-page-img" src="@Url.Content($"{serviceRoot.ServiceRoot}/familybryce.gallery/{img.ID}/{img.Title}")" />
+                                    <img class="front-page-img" src="@Url.Content($"{serviceRoot.ServiceRoot}/{img.ID}/{img.Title}")" />
                                 </div>
                                 <div class="col-md-9">
                                     <b>@Html.ActionLink(frontPageEvent.Title, "Detail", "Event", new { eventId = eventGuid })</b><br />

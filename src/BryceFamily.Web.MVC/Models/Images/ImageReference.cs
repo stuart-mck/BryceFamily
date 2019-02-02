@@ -14,8 +14,6 @@ namespace BryceFamily.Web.MVC.Models.Image
 
         public string FileName { get; set; }
 
-        public string Reference { get; set; }
-
         public string Description { get; set; }
 
         public string MimeType { get; set; }
@@ -28,7 +26,7 @@ namespace BryceFamily.Web.MVC.Models.Image
      
         public string ThumbnailSizeLink {
             get {
-                return $"{Reference}/thumbnail/{Id}{Path.GetExtension(FileName)}";
+                return $"{GalleryReference}/thumbnail/{Id}{Path.GetExtension(FileName)}";
             }
         }
 
@@ -38,7 +36,6 @@ namespace BryceFamily.Web.MVC.Models.Image
             {
                 Title = Title,
                 FileName = FileName,
-                ImageLocation = Reference,
                 ID = GalleryReference,
                 Description = Description,
                 MimeType = MimeType,
@@ -57,7 +54,6 @@ namespace BryceFamily.Web.MVC.Models.Image
             return new ImageReferenceModel()
             {
                 MimeType = arg.MimeType,
-                Reference = arg.ImageLocation,
                 Title = arg.Title,
                 FileName = string.IsNullOrEmpty(arg.FileName) ?arg.Title : arg.FileName,
                 Id = arg.ImageID,

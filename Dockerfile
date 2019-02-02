@@ -10,7 +10,6 @@ WORKDIR /app/src/BryceFamily.Web.MVC
 
 RUN ls -la
 
-
 RUN dotnet restore
 
 RUN dotnet build -c Release

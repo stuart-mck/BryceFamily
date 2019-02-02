@@ -17,7 +17,7 @@ namespace BryceFamily.Web.MVC.Models.Image
         {
             get
             {
-                return $"familybryce.gallery/{GalleryId}/{ImageId}{Path.GetExtension(FileName)}";
+                return $"/{GalleryId}/{ImageId}{Path.GetExtension(FileName)}";
             }
         }
 

@@ -33,7 +33,7 @@
             }
         </div>
         <div class="col-md-8">
-            <img src="@Url.Content($"{@serviceRoot.ServiceRoot}/familybryce.gallery/{Model.ImagePath}")" id="imageDisplay" class="@imgClass" />
+            <img src="@Url.Content($"{@serviceRoot.ServiceRoot}/{Model.ImagePath}")" id="imageDisplay" class="@imgClass" />
             <input type="hidden" asp-for="GalleryId" />
         </div>
     </div>

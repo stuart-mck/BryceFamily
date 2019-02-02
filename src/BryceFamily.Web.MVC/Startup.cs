@@ -83,7 +83,7 @@ namespace BryceFamily.Web.MVC
                 TableNamePrefix = "familybryce."
             });
 
-            services.AddSingleton(context => new CDNServiceRoot("https://s3-ap-southeast-2.amazonaws.com"));
+            services.AddSingleton(context => new CDNServiceRoot("https://cdn.brycefamily.net"));
 
             services.AddScoped<ClanAndPeopleService>();
             services.AddScoped<ContextService>();

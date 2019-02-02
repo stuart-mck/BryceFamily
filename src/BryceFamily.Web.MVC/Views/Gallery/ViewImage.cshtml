@@ -14,7 +14,7 @@
 @{ Html.RenderPartial("_GalleryNavigation", Model);}
 
 <div class="row">
-    <img src="@Url.Content($"{serviceRoot.ServiceRoot}/{Model.FullSizeLink}")" class="image-view" />
+    <img src="@Url.Content($"{serviceRoot.ServiceRoot}{Model.FullSizeLink}")" class="image-view" />
 </div>
 
 @{ Html.RenderPartial("_GalleryNavigation", Model);}

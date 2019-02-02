@@ -250,7 +250,6 @@ namespace BryceFamily.Web.MVC.Controllers
                 using (var stream = new MemoryStream())
                 {
                     await imageWriteModel.DefaultImage.CopyToAsync(stream);
-                    img.Reference = await _fileService.SaveFile(img.Id, imageWriteModel.FamilyEventGalleryId.ToString(), stream, imageWriteModel.DefaultImage.FileName, imageWriteModel.DefaultImage.ContentType, cancellationToken);
                     stream.Position = 0;
                     var resized = FileResizer.GetFileResized(ReadFully(stream), 150);
                     await _fileService.SaveFile(img.Id, $"{imageWriteModel.FamilyEventGalleryId}/thumbnail", resized, imageWriteModel.DefaultImage.FileName, imageWriteModel.DefaultImage.ContentType, cancellationToken);
@@ -259,7 +258,7 @@ namespace BryceFamily.Web.MVC.Controllers
                 }
             }
             
-            return Json(new { path = img.Reference + "/thumbnail/" + img.Title, id = img.Id });
+            return Json(new { path = $"{img.GalleryReference}/thumbnail/{img.Id}{Path.GetExtension(img.Title)}", id = img.Id });
         }
     }
 }
