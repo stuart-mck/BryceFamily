@@ -15,6 +15,6 @@ RUN dotnet restore
 
 RUN dotnet build -c Release
 
-EXPOSE 3000
+EXPOSE 80
 
 ENTRYPOINT ["dotnet", "run"]
