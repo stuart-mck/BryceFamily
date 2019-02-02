@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Net;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
@@ -15,7 +16,7 @@ namespace BryceFamily.Web.MVC
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseUrls("http://*:4000", "http://*:80", "https://*:443")
+                .UseUrls("http://*:4000", "http://*:80")
                 .Build();
     }
 }
