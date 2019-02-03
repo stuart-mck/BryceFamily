@@ -277,6 +277,7 @@ namespace BryceFamily.Web.MVC.Controllers
 
         [HttpPost]
         [Authorize(Roles = RoleNameConstants.AllAdminRoles)]
+        [DisableRequestSizeLimit]
         public async Task<IActionResult> UploadFiles(Guid galleryId, int FamilyImageId, List<IFormFile> files)
         {
             try

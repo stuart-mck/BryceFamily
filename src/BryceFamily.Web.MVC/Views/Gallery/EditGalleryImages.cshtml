@@ -26,10 +26,6 @@
             @Html.DisplayFor(e => e.GalleryName)
             @Html.HiddenFor(t => t.GalleryId)
             <div class="row">
-                <label >Associate image with family member:</label>
-                <select asp-for="FamilyImageId" asp-items="familyMembers" ></select>
-            </div>
-            <div class="row">
                 <p>Upload one or more files using this form:</p>
                 <input type="file" name="files" multiple />
             </div>
