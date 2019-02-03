@@ -6,13 +6,14 @@ namespace BryceFamily.Web.MVC.Models
 {
     public class FamilyGalleryCreateModel
     {
-        private IReadOnlyList<FamilyClan> _clans;
-        private IReadOnlyList<FamilyEvent> _events;
+        private readonly IReadOnlyList<FamilyClan> _clans;
+        private readonly IReadOnlyList<FamilyEvent> _events;
 
         public FamilyGalleryCreateModel()
         {
             _clans = new List<FamilyClan>();
             _events = new List<FamilyEvent>();
+            GalleryDate = DateTime.Today;
 
         }
 
@@ -35,7 +36,7 @@ namespace BryceFamily.Web.MVC.Models
         [Required]
         public int FamilyId { get; set; }
 
-        public Guid EventId { get; set; }
+        public Guid? EventId { get; set; }
 
         public DateTime GalleryDate { get; set; }
 

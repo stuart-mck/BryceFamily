@@ -156,7 +156,7 @@ namespace BryceFamily.Web.MVC.Controllers
                 Name = newGallery.Name,
                 Summary = newGallery.Description,
                 FamilyId = newGallery.FamilyId,
-                FamilyEvent = newGallery.EventId,
+                FamilyEvent = newGallery.EventId.HasValue ? newGallery.EventId.Value : Guid.Empty,
                 Owner = _contextService.LoggedInPerson.Id,
                 GalleryDate = newGallery.GalleryDate
             };
