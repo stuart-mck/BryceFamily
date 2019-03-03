@@ -313,6 +313,8 @@ namespace BryceFamily.Web.MVC.Controllers
                             using (var rotatedStream = new MemoryStream())
                             {
                                 rotatedImage.Save(rotatedStream, GetRawFormat(formFile.FileName));
+                                await _fileService.SaveFile(img.Id, galleryId.ToString(), rotatedStream, formFile.FileName, formFile.ContentType, cancellationToken);
+
                                 rotatedStream.Position = 0;
                                 var resized = FileResizer.GetFileResized(ReadFully(rotatedStream), 150);
                                 await _fileService.SaveFile(img.Id, $"{galleryId}/thumbnail", resized, formFile.FileName, formFile.ContentType, cancellationToken);
